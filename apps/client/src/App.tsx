@@ -1,27 +1,53 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { BattleResult, BattleSnapshot, CombatEvent, FrenzyState, MatchResolution, PendingAttack, SwapRequest, UserAccountState } from '@mercenary/shared';
 import { bootstrapAccount, resetAccountBootstrapForRetry, type AccountStage } from './account';
 import { Board } from './Board';
+import { AppShell } from './AppShell';
 import { ActiveSkillControl, ResultSummary } from './BattleUi';
 import { CharacterCombatStage, CombatComparisonHud } from './CombatStage';
-import { ConnectionStatusBanner, LoadoutEditor, LobbyLoadout } from './LobbyUi';
+import { ConnectionStatusBanner } from './LobbyUi';
+import { pathForTab, tabForPath, type AppTab } from './app-navigation';
 import { appendFeedback, eventToPresentation, pruneFeedback, type BattlePresentationEvent } from './battle-presentation';
 import { setMuted, sound } from './audio';
 import { connectAuthenticated, socket } from './socket';
 
-function QueueTimer({ since }: { since: number }) { const [seconds, setSeconds] = useState(0); useEffect(() => { const update = () => setSeconds(Math.floor((Date.now() - since) / 1_000)); update(); const timer = setInterval(update, 1_000); return () => clearInterval(timer) }, [since]); return <div className="queue-time">대기 중 {seconds}s</div> }
 export default function App() {
   const [connected, setConnected] = useState(socket.connected), [name, setName] = useState('Guest'), [queuedAt, setQueuedAt] = useState<number | null>(null), [snapshot, setSnapshot] = useState<BattleSnapshot | null>(null);
   const [muted, setMute] = useState(false), [reducedMotion, setReducedMotion] = useState(matchMedia('(prefers-reduced-motion: reduce)').matches), [ping, setPing] = useState(0), [clockOffset, setClockOffset] = useState(0), [resolution, setResolution] = useState<MatchResolution | null>(null);
-  const [connectionFailed, setConnectionFailed] = useState(false), [accountStage, setAccountStage] = useState<AccountStage>('INITIALIZING'), [account, setAccount] = useState<UserAccountState | null>(null), [accessToken, setAccessToken] = useState(''), [loadoutOpen, setLoadoutOpen] = useState(false), [accountError, setAccountError] = useState('');
+  const [connectionFailed, setConnectionFailed] = useState(false), [accountStage, setAccountStage] = useState<AccountStage>('INITIALIZING'), [account, setAccount] = useState<UserAccountState | null>(null), [accessToken, setAccessToken] = useState(''), [accountError, setAccountError] = useState('');
+  const initialPath = tabForPath(location.pathname) ? (location.pathname === '/' ? '/lobby' : location.pathname) : '/lobby';
+  if (location.pathname !== initialPath) history.replaceState(null, '', initialPath);
+  const [activeTab, setActiveTab] = useState<AppTab>(() => tabForPath(initialPath) ?? 'lobby'), [currentPath, setCurrentPath] = useState(initialPath);
   const [feedback, setFeedback] = useState<BattlePresentationEvent[]>([]), [activeAbilityId, setActiveAbilityId] = useState(''), [skillPending, setSkillPending] = useState(false), [opponentExit, setOpponentExit] = useState(false), [rematchPending, setRematchPending] = useState(false), [lobbyPending, setLobbyPending] = useState(false);
   const [visualAttacks, setVisualAttacks] = useState<PendingAttack[]>([]);
   const battleId = useRef<string | null>(null), selfId = useRef<string | null>(null), snapshotRef = useRef<BattleSnapshot | null>(null), attacks = useRef(new Map<string, PendingAttack>()), connectionTimer = useRef<ReturnType<typeof setTimeout> | null>(null), abilityTimer = useRef<ReturnType<typeof setTimeout> | null>(null), gaugeAtRequest = useRef(0);
+  const currentPathRef = useRef(initialPath), currentHistoryStateRef = useRef(history.state), navigationBlocker = useRef<((targetPath: string) => boolean) | null>(null);
+  const registerNavigationBlocker = useCallback((blocker: ((targetPath: string) => boolean) | null) => { navigationBlocker.current = blocker }, []);
+  const navigatePath = useCallback((path: string, options?: { replace?: boolean; state?: object }) => {
+    if (snapshotRef.current) { history.replaceState(null, '', '/battle'); return }
+    if (navigationBlocker.current?.(path)) return;
+    if (options?.replace) history.replaceState(options.state ?? null, '', path);
+    else if (location.pathname !== path || options?.state) history.pushState(options?.state ?? null, '', path);
+    currentHistoryStateRef.current = options?.state ?? null;
+    currentPathRef.current = path; setCurrentPath(path); setActiveTab(tabForPath(path) ?? 'lobby');
+  }, []);
 
   useEffect(() => {
     let active = true, unsubscribe = () => {};
     const start = async () => { setAccountStage('CHECKING_SESSION'); setAccountError(''); try { const result = await bootstrapAccount((token) => { if (!active) return; if (token) { setAccessToken(token); connectAuthenticated(token) } else { setAccessToken(''); setAccount(null); setAccountStage('RETRYABLE_ERROR'); socket.disconnect() } }); if (!active) { result.unsubscribe(); return } unsubscribe = result.unsubscribe; setAccessToken(result.accessToken); setAccount(result.account); setName(result.account.profile.displayName); setAccountStage('READY'); connectAuthenticated(result.accessToken) } catch (error) { if (!active) return; setAccountStage(error instanceof Error && error.message.includes('VITE_SUPABASE') ? 'FATAL_ERROR' : 'RETRYABLE_ERROR'); setAccountError(error instanceof Error ? error.message : 'ACCOUNT_ERROR') } };
     void start(); return () => { active = false; unsubscribe() };
+  }, []);
+
+  useEffect(() => {
+    const onPopState = () => {
+      if (snapshotRef.current) { history.replaceState(null, '', '/battle'); return }
+      if (navigationBlocker.current?.(location.pathname)) { history.pushState(currentHistoryStateRef.current, '', currentPathRef.current); return }
+      const tab = tabForPath(location.pathname);
+      if (!tab) { history.replaceState(null, '', '/lobby'); currentPathRef.current = '/lobby'; setCurrentPath('/lobby'); setActiveTab('lobby'); return }
+      currentPathRef.current = location.pathname; currentHistoryStateRef.current = history.state; setCurrentPath(location.pathname); setActiveTab(tab);
+    };
+    addEventListener('popstate', onPopState);
+    return () => removeEventListener('popstate', onPopState);
   }, []);
 
   useEffect(() => {
@@ -32,7 +58,7 @@ export default function App() {
     if (!socket.connected) scheduleWarning();
     const onSession = (data: { sessionToken: string; name: string }) => { sessionStorage.setItem('mercenary-session', data.sessionToken); setName(data.name) };
     const onQueue = (data: { queued: boolean; joinedAt?: number }) => setQueuedAt(data.queued ? data.joinedAt ?? Date.now() : null);
-    const onSnapshot = (data: BattleSnapshot) => { if (battleId.current !== data.battleId) { battleId.current = data.battleId; attacks.current.clear(); setFeedback([]); setVisualAttacks(data.pendingAttacks); setResolution(null); setOpponentExit(false); setRematchPending(false); setLobbyPending(false) } selfId.current = data.selfId; snapshotRef.current = data; setSnapshot(data); if (skillPending && (data.self.gauge < gaugeAtRequest.current || data.phase !== 'PLAYING')) setSkillPending(false) };
+    const onSnapshot = (data: BattleSnapshot) => { if (battleId.current !== data.battleId) { battleId.current = data.battleId; attacks.current.clear(); setFeedback([]); setVisualAttacks(data.pendingAttacks); setResolution(null); setOpponentExit(false); setRematchPending(false); setLobbyPending(false) } selfId.current = data.selfId; snapshotRef.current = data; if (location.pathname !== '/battle') history.pushState(null, '', '/battle'); currentPathRef.current = '/battle'; currentHistoryStateRef.current = null; setCurrentPath('/battle'); setSnapshot(data); if (skillPending && (data.self.gauge < gaugeAtRequest.current || data.phase !== 'PLAYING')) setSkillPending(false) };
     const onEvent = (event: CombatEvent) => {
       const current = snapshotRef.current;
       if (event.type === 'ATTACK_QUEUED') { attacks.current.set(event.attack.id, event.attack); setVisualAttacks((value) => [...value.filter((attack) => attack.id !== event.attack.id), event.attack]); sound('attack') }
@@ -43,7 +69,7 @@ export default function App() {
     };
     const onEnd = (result: BattleResult) => { setFeedback([]); setSkillPending(false); sound(result.winnerId === null ? 'match' : result.winnerId === selfId.current ? 'win' : 'lose') };
     const onFrenzy = (_state: FrenzyState) => setFeedback((value) => appendFeedback(value, { id: `frenzy:${Date.now()}`, category: 'frenzy', owner: 'common', sourceName: '', label: '격전 돌입', icon: '⚔', priority: 100, createdAt: Date.now(), durationMs: reducedMotion ? 900 : 1_250 }));
-    const onLobbyAccepted = () => { battleId.current = null; selfId.current = null; snapshotRef.current = null; attacks.current.clear(); setSnapshot(null); setResolution(null); setQueuedAt(null); setOpponentExit(false); setFeedback([]); setVisualAttacks([]); setLobbyPending(false); setRematchPending(false) };
+    const onLobbyAccepted = () => { battleId.current = null; selfId.current = null; snapshotRef.current = null; attacks.current.clear(); setSnapshot(null); setResolution(null); setQueuedAt(null); setOpponentExit(false); setFeedback([]); setVisualAttacks([]); setLobbyPending(false); setRematchPending(false); setActiveTab('lobby'); currentPathRef.current = '/lobby'; currentHistoryStateRef.current = null; setCurrentPath('/lobby'); history.replaceState(null, '', '/lobby') };
     const onOpponentExit = () => { setOpponentExit(true); setRematchPending(false) };
     const onError = () => { setSkillPending(false); setLobbyPending(false); setRematchPending(false) };
     socket.on('connect', onConnect); socket.on('disconnect', onDisconnect); socket.on('connect_error', onConnectError); socket.on('session', onSession); socket.on('queueStatus', onQueue); socket.on('stateSnapshot', onSnapshot); socket.on('boardResolved', setResolution); socket.on('combatEvent', onEvent); socket.on('frenzyStarted', onFrenzy); socket.on('battleEnded', onEnd); socket.on('returnToLobbyAccepted', onLobbyAccepted); socket.on('opponentReturnedToLobby', onOpponentExit); socket.on('errorMessage', onError);
@@ -54,7 +80,8 @@ export default function App() {
 
   const toggleMute = () => { setMute((value) => { setMuted(!value); return !value }) };
   const reconnect = () => { setConnectionFailed(false); connectAuthenticated(accessToken) };
-  if (!snapshot) return <main className="shell lobby"><ConnectionStatusBanner connected={connected} failed={connectionFailed} accountBusy={accountStage !== 'READY' && accountStage !== 'RETRYABLE_ERROR' && accountStage !== 'FATAL_ERROR'} onRetry={reconnect}/><div className="crest" aria-hidden="true"><span>7×7</span></div><div className="lobby-heading"><small>표시 이름</small><h1>폐급용병단 MATCH</h1><strong data-testid="lobby-ready">{name}</strong><p>검으로 공격, 방패로 방어, 회복과 마력으로 전장을 지배하세요.</p></div>{(accountStage === 'RETRYABLE_ERROR' || accountStage === 'FATAL_ERROR') && <div className="account-error" role="alert" data-testid="account-status"><p>{accountStage === 'FATAL_ERROR' ? '계정 설정을 확인하세요.' : '용병단 기록을 불러오지 못했습니다.'}</p>{accountError && accountStage !== 'FATAL_ERROR' && <button onClick={() => { resetAccountBootstrapForRetry(); location.reload() }}>재시도</button>}</div>}{account && <section className="lobby-loadout"><h2>현재 편성</h2><LobbyLoadout account={account}/><button className="secondary edit-loadout" data-testid="edit-loadout" disabled={accountStage !== 'READY' || Boolean(queuedAt)} onClick={() => setLoadoutOpen(true)}>편성 변경</button></section>}<div className="lobby-actions">{queuedAt ? <><QueueTimer since={queuedAt}/><button onClick={() => socket.emit('queueLeave')}>대기 취소</button></> : <><button data-testid="normal-match" disabled={!connected || accountStage !== 'READY'} onClick={() => socket.emit('queueJoin', {})}>일반전</button><button className="secondary" disabled={!connected || accountStage !== 'READY'} onClick={() => socket.emit('queueJoin', { immediateBot: true })}>봇 대전</button></>}</div><button className="quiet-button" onClick={toggleMute} aria-label={`음소거 ${muted ? '켜짐' : '꺼짐'}`}>음소거 {muted ? 'OFF' : 'ON'}</button>{loadoutOpen && account && <LoadoutEditor account={account} token={accessToken} onClose={() => setLoadoutOpen(false)} onSaved={(value) => { setAccount(value); setLoadoutOpen(false) }}/>}</main>;
+  const navigateTab = (tab: AppTab) => navigatePath(pathForTab(tab));
+  if (!snapshot) return <AppShell activeTab={activeTab} currentPath={currentPath} account={account} accountStage={accountStage} accountError={accountError} accessToken={accessToken} connected={connected} connectionFailed={connectionFailed} name={name} queuedAt={queuedAt} muted={muted} onNavigate={navigateTab} onNavigatePath={navigatePath} registerNavigationBlocker={registerNavigationBlocker} onRetryConnection={reconnect} onRetryAccount={() => { resetAccountBootstrapForRetry(); location.reload() }} onQueue={(immediateBot) => socket.emit('queueJoin', immediateBot ? { immediateBot: true } : {})} onLeaveQueue={() => socket.emit('queueLeave')} onToggleMute={toggleMute} onAccountSaved={setAccount}/>;
 
   const useSkill = () => { if (skillPending) return; gaugeAtRequest.current = snapshot.self.gauge; setSkillPending(true); socket.emit('useSkillRequest', { requestId: crypto.randomUUID() }); setTimeout(() => setSkillPending(false), 3_000) };
   return <main className="shell battle-screen"><ConnectionStatusBanner connected={connected} failed={connectionFailed} accountBusy={false} onRetry={reconnect}/><CombatComparisonHud snapshot={snapshot} clockOffset={clockOffset} activeAbilityId={activeAbilityId}/><CharacterCombatStage snapshot={snapshot} events={feedback} attacks={visualAttacks} activeAbilityId={activeAbilityId} clockOffset={clockOffset} reducedMotion={reducedMotion}/><section className="board-wrap" aria-label="7×7 전투 보드"><Board key={snapshot.battleId} board={snapshot.board} resolution={resolution} reducedMotion={reducedMotion} active={snapshot.phase === 'PLAYING' && connected} onSwap={(request: SwapRequest) => socket.emit('swapRequest', request)}/>{snapshot.phase === 'COUNTDOWN' && <div className="overlay">전투 준비</div>}</section><ActiveSkillControl snapshot={snapshot} connected={connected} pending={skillPending} onUse={useSkill}/><nav className="battle-utilities" aria-label="보조 설정"><button onClick={() => socket.emit('forfeitRequest')}>기권</button><button onClick={toggleMute}>음소거 {muted ? 'OFF' : 'ON'}</button><label><input type="checkbox" checked={reducedMotion} onChange={(event) => setReducedMotion(event.target.checked)}/>연출 감소</label></nav>{snapshot.phase === 'FINISHED' && snapshot.result && <ResultSummary snapshot={snapshot} opponentExit={opponentExit} rematchPending={rematchPending || snapshot.rematchReady.includes(snapshot.selfId)} lobbyPending={lobbyPending} onRematch={() => { if (!rematchPending) { setRematchPending(true); socket.emit('rematchRequest') } }} onLobby={() => { if (!lobbyPending) { setLobbyPending(true); socket.emit('returnToLobbyRequest') } }}/>} {import.meta.env.DEV && <details className="debug"><summary>DEV</summary><code data-testid="debug-stats">{snapshot.battleId}<br/>socket {connected ? 'on' : 'off'} · ping {ping}ms · offset {Math.round(clockOffset)}ms<br/>HP {snapshot.self.hp}/{snapshot.opponent.hp} SH {snapshot.self.shield}/{snapshot.opponent.shield}<br/>gauge {snapshot.self.gauge} · board v{snapshot.board.version}<br/>frenzy {String(snapshot.frenzy.isFrenzy)} · ATK {snapshot.frenzy.attackMultiplier} SH {snapshot.frenzy.shieldMultiplier} HP {snapshot.frenzy.healMultiplier}<br/>generated {snapshot.stats[snapshot.selfId]?.totalDamageGenerated}/{snapshot.stats[snapshot.opponent.id]?.totalDamageGenerated} hpDamage {snapshot.stats[snapshot.selfId]?.hpDamageDealt}/{snapshot.stats[snapshot.opponent.id]?.hpDamageDealt}</code><div><button onClick={() => socket.emit('debugCommand', { action: 'deterministicBoard' })}>Test board</button><button data-testid="debug-sword" onClick={() => socket.emit('debugCommand', { action: 'swordMove' })}>Sword move</button><button data-testid="debug-shield" onClick={() => socket.emit('debugCommand', { action: 'shieldMove' })}>Shield move</button><button data-testid="debug-heal" onClick={() => socket.emit('debugCommand', { action: 'healMove' })}>Heal move</button><button data-testid="debug-mana" onClick={() => socket.emit('debugCommand', { action: 'manaMove' })}>Mana move</button><button data-testid="debug-time35" onClick={() => socket.emit('debugCommand', { action: 'time35' })}>35s</button><button data-testid="debug-time5" onClick={() => socket.emit('debugCommand', { action: 'time5' })}>5s</button><button data-testid="debug-win" onClick={() => socket.emit('debugCommand', { action: 'win' })}>Win</button><button onClick={() => socket.emit('debugCommand', { action: 'lose' })}>Lose</button></div></details>}</main>;

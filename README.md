@@ -74,6 +74,26 @@ Future combatants and two support mercenaries attach at `LoadoutDefinition` and 
 - Temporary geometric fighter art and synthesized effects are deliberately minimal.
 - The prototype has no spectator or replay system.
 
+## Mobile App Shell and navigation
+
+Outside battle, the client uses a single mobile game App Shell with a fixed header, one scrollable content area, and a safe-area-aware five-tab bottom navigation. The order is Gacha, Mercenaries, Lobby, Inventory, and Forge. Lobby is the default and visually emphasized center tab. Desktop browsers keep the same navigation inside the centered portrait frame.
+
+The normal-screen routes are `/gacha`, `/mercenaries`, `/lobby`, `/inventory`, and `/forge`. Mercenary detail and editing add `/mercenaries/:characterId` and `/mercenaries/loadout`. `/` and unknown routes safely normalize to `/lobby`; invalid character detail routes return to `/mercenaries`. Browser back/forward and refresh restore the current normal view without rerunning the account bootstrap or recreating the Socket.IO client. The account, owned-character list, saved loadout, and authenticated socket remain owned by the top-level application for the lifetime of the page.
+
+- Gacha is a presentation-only preparation screen. Recruitment buttons are disabled and there are no rates, currency, results, or network requests.
+- Mercenaries opens the collection-first **Mercenary Archive**. Its image-led cards expose only short names, rarity, recommended role, and current combatant/support placement. Search covers names, descriptions, and tags; rarity and role filters plus name/rarity sorting are local and make no server request.
+- Selecting a collection card opens a route-backed, focus-trapped character detail dialog. It presents the large available portrait, setting text, active ability, support effect, and current placement without exposing internal IDs or effect JSON. Escape, the close action, backdrop click, and browser Back close it and restore focus to the originating card when available.
+- `/mercenaries/loadout` is the only full loadout editor. It separates the combatant, support 1, and support 2 slots from slot-specific candidates, prevents duplicate and disallowed choices in the UI, and keeps edits in a local draft. Cancel, Escape, or browser Back prompts before discarding a dirty draft. Save reuses the authenticated loadout API and `expectedVersion`; success updates the top-level account immediately, while failure preserves the draft and the previously saved loadout.
+- Lobby is the home screen. It displays the saved combatant and two supports, normal matchmaking, immediate bot training, and a shortcut that opens the loadout editor directly. Save or cancel returns to Lobby when editing began there, and a successful save refreshes the Lobby summary without another account bootstrap.
+- Inventory provides five local filters and an intentional empty state. It does not invent or request item data.
+- Forge is accessible as a visibly locked future-content screen. It does not create unlock requirements, equipment, crafting, or enhancement state.
+
+When an authoritative battle snapshot exists, `/battle` replaces the App Shell, header, and bottom navigation with the dedicated no-scroll combat screen. Browser navigation cannot hide a live or finished battle locally. The explicit server-approved return-to-lobby flow clears the battle presentation, restores the Lobby tab at `/lobby`, and keeps the Supabase account and Socket.IO connection alive. A refreshed page can still restore a server-held battle through the existing reconnection snapshot.
+
+Actual recruitment, items, equipment, crafting, and enhancement remain unimplemented future systems.
+
+Character growth, equipment, multiple loadout presets, automatic composition, and server-saved favorites are also not implemented.
+
 ## Render single-service deployment
 
 Production uses one Render Node Web Service. The built Express process serves `/health`, the Socket.IO endpoint, Vite static assets, and the React SPA from the same HTTP server and public origin. This keeps the in-memory queue and battles on the same instance as every connected client; do not create a separate Static Site or a second Web Service.

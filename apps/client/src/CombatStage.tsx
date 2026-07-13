@@ -65,6 +65,7 @@ function AttackProjectile({ attack, selfId, clockOffset }: { attack: PendingAtta
 function AttackLane({ attacks, selfId, clockOffset }: { attacks: PendingAttack[]; selfId: string; clockOffset: number }) {
   const incoming = attacks.filter((attack) => attack.targetId === selfId);
   return <div className="attack-lane" data-testid="attack-warning" aria-label="접근 중인 공격">
+    <span className="sr-only">{incoming.map((attack) => `${attack.kind} ${attack.damage}`).join(', ')}</span>
     {attacks.slice(0, 4).map((attack) => <AttackProjectile key={attack.id} attack={attack} selfId={selfId} clockOffset={clockOffset}/>)}
     {incoming.length > 0 && <div className="incoming-readout"><span>접근 중</span><b>{incoming[0]!.damage}</b>{incoming.length > 1 && <small>+{incoming.length - 1}</small>}</div>}
   </div>;

@@ -13,7 +13,7 @@ function configuration() {
 }
 async function api<T>(path: string, token: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`${apiOrigin}${path}`, { ...init, headers: { 'content-type': 'application/json', authorization: `Bearer ${token}`, ...init?.headers } });
-  if (!response.ok) throw new Error(response.status === 401 ? 'AUTH_EXPIRED' : 'ACCOUNT_REQUEST_FAILED'); return response.json() as Promise<T>;
+  if (!response.ok) throw new Error(response.status === 401 ? 'AUTH_EXPIRED' : response.status === 409 ? 'ACCOUNT_VERSION_CONFLICT' : 'ACCOUNT_REQUEST_FAILED'); return response.json() as Promise<T>;
 }
 function testToken() { let userId = localStorage.getItem('mercenary-test-user'); if (!userId) { userId = crypto.randomUUID(); localStorage.setItem('mercenary-test-user', userId) } return `test-user-${userId}` }
 

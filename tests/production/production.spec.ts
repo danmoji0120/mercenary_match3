@@ -3,6 +3,8 @@ import { expect, test } from '@playwright/test';
 test('single-origin production shell protects account-required actions', async ({ page }) => {
   const errors: string[] = []; page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/');
+  await expect(page).toHaveURL(/\/lobby$/);
+  await expect(page.getByTestId('bottom-navigation').getByRole('button')).toHaveCount(5);
   await expect(page.locator('details.debug')).toHaveCount(0);
   await expect(page.getByTestId('account-status')).toBeVisible();
   await expect(page.getByTestId('normal-match')).toBeDisabled();

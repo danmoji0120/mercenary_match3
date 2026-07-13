@@ -63,7 +63,7 @@ export function ActiveSkillControl({ snapshot, connected, pending, onUse }: { sn
 }
 
 type NumericBattleStatKey = { [Key in keyof BattleStats]: BattleStats[Key] extends number ? Key : never }[keyof BattleStats];
-const detailRows: Array<[string, NumericBattleStatKey]> = [['가한 총 피해', 'totalDamageGenerated'], ['HP 피해', 'hpDamageDealt'], ['보호막 피해', 'shieldDamageDealt'], ['획득 보호막', 'shieldGained'], ['회복량', 'healingDone'], ['마력 획득', 'manaGained'], ['최대 연쇄', 'maxChain'], ['보호막 파괴', 'shieldBreakCount'], ['완전 방어', 'attacksFullyBlocked'], ['보호막 무시', 'directHpDamageBypass'], ['회복 차단', 'healingPrevented'], ['피해 감소', 'damageReduced']];
+const detailRows: Array<[string, NumericBattleStatKey]> = [['가한 총 피해', 'totalDamageGenerated'], ['HP 피해', 'hpDamageDealt'], ['보호막 피해', 'shieldDamageDealt'], ['막은 피해', 'damageBlockedByShield'], ['획득 보호막', 'shieldGained'], ['회복량', 'healingDone'], ['마력 획득', 'manaGained'], ['최대 연쇄', 'maxChain'], ['보호막 파괴', 'shieldBreakCount'], ['완전 방어', 'attacksFullyBlocked'], ['보호막 무시', 'directHpDamageBypass'], ['회복 차단', 'healingPrevented'], ['피해 감소', 'damageReduced']];
 function StatsRows({ rows, self, opponent }: { rows: Array<[string, NumericBattleStatKey]>; self: BattleStats; opponent: BattleStats }) { return <div className="stats-grid">{rows.map(([label, key]) => <div className="stats-row" data-stat={key} key={key}><span>{label}</span><b data-side="self">{self[key]}</b><b data-side="opponent">{opponent[key]}</b></div>)}</div> }
 function reasonLabel(reason: BattleResult['reason']) { return reason === 'HP_ZERO' ? 'HP 0' : reason === 'TIMEOUT' ? '시간 종료' : reason === 'FORFEIT' ? '기권' : reason === 'DISCONNECT' ? '연결 종료' : '서버 종료' }
 

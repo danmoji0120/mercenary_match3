@@ -1,0 +1,33 @@
+.mercenary-detail-backdrop {
+  position: fixed;
+  left: 0;
+  right: 0;
+  width: min(100vw, 540px);
+  height: 100dvh;
+  margin: auto;
+  overflow: hidden;
+}
+
+.mercenary-detail-dialog {
+  max-height: 100%;
+}
+
+.loadout-candidate.detail-focused:not(.selected) {
+  outline: 2px dashed #b99a68;
+  outline-offset: -3px;
+}
+
+.loadout-saved-toast {
+  position: sticky;
+  z-index: 35;
+  top: 0;
+  display: block;
+  margin: 0 auto 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--positive);
+  border-radius: 10px;
+  background: #163025ee;
+  color: #9be5b9;
+  text-align: center;
+  font-size: 11px;
+}
