@@ -1,0 +1,20 @@
+{
+  "id": "healing_reduction",
+  "name": "회복 봉인",
+  "description": "받는 회복량이 45% 감소합니다.",
+  "durationMs": 7000,
+  "stacking": "refresh",
+  "maxStacks": 1,
+  "refreshPolicy": "refresh",
+  "consumePolicy": null,
+  "modifiers": [
+    {
+      "type": "healing_received_multiplier",
+      "value": 0.55
+    }
+  ],
+  "triggers": [],
+  "visibleToOwner": true,
+  "visibleToOpponent": true,
+  "contentVersion": 1
+}

@@ -1,0 +1,43 @@
+{
+  "id": "yuria_revenge_edge",
+  "kind": "support",
+  "name": "복수의 칼날",
+  "shortDescription": "보호막 파괴 시 피해 75 · 재사용 9초",
+  "fullDescription": "적의 공격으로 아군 보호막이 파괴되면 반격합니다.",
+  "trigger": {
+    "type": "shield_broken"
+  },
+  "cost": 0,
+  "cooldownMs": 9000,
+  "oncePerBattle": false,
+  "maxTriggersPerBattle": null,
+  "conditions": [
+    {
+      "type": "source_type_is",
+      "value": "enemy_attack"
+    }
+  ],
+  "effects": [
+    {
+      "type": "schedule_effects",
+      "delayMs": 0,
+      "effects": [
+        {
+          "type": "deal_damage",
+          "target": "opponent",
+          "amount": 75,
+          "travelMs": 0,
+          "tags": [
+            "counter",
+            "offense"
+          ]
+        }
+      ]
+    }
+  ],
+  "tags": [
+    "offense"
+  ],
+  "contentVersion": 1,
+  "enabled": true
+}

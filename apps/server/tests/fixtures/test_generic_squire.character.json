@@ -1,0 +1,17 @@
+{
+  "id": "test_generic_squire",
+  "name": "Generic Squire",
+  "shortName": "Squire",
+  "rarity": "R",
+  "race": "human",
+  "tags": ["human", "test"],
+  "description": "JSON-only generic engine fixture.",
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": ["combatant", "support"],
+  "recommendedRole": "combatant",
+  "portraitAsset": "/characters/yuria_counter_sword.svg",
+  "combatant": { "skillId": "test_generic_strike" },
+  "support": { "effectId": "test_generic_mana_support" }
+}

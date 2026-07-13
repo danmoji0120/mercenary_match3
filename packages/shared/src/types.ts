@@ -1,6 +1,61 @@
 export const TILE_TYPES = ['SWORD', 'SHIELD', 'HEAL', 'MANA'] as const;
 export type TileType = (typeof TILE_TYPES)[number];
 
+export type CharacterId = string;
+export type CharacterRarity = 'R' | 'SR' | 'SSR';
+export type CharacterSlot = 'combatant' | 'support';
+export interface CharacterDefinition {
+  id: CharacterId;
+  name: string;
+  shortName: string;
+  rarity: CharacterRarity;
+  race: string;
+  tags: string[];
+  description: string;
+  enabled: boolean;
+  starter: boolean;
+  contentVersion: number;
+  allowedSlots: CharacterSlot[];
+  recommendedRole: CharacterSlot;
+  portraitAsset: string;
+  defaultSlots?: Array<'account_combatant' | 'account_support_1' | 'account_support_2' | 'bot_combatant' | 'bot_support_1' | 'bot_support_2'>;
+  combatant: { skillId: string; ability?: AbilitySummary };
+  support: { effectId: string; ability?: AbilitySummary };
+}
+export type AbilityKind = 'active' | 'support';
+export type AbilityTag = 'offense' | 'defense' | 'heal' | 'disruption' | 'shield' | 'execute';
+export interface AbilitySummary { id: string; kind: AbilityKind; name: string; shortDescription: string; fullDescription: string; cost: number; cooldownMs: number; tags: AbilityTag[] }
+export interface StatusSnapshot { id: string; name: string; sourceParticipantId: string; targetParticipantId: string; stackCount: number; expiresAt: number; visible: boolean }
+export interface AbilityRuntimeSnapshot { runtimeKey: string; abilityId: string; cooldownEndsAt: number; triggersUsed: number; usedThisBattle: boolean; remainingCharges: number }
+export interface ScheduledEffectSnapshot { id: string; executeAt: number; sourceParticipantId: string; targetParticipantId: string; sourceAbilityId: string; sourceAttackId?: string; sequence: number }
+export interface EffectRuntimeSnapshot { activeAbility: AbilitySummary; supportAbilities: [AbilitySummary, AbilitySummary]; statuses: StatusSnapshot[]; abilities: AbilityRuntimeSnapshot[]; scheduledEffects: ScheduledEffectSnapshot[]; runtimeFlags: Record<string, number | boolean | string>; messages: string[] }
+export interface OwnedCharacter { characterId: CharacterId; acquiredAt: string; acquisitionSource: string }
+export interface UserProfile { displayName: string; createdAt: string; updatedAt: string; lastSeenAt: string }
+export interface UserLoadout {
+  combatantCharacterId: CharacterId;
+  supportCharacterId1: CharacterId;
+  supportCharacterId2: CharacterId;
+  loadoutVersion: number;
+}
+export interface UserAccountState {
+  profile: UserProfile;
+  ownedCharacterIds: CharacterId[];
+  loadout: UserLoadout;
+  characters: CharacterDefinition[];
+  accountReady: boolean;
+}
+export type AccountBootstrapResponse = UserAccountState;
+export type AccountMeResponse = UserAccountState;
+export interface UpdateLoadoutRequest {
+  combatantCharacterId: CharacterId;
+  supportCharacterId1: CharacterId;
+  supportCharacterId2: CharacterId;
+  expectedVersion?: number;
+}
+export interface UpdateLoadoutResponse { loadout: UserLoadout }
+export interface LoadoutCharacterSnapshot { characterId: CharacterId; name: string; portraitAsset: string; rarity: CharacterRarity }
+export interface BattleLoadoutSnapshot { combatant: LoadoutCharacterSnapshot; supports: [LoadoutCharacterSnapshot, LoadoutCharacterSnapshot] }
+
 export type BattlePhase =
   | 'LOBBY'
   | 'QUEUED'
@@ -60,6 +115,17 @@ export interface BattleStats {
   attacksQueued: number;
   attacksFullyBlocked: number;
   shieldBreakCount: number;
+  activeSkillUsesById: Record<string, number>;
+  supportEffectTriggersById: Record<string, number>;
+  damageByAbilityId: Record<string, number>;
+  healingByAbilityId: Record<string, number>;
+  shieldByAbilityId: Record<string, number>;
+  directHpDamageBypass: number;
+  healingPrevented: number;
+  damageReduced: number;
+  bonusShieldFromEffects: number;
+  emergencyHealsTriggered: number;
+  countersTriggered: number;
 }
 
 export interface BotDiagnostics {
@@ -112,6 +178,7 @@ export interface BattleParticipant {
   gauge: number;
   board: BoardState;
   loadout: LoadoutDefinition;
+  battleLoadout?: BattleLoadoutSnapshot;
 }
 
 export interface PendingAttack {
@@ -122,6 +189,9 @@ export interface PendingAttack {
   kind: 'SWORD' | 'SKILL';
   createdAt: number;
   arrivesAt: number;
+  sourceAbilityId?: string;
+  sourceTags?: string[];
+  shieldBypassRatio?: number;
 }
 
 export type CombatEvent =
@@ -129,9 +199,12 @@ export type CombatEvent =
   | { type: 'ATTACK_RESOLVED'; at: number; attackId: string; absorbed: number; hpDamage: number; shieldBroken: boolean }
   | { type: 'SHIELD_GAINED'; at: number; participantId: string; amount: number }
   | { type: 'HEALED'; at: number; participantId: string; amount: number }
-  | { type: 'GAUGE_GAINED'; at: number; participantId: string; amount: number };
+  | { type: 'GAUGE_GAINED'; at: number; participantId: string; amount: number }
+  | { type: 'ABILITY_TRIGGERED'; at: number; participantId: string; abilityId: string; abilityName: string; kind: AbilityKind }
+  | { type: 'STATUS_CHANGED'; at: number; participantId: string; statusId: string; active: boolean }
+  | { type: 'BATTLE_MESSAGE'; at: number; participantId: string; message: string };
 
-export interface PublicParticipant { id: string; name: string; isBot: boolean; connected: boolean; hp: number; shield: number; gauge: number }
+export interface PublicParticipant { id: string; name: string; isBot: boolean; connected: boolean; hp: number; shield: number; gauge: number; loadout: BattleLoadoutSnapshot; effectRuntime?: EffectRuntimeSnapshot }
 export interface BattleSnapshot {
   battleId: string;
   phase: BattlePhase;
@@ -156,6 +229,7 @@ export interface ClientToServerEvents {
   swapRequest: (payload: SwapRequest) => void;
   useSkillRequest: (payload: { requestId: string }) => void;
   rematchRequest: () => void;
+  returnToLobbyRequest: () => void;
   forfeitRequest: () => void;
   pingRequest: (sentAt: number, callback: (serverNow: number) => void) => void;
   debugCommand: (payload: { action: 'deterministicBoard' | 'swordMove' | 'shieldMove' | 'healMove' | 'manaMove' | 'time35' | 'time5' | 'win' | 'lose' }) => void;
@@ -172,5 +246,7 @@ export interface ServerToClientEvents {
   battleEnded: (result: BattleResult) => void;
   frenzyStarted: (state: FrenzyState) => void;
   opponentDisconnected: (payload: { deadline: number }) => void;
+  returnToLobbyAccepted: () => void;
+  opponentReturnedToLobby: () => void;
   errorMessage: (payload: { message: string }) => void;
 }

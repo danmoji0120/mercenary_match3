@@ -1,0 +1,23 @@
+{
+  "id": "emergency_guard",
+  "name": "긴급 방어",
+  "description": "다음 적 공격 피해가 45% 감소합니다.",
+  "durationMs": 5000,
+  "stacking": "refresh",
+  "maxStacks": 1,
+  "refreshPolicy": "refresh",
+  "consumePolicy": {
+    "type": "on_next_incoming_attack",
+    "consumeAfter": "attack_arrived"
+  },
+  "modifiers": [
+    {
+      "type": "incoming_damage_multiplier",
+      "value": 0.55
+    }
+  ],
+  "triggers": [],
+  "visibleToOwner": true,
+  "visibleToOpponent": true,
+  "contentVersion": 1
+}

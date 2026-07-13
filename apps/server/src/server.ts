@@ -7,6 +7,10 @@ import express from 'express';
 import { Server } from 'socket.io';
 import type { ClientToServerEvents, ServerToClientEvents } from '@mercenary/shared';
 import { GameServer } from './game-server.js';
+import { InMemoryAccountRepository, InMemoryAuthVerifier, createSupabaseServices, type AccountServices } from './account.js';
+import { ensureAccount, installAccountApi } from './account-api.js';
+import { readSupabaseServerEnvironment } from './environment.js';
+import { loadCharacterRegistry } from './character-registry.js';
 
 export const SERVER_HOST = '0.0.0.0';
 export const DEFAULT_PORT = 3001;
@@ -19,6 +23,7 @@ export interface ServerOptions {
   clientOrigins?: string[];
   queueBotDelayMs?: number;
   reconnectGraceMs?: number;
+  accountServices?: AccountServices;
 }
 
 export function parsePort(value: string | undefined): number {
@@ -47,7 +52,11 @@ export function createMercenaryServer(options: ServerOptions = {}) {
   const origins = options.clientOrigins ?? configuredOrigins(environment);
   if (!production || origins.length) app.use(cors({ origin: origins, credentials: true }));
   app.use(express.json({ limit: '16kb' }));
+  const registry = options.accountServices?.registry ?? loadCharacterRegistry();
+  const supabaseEnvironment = options.accountServices ? null : readSupabaseServerEnvironment(environment);
+  const accountServices = options.accountServices ?? (supabaseEnvironment ? createSupabaseServices(supabaseEnvironment.url, supabaseEnvironment.secretKey, registry) : { auth: new InMemoryAuthVerifier(new Map(), true), accounts: new InMemoryAccountRepository(), registry });
   app.get('/health', (_request, response) => response.status(200).json({ status: 'ok', service: 'mercenary-match3', uptimeSeconds: Math.floor(process.uptime()), clientReady }));
+  installAccountApi(app, accountServices);
 
   if (clientReady) {
     app.use(express.static(clientDistPath, {
@@ -59,7 +68,7 @@ export function createMercenaryServer(options: ServerOptions = {}) {
         else response.setHeader('Cache-Control', 'public, max-age=3600');
       },
     }));
-    app.get(/^(?!\/health(?:\/|$)|\/socket\.io(?:\/|$)).*/, (request, response) => {
+    app.get(/^(?!\/health(?:\/|$)|\/api(?:\/|$)|\/socket\.io(?:\/|$)).*/, (request, response) => {
       if (path.extname(request.path)) { response.status(404).json({ error: 'Not found' }); return }
       response.setHeader('Cache-Control', 'no-store');
       response.sendFile(indexPath);
@@ -72,7 +81,13 @@ export function createMercenaryServer(options: ServerOptions = {}) {
   const httpServer = http.createServer(app);
   const socketOptions = origins.length ? { cors: { origin: origins, credentials: true }, maxHttpBufferSize: 16_384 } : { maxHttpBufferSize: 16_384 };
   const io = new Server<ClientToServerEvents, ServerToClientEvents>(httpServer, socketOptions);
-  const game = new GameServer(io, options.queueBotDelayMs, options.reconnectGraceMs, !production);
+  const game = new GameServer(io, options.queueBotDelayMs, options.reconnectGraceMs, !production, registry, (userId) => ensureAccount(accountServices, userId));
+  io.use(async (socket, next) => {
+    const accessToken = typeof socket.handshake.auth.accessToken === 'string' ? socket.handshake.auth.accessToken : '';
+    if (!accessToken) { next(new Error('Authentication required')); return }
+    try { const identity = await accountServices.auth.verify(accessToken); const account = await ensureAccount(accountServices, identity.userId); registry.validateLoadout(account.loadout, new Set(account.ownedCharacterIds)); (socket.data as any).userId = identity.userId; (socket.data as any).account = account; next() }
+    catch { next(new Error('Account authentication failed')) }
+  });
   io.on('connection', (socket) => game.attach(socket));
 
   let shutdownPromise: Promise<void> | null = null;
@@ -87,5 +102,5 @@ export function createMercenaryServer(options: ServerOptions = {}) {
     return shutdownPromise;
   }
 
-  return { app, httpServer, io, game, environment, production, clientDistPath, clientReady, shutdown };
+  return { app, httpServer, io, game, accountServices, environment, production, clientDistPath, clientReady, shutdown };
 }

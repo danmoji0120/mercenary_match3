@@ -1,0 +1,33 @@
+{
+  "id": "marta_guard_command",
+  "kind": "active",
+  "name": "긴급 방어 명령",
+  "shortDescription": "보호막 120 · 다음 공격 피해 45% 감소",
+  "fullDescription": "보호막을 얻고 다음 한 번의 적 공격 피해를 크게 줄입니다.",
+  "trigger": {
+    "type": "active_requested"
+  },
+  "cost": 100,
+  "cooldownMs": 0,
+  "oncePerBattle": false,
+  "maxTriggersPerBattle": null,
+  "conditions": [],
+  "effects": [
+    {
+      "type": "gain_shield",
+      "target": "self",
+      "amount": 120
+    },
+    {
+      "type": "apply_status",
+      "target": "self",
+      "statusId": "emergency_guard"
+    }
+  ],
+  "tags": [
+    "defense",
+    "shield"
+  ],
+  "contentVersion": 1,
+  "enabled": true
+}

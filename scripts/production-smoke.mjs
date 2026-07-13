@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 
 const port = await new Promise((resolve, reject) => { const probe = net.createServer(); probe.once('error', reject); probe.listen(0, '127.0.0.1', () => { const address = probe.address(); const value = typeof address === 'object' && address ? address.port : 0; probe.close(() => resolve(value)) }) });
 const baseUrl = `http://127.0.0.1:${port}`;
-const child = spawn(process.execPath, ['apps/server/dist/index.js'], { cwd: process.cwd(), env: { ...process.env, NODE_ENV: 'production', PORT: String(port), CLIENT_ORIGIN: '', ENABLE_TEST_API: 'true' }, stdio: ['ignore', 'pipe', 'pipe'] });
+const child = spawn(process.execPath, ['apps/server/dist/index.js'], { cwd: process.cwd(), env: { ...process.env, NODE_ENV: 'production', PORT: String(port), CLIENT_ORIGIN: '', ENABLE_TEST_API: 'true', SUPABASE_URL: 'https://example.supabase.co', SUPABASE_SECRET_KEY: 'smoke-placeholder-not-a-real-secret' }, stdio: ['ignore', 'pipe', 'pipe'] });
 let output = ''; child.stdout.on('data', (chunk) => { output += chunk.toString() }); child.stderr.on('data', (chunk) => { output += chunk.toString() });
 const deadline = Date.now() + 12_000;
 let ready = false;
@@ -18,16 +18,11 @@ const assetPath = html.match(/(?:src|href)="(\/assets\/[^"]+)"/)?.[1]; if (!asse
 if ((await fetch(`${baseUrl}/assets/does-not-exist.js`)).status !== 404) throw new Error('Missing asset did not return 404');
 if (!(await fetch(`${baseUrl}/battle/client-route`)).ok) throw new Error('SPA fallback failed');
 
-const once = (socket, name, timeout = 3_000) => new Promise((resolve, reject) => { const timer = setTimeout(() => reject(new Error(`Socket event timeout: ${name}`)), timeout); socket.once(name, (value) => { clearTimeout(timer); resolve(value) }) });
-const first = io(baseUrl), second = io(baseUrl), botClient = io(baseUrl);
-await Promise.all([once(first, 'session'), once(second, 'session'), once(botClient, 'session')]);
-const firstFound = once(first, 'matchFound'), secondFound = once(second, 'matchFound'); first.emit('queueJoin', {}); second.emit('queueJoin', {}); const [a, b] = await Promise.all([firstFound, secondFound]); if (a.battleId !== b.battleId) throw new Error('Production clients did not match together');
-const botSnapshot = once(botClient, 'stateSnapshot'); botClient.emit('queueJoin', { immediateBot: true }); const botBattle = await botSnapshot; if (!botBattle.opponent.isBot) throw new Error('Production bot battle failed');
-let debugEnded = false; botClient.once('battleEnded', () => { debugEnded = true }); botClient.emit('debugCommand', { action: 'win' }); await new Promise((resolve) => setTimeout(resolve, 150));
-if (debugEnded || botBattle.phase === 'FINISHED') throw new Error('Production debug command was accepted');
-for (const socket of [first, second, botClient]) socket.close();
+const unauthenticated = io(baseUrl, { reconnection: false });
+const rejection = await new Promise((resolve, reject) => { const timer = setTimeout(() => reject(new Error('Unauthenticated socket was not rejected')), 3_000); unauthenticated.once('connect', () => reject(new Error('Unauthenticated socket connected'))); unauthenticated.once('connect_error', (error) => { clearTimeout(timer); resolve(error.message) }) });
+unauthenticated.close();
 
 child.kill('SIGTERM');
 const exit = await Promise.race([new Promise((resolve) => child.once('exit', (code, signal) => resolve({ code, signal }))), new Promise((_, reject) => setTimeout(() => reject(new Error('Production server did not terminate')), 8_000))]);
 if (!output.includes('staticClient=true')) throw new Error(`Startup diagnostics missing\n${output}`);
-console.log(JSON.stringify({ health: healthBody, assetPath, matchedBattleId: a.battleId, botBattleId: botBattle.battleId, exit }, null, 2));
+console.log(JSON.stringify({ health: healthBody, assetPath, unauthenticatedSocket: rejection, exit }, null, 2));

@@ -1,0 +1,32 @@
+{
+  "id": "eda_curse_appraiser",
+  "name": "저주 감정사 에다",
+  "shortName": "에다",
+  "rarity": "SR",
+  "race": "human",
+  "tags": [
+    "human",
+    "curse",
+    "support",
+    "disruption"
+  ],
+  "description": "저주의 흐름을 읽는 감정사",
+  "enabled": true,
+  "starter": true,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "support",
+  "portraitAsset": "/characters/eda_curse_appraiser.svg",
+  "combatant": {
+    "skillId": "eda_curse_verdict"
+  },
+  "support": {
+    "effectId": "eda_exposed_flaw"
+  },
+  "defaultSlots": [
+    "bot_support_2"
+  ]
+}

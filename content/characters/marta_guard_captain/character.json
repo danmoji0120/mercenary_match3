@@ -1,0 +1,33 @@
+{
+  "id": "marta_guard_captain",
+  "name": "방패 경비반장 마르타",
+  "shortName": "마르타",
+  "rarity": "SR",
+  "race": "human",
+  "tags": [
+    "human",
+    "shield",
+    "support",
+    "guard"
+  ],
+  "description": "대오를 지키는 경비반장",
+  "enabled": true,
+  "starter": true,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "support",
+  "portraitAsset": "/characters/marta_guard_captain.svg",
+  "combatant": {
+    "skillId": "marta_guard_command"
+  },
+  "support": {
+    "effectId": "marta_intercept_order"
+  },
+  "defaultSlots": [
+    "account_support_1",
+    "bot_support_1"
+  ]
+}

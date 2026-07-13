@@ -1,0 +1,37 @@
+{
+  "id": "eda_exposed_flaw",
+  "kind": "support",
+  "name": "약점 감정",
+  "shortDescription": "마력 4+ 매치 후 보호막 무시 30%",
+  "fullDescription": "큰 마력 매치 후 다음 피해 공격 일부가 보호막을 무시합니다.",
+  "trigger": {
+    "type": "match_group_resolved"
+  },
+  "cost": 0,
+  "cooldownMs": 8000,
+  "oncePerBattle": false,
+  "maxTriggersPerBattle": null,
+  "conditions": [
+    {
+      "type": "tile_type_is",
+      "tileType": "MANA"
+    },
+    {
+      "type": "matched_tile_count",
+      "operator": "gte",
+      "value": 4
+    }
+  ],
+  "effects": [
+    {
+      "type": "apply_status",
+      "target": "self",
+      "statusId": "exposed_flaw_charge"
+    }
+  ],
+  "tags": [
+    "disruption"
+  ],
+  "contentVersion": 1,
+  "enabled": true
+}

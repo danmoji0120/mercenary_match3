@@ -1,0 +1,20 @@
+{
+  "id": "damage_reduction",
+  "name": "철벽 태세",
+  "description": "받는 피해가 25% 감소합니다.",
+  "durationMs": 4000,
+  "stacking": "refresh",
+  "maxStacks": 1,
+  "refreshPolicy": "refresh",
+  "consumePolicy": null,
+  "modifiers": [
+    {
+      "type": "incoming_damage_multiplier",
+      "value": 0.75
+    }
+  ],
+  "triggers": [],
+  "visibleToOwner": true,
+  "visibleToOpponent": true,
+  "contentVersion": 1
+}

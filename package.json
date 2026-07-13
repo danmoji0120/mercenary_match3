@@ -22,6 +22,7 @@
     "start": "node apps/server/dist/index.js",
     "start:prod": "npm run start",
     "test:production": "node scripts/production-smoke.mjs && playwright test -c playwright.production.config.ts"
+    ,"supabase:types": "supabase gen types typescript --linked --schema public > packages/shared/src/database.types.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.0",
@@ -33,6 +34,7 @@
     "eslint-config-prettier": "^10.1.5",
     "globals": "^16.3.0",
     "prettier": "^3.6.2",
+    "supabase": "^2.109.1",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.36.0",
     "vitest": "^3.2.4"

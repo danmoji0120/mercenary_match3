@@ -1,0 +1,20 @@
+{
+  "id": "test_generic_mana_support",
+  "kind": "support",
+  "name": "Squire Focus",
+  "shortDescription": "Sword 4+ grants mana 10",
+  "fullDescription": "Uses generic match conditions and mana gain.",
+  "trigger": { "type": "match_group_resolved" },
+  "cost": 0,
+  "cooldownMs": 0,
+  "oncePerBattle": false,
+  "maxTriggersPerBattle": null,
+  "conditions": [
+    { "type": "tile_type_is", "tileType": "SWORD" },
+    { "type": "matched_tile_count", "operator": "gte", "value": 4 }
+  ],
+  "effects": [{ "type": "gain_mana", "target": "self", "amount": 10 }],
+  "tags": ["offense"],
+  "contentVersion": 1,
+  "enabled": true
+}

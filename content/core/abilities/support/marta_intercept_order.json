@@ -1,0 +1,49 @@
+{
+  "id": "marta_intercept_order",
+  "kind": "support",
+  "name": "선제 엄호",
+  "shortDescription": "강한 공격 직전 보호막 75",
+  "fullDescription": "강한 공격이 도착하기 직전 부족한 보호막을 보충합니다.",
+  "trigger": {
+    "type": "before_attack_impact",
+    "leadTimeMs": 150
+  },
+  "cost": 0,
+  "cooldownMs": 10000,
+  "oncePerBattle": false,
+  "maxTriggersPerBattle": null,
+  "conditions": [
+    {
+      "type": "any",
+      "conditions": [
+        {
+          "type": "incoming_damage",
+          "operator": "gte",
+          "value": 150
+        },
+        {
+          "type": "source_has_tag",
+          "tag": "active_skill"
+        }
+      ]
+    },
+    {
+      "type": "self_shield_amount",
+      "operator": "lt",
+      "value": 100
+    }
+  ],
+  "effects": [
+    {
+      "type": "gain_shield",
+      "target": "self",
+      "amount": 75
+    }
+  ],
+  "tags": [
+    "defense",
+    "shield"
+  ],
+  "contentVersion": 1,
+  "enabled": true
+}

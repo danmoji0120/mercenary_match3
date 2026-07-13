@@ -1,11 +1,14 @@
 import {
-  BATTLE_CONFIG, DEFAULT_LOADOUT, SeededRandom, activeSkillDamage, applyGauge, applyHeal, applyShield,
+  BATTLE_CONFIG, DEFAULT_LOADOUT as LEGACY_LOADOUT, SeededRandom, applyGauge, applyHeal, applyShield,
   createBattleStats, effectFor, generateBoard, listLegalSwaps, resolveAttack, resolveSwap, shuffleBoard, swordTravelMs, timeResult,
   type BattleDecision, type BattleParticipant, type BattleResult, type BattleSnapshot, type BattleStats, type BotDiagnostics, type CombatEvent, type FrenzyState, type MatchResolution,
   type PendingAttack, type SwapRequest, type TileType,
 } from '@mercenary/shared';
-import { chooseBotMove, shouldBotUseSkill, type BotDecision } from './bot.js';
+import { chooseBotMove, shouldBotUseAbility, type BotDecision } from './bot.js';
 import { BOT_CONFIG, botActionDelay, botDefenseDelay, botSkillDelay } from './bot-config.js';
+import { BOT_LOADOUT, CharacterRegistry, DEFAULT_LOADOUT, loadCharacterRegistry } from './character-registry.js';
+import { BattleEffectEngine, type QueueAbilityAttack } from './effect-engine.js';
+import type { AbilityDefinition, EffectResult } from './effect-types.js';
 
 export interface BattleHooks {
   snapshot(playerId: string, value: BattleSnapshot): void;
@@ -16,8 +19,8 @@ export interface BattleHooks {
 let sequence = 0;
 const id = (prefix: string) => `${prefix}-${Date.now().toString(36)}-${(++sequence).toString(36)}`;
 
-export function createParticipant(playerId: string, token: string, name: string, isBot = false, seed = Date.now()): BattleParticipant {
-  return { id: playerId, sessionToken: token, name, isBot, connected: true, hp: 1_000, shield: 0, gauge: 0, board: { tiles: generateBoard(new SeededRandom(seed)), version: 1, processing: false }, loadout: DEFAULT_LOADOUT };
+export function createParticipant(playerId: string, token: string, name: string, isBot = false, seed = Date.now(), battleLoadout = loadCharacterRegistry().snapshot(isBot ? BOT_LOADOUT : DEFAULT_LOADOUT)): BattleParticipant {
+  return { id: playerId, sessionToken: token, name, isBot, connected: true, hp: 1_000, shield: 0, gauge: 0, board: { tiles: generateBoard(new SeededRandom(seed)), version: 1, processing: false }, loadout: LEGACY_LOADOUT, battleLoadout };
 }
 
 export class Battle {
@@ -31,6 +34,7 @@ export class Battle {
   isFrenzy = false;
   frenzyStartedAt: number | null = null;
   rematchReady = new Set<string>();
+  exitedPlayers = new Set<string>();
   private timer: NodeJS.Timeout;
   private botTimers = new Set<NodeJS.Timeout>();
   private botActionTimers = new Map<string, NodeJS.Timeout>();
@@ -40,12 +44,19 @@ export class Battle {
   private usedSkillRequests = new Set<string>();
   private processedAttackIds = new Set<string>();
   private rng: SeededRandom;
+  private effects: BattleEffectEngine;
+  private battleStartedDispatched = false;
 
-  constructor(public players: [BattleParticipant, BattleParticipant], private hooks: BattleHooks, now = Date.now(), countdownMs = Number(process.env.COUNTDOWN_MS ?? 3_000), seed = now) {
+  constructor(public players: [BattleParticipant, BattleParticipant], private hooks: BattleHooks, now = Date.now(), countdownMs = Number(process.env.COUNTDOWN_MS ?? 3_000), seed = now, private registry: CharacterRegistry = loadCharacterRegistry()) {
     this.startsAt = now + countdownMs;
     this.endsAt = this.startsAt + BATTLE_CONFIG.durationMs;
     this.rng = new SeededRandom(seed);
     this.stats = Object.fromEntries(players.map((player) => [player.id, createBattleStats()]));
+    this.effects = new BattleEffectEngine(this.id, players, registry, {
+      participant: (participantId) => this.player(participantId), opponent: (participantId) => this.other(participantId), queueAbilityAttack: (value) => this.queueAbilityAttack(value),
+      gainShield: (participantId, amount, abilityId) => this.effectShield(participantId, amount, abilityId), heal: (participantId, amount, abilityId) => this.effectHeal(participantId, amount, abilityId), gainMana: (participantId, amount) => this.effectMana(participantId, amount),
+      emitAbility: (participantId, ability) => this.emitAbility(participantId, ability), emitStatus: (participantId, statusId, active) => this.emitAll('combatEvent', { type: 'STATUS_CHANGED', at: Date.now(), participantId, statusId, active } satisfies CombatEvent), emitMessage: (participantId, message) => this.emitAll('combatEvent', { type: 'BATTLE_MESSAGE', at: Date.now(), participantId, message } satisfies CombatEvent), incrementStat: (participantId, field, abilityId, amount) => this.incrementEffectStat(participantId, field, abilityId, amount),
+    });
     for (const player of players) if (player.isBot) this.botDiagnostics.set(player.id, { swapActionCount: 0, resolvedMatchGroupCount: 0, healDecisionCount: 0, shieldDecisionCount: 0, manaDecisionCount: 0, swordDecisionCount: 0, skillDecisionCount: 0, skillUseCount: 0, optimalMovePickCount: 0, topMovePickCount: 0, randomMovePickCount: 0, recentActions: [] });
     this.timer = setInterval(() => this.tick(), 25);
     this.timer.unref?.();
@@ -55,8 +66,8 @@ export class Battle {
   other(playerId: string) { return this.players.find((player) => player.id !== playerId)! }
   player(playerId: string) { return this.players.find((player) => player.id === playerId) }
 
-  private publicPlayer(player: BattleParticipant) {
-    return { id: player.id, name: player.name, isBot: player.isBot, connected: player.connected, hp: player.hp, shield: player.shield, gauge: player.gauge };
+  private publicPlayer(player: BattleParticipant, viewerId: string) {
+    return { id: player.id, name: player.name, isBot: player.isBot, connected: player.connected, hp: player.hp, shield: player.shield, gauge: player.gauge, loadout: player.battleLoadout!, effectRuntime: this.effects.snapshot(player.id, viewerId) };
   }
 
   private frenzyState(now = Date.now()): FrenzyState {
@@ -70,7 +81,7 @@ export class Battle {
   snapshotFor(playerId: string, now = Date.now()): BattleSnapshot {
     const self = this.player(playerId)!; const opponent = this.other(playerId);
     const diagnostics = this.botDiagnostics.get(opponent.isBot ? opponent.id : self.id);
-    return { battleId: this.id, phase: this.phase, serverNow: now, startsAt: this.startsAt, endsAt: this.endsAt, selfId: self.id, self: this.publicPlayer(self), opponent: this.publicPlayer(opponent), board: { ...self.board, tiles: [...self.board.tiles] }, pendingAttacks: this.pendingAttacks.filter((attack) => attack.targetId === playerId), result: this.result, frenzy: this.frenzyState(now), stats: this.statsSnapshot(), botDiagnostics: diagnostics ? { ...diagnostics, recentActions: [...diagnostics.recentActions] } : undefined, rematchReady: [...this.rematchReady] };
+    return { battleId: this.id, phase: this.phase, serverNow: now, startsAt: this.startsAt, endsAt: this.endsAt, selfId: self.id, self: this.publicPlayer(self, playerId), opponent: this.publicPlayer(opponent, playerId), board: { ...self.board, tiles: [...self.board.tiles] }, pendingAttacks: this.pendingAttacks.filter((attack) => attack.targetId === playerId), result: this.result, frenzy: this.frenzyState(now), stats: this.statsSnapshot(), botDiagnostics: diagnostics ? { ...diagnostics, recentActions: [...diagnostics.recentActions] } : undefined, rematchReady: [...this.rematchReady] };
   }
 
   broadcastSnapshots() { for (const player of this.players) if (!player.isBot) this.hooks.snapshot(player.id, this.snapshotFor(player.id)) }
@@ -78,8 +89,9 @@ export class Battle {
   private emitAll(name: string, value: unknown) { for (const player of this.players) if (!player.isBot) this.hooks.event(player.id, name, value) }
 
   tick(now = Date.now()) {
-    if (this.phase === 'COUNTDOWN' && now >= this.startsAt) { this.phase = 'PLAYING'; this.broadcastSnapshots() }
+    if (this.phase === 'COUNTDOWN' && now >= this.startsAt) { this.phase = 'PLAYING'; if (!this.battleStartedDispatched) { this.battleStartedDispatched = true; for (const player of this.players) this.effects.dispatch('battle_started', player.id, { serverTime: now }) } this.broadcastSnapshots() }
     if (this.phase !== 'PLAYING') return;
+    this.effects.tick(now, this.pendingAttacks);
     if (!this.isFrenzy && now < this.endsAt && this.endsAt - now <= BATTLE_CONFIG.frenzyStartRemainingMs) {
       this.isFrenzy = true; this.frenzyStartedAt = now; const state = this.frenzyState(now);
       this.emitAll('frenzyStarted', state); this.broadcastSnapshots();
@@ -91,16 +103,19 @@ export class Battle {
       this.processedAttackIds.add(attack.id);
       const target = this.player(attack.targetId);
       if (!target) continue;
-      const damage = resolveAttack(target, attack);
+      const before = { hp: target.hp, shield: target.shield }; this.effects.incoming(attack, now); const damage = resolveAttack(target, attack); const after = { hp: target.hp, shield: target.shield };
       const sourceStats = this.stats[attack.sourceId], targetStats = this.stats[attack.targetId];
       if (sourceStats && targetStats) {
         sourceStats.shieldDamageDealt += damage.absorbed; sourceStats.hpDamageDealt += damage.hpDamage;
         targetStats.damageBlockedByShield += damage.absorbed; targetStats.hpDamageReceived += damage.hpDamage; targetStats.totalDamageReceived += damage.absorbed + damage.hpDamage;
         if (damage.hpDamage === 0 && damage.absorbed === attack.damage) targetStats.attacksFullyBlocked++;
         if (damage.shieldBroken) targetStats.shieldBreakCount++;
+        const bypass = Math.min(damage.hpDamage, Math.round(attack.damage * (attack.shieldBypassRatio ?? 0))); sourceStats.directHpDamageBypass += bypass;
+        if (attack.sourceAbilityId) sourceStats.damageByAbilityId[attack.sourceAbilityId] = (sourceStats.damageByAbilityId[attack.sourceAbilityId] ?? 0) + damage.absorbed + damage.hpDamage;
       }
       const event: CombatEvent = { type: 'ATTACK_RESOLVED', at: now, attackId: attack.id, ...damage };
       this.emitAll('combatEvent', event);
+      this.effects.attackResolved(attack, { requestedAmount: attack.damage, finalAmount: attack.damage, shieldDamage: damage.absorbed, hpDamage: damage.hpDamage, shieldBroken: damage.shieldBroken, targetDefeated: target.hp <= 0 }, now, before, after);
       if (target.hp <= 0) { this.finish({ winnerId: attack.sourceId, reason: 'HP_ZERO', endedAt: now }); return }
     }
     if (now >= this.endsAt) { this.finish(timeResult(this.players[0], this.players[1], now)); return }
@@ -124,11 +139,13 @@ export class Battle {
     this.recordMatches(player.id, resolution);
     resolution.effects = resolution.effects.map((effect) => ({ ...effect, amount: effectFor(effect.type, effect.matched, effect.chain, this.isFrenzy) }));
     this.applyEffects(player, resolution);
+    for (const step of resolution.steps) for (let groupIndex = 0; groupIndex < step.groups.length; groupIndex++) { const group = step.groups[groupIndex]!; this.effects.dispatch('match_group_resolved', player.id, { tileType: group.type, matchedTileCount: group.cells.length, chainLevel: step.chain, scopeKey: `${player.id}:${player.board.version}:${step.chain}`, serverTime: Date.now() }) }
   }
 
   private recordMatches(playerId: string, resolution: MatchResolution) {
     const stats = this.stats[playerId]; if (!stats) return;
-    const keys: Record<TileType, [keyof BattleStats, keyof BattleStats]> = { SWORD: ['swordMatchCount', 'swordTilesMatched'], SHIELD: ['shieldMatchCount', 'shieldTilesMatched'], HEAL: ['healMatchCount', 'healTilesMatched'], MANA: ['manaMatchCount', 'manaTilesMatched'] };
+    type MatchStatKey = 'swordMatchCount' | 'swordTilesMatched' | 'shieldMatchCount' | 'shieldTilesMatched' | 'healMatchCount' | 'healTilesMatched' | 'manaMatchCount' | 'manaTilesMatched';
+    const keys: Record<TileType, [MatchStatKey, MatchStatKey]> = { SWORD: ['swordMatchCount', 'swordTilesMatched'], SHIELD: ['shieldMatchCount', 'shieldTilesMatched'], HEAL: ['healMatchCount', 'healTilesMatched'], MANA: ['manaMatchCount', 'manaTilesMatched'] };
     for (const step of resolution.steps) {
       stats.maxChain = Math.max(stats.maxChain, step.chain);
       for (const group of step.groups) { const [countKey, tilesKey] = keys[group.type]; stats[countKey]++; stats[tilesKey] += group.cells.length }
@@ -140,12 +157,12 @@ export class Battle {
     for (const effect of resolution.effects) {
       let event: CombatEvent | null = null;
       if (effect.type === 'SWORD') {
-        const attack: PendingAttack = { id: id('attack'), sourceId: player.id, targetId: opponent.id, damage: effect.amount, kind: 'SWORD', createdAt: now, arrivesAt: now + swordTravelMs(effect.matched) };
+        const attack: PendingAttack = this.effects.outgoing({ id: id('attack'), sourceId: player.id, targetId: opponent.id, damage: effect.amount, kind: 'SWORD', createdAt: now, arrivesAt: now + swordTravelMs(effect.matched), sourceTags: ['normal_attack','offense'] }, now);
         this.pendingAttacks.push(attack); event = { type: 'ATTACK_QUEUED', at: now, attack };
         this.stats[player.id]!.totalDamageGenerated += attack.damage; this.stats[player.id]!.attacksQueued++;
         if (opponent.isBot) this.scheduleBot(opponent.id, false, botDefenseDelay());
-      } else if (effect.type === 'SHIELD') { const amount = applyShield(player, effect.amount); this.stats[player.id]!.shieldGained += amount; event = { type: 'SHIELD_GAINED', at: now, participantId: player.id, amount } }
-      else if (effect.type === 'HEAL') { const amount = applyHeal(player, effect.amount); this.stats[player.id]!.healingDone += amount; event = { type: 'HEALED', at: now, participantId: player.id, amount } }
+      } else if (effect.type === 'SHIELD') { const requested = Math.round(effect.amount * this.effects.shieldMultiplier(player.id, now)); const amount = applyShield(player, requested); this.stats[player.id]!.shieldGained += amount; event = { type: 'SHIELD_GAINED', at: now, participantId: player.id, amount } }
+      else if (effect.type === 'HEAL') { const multiplier = this.effects.healingMultiplier(player.id, now), requested = Math.round(effect.amount * multiplier), amount = applyHeal(player, requested); this.stats[player.id]!.healingDone += amount; this.stats[player.id]!.healingPrevented += Math.max(0, effect.amount - requested); event = { type: 'HEALED', at: now, participantId: player.id, amount } }
       else { const amount = applyGauge(player, effect.amount); this.stats[player.id]!.manaGained += amount; event = { type: 'GAUGE_GAINED', at: now, participantId: player.id, amount } }
       if (event) this.emitAll('combatEvent', event);
     }
@@ -153,11 +170,9 @@ export class Battle {
 
   useSkill(playerId: string, requestId: string): boolean {
     const player = this.player(playerId);
-    if (!player || this.phase !== 'PLAYING' || player.gauge < 100 || !requestId || this.usedSkillRequests.has(requestId)) return false;
-    this.usedSkillRequests.add(requestId); player.gauge = 0; const now = Date.now(); const opponent = this.other(playerId);
-    const attack: PendingAttack = { id: id('attack'), sourceId: playerId, targetId: opponent.id, damage: activeSkillDamage(this.isFrenzy), kind: 'SKILL', createdAt: now, arrivesAt: now + BATTLE_CONFIG.skillTravelMs };
-    this.stats[playerId]!.skillUseCount++; this.stats[playerId]!.totalDamageGenerated += attack.damage; this.stats[playerId]!.attacksQueued++;
-    this.pendingAttacks.push(attack); this.emitAll('combatEvent', { type: 'ATTACK_QUEUED', at: now, attack } satisfies CombatEvent); this.broadcastSnapshots(); return true;
+    const ability = player ? this.effects.activeDefinition(playerId) : undefined;
+    if (!player || !ability || this.phase !== 'PLAYING' || player.gauge < ability.cost || !requestId || this.usedSkillRequests.has(requestId)) return false;
+    const now = Date.now(); if (!this.effects.useActive(playerId, now)) return false; this.usedSkillRequests.add(requestId); player.gauge -= ability.cost; this.stats[playerId]!.skillUseCount++; this.broadcastSnapshots(); return true;
   }
 
   setConnected(playerId: string, connected: boolean) { const player = this.player(playerId); if (player) { player.connected = connected; this.broadcastSnapshots() } }
@@ -167,11 +182,19 @@ export class Battle {
     if (this.phase === 'FINISHED') return;
     this.phase = 'FINISHED';
     this.result = { ...decision, matchDurationMs: Math.max(0, decision.endedAt - this.startsAt), endedByHpZero: decision.reason === 'HP_ZERO', endedByTimeout: decision.reason === 'TIMEOUT', endedByForfeit: decision.reason === 'FORFEIT', endedByDisconnect: decision.reason === 'DISCONNECT', frenzyStarted: this.isFrenzy, frenzyDurationMs: this.frenzyStartedAt === null ? 0 : Math.max(0, decision.endedAt - this.frenzyStartedAt), stats: this.statsSnapshot() };
-    this.pendingAttacks = []; clearInterval(this.timer); for (const timer of this.botTimers) clearTimeout(timer); this.botTimers.clear(); this.botActionTimers.clear(); this.botSkillTimers.clear(); this.botSkillPending.clear();
+    for (const player of this.players) this.effects.dispatch('battle_finished', player.id, { serverTime: decision.endedAt }); this.effects.finish(); this.pendingAttacks = []; clearInterval(this.timer); for (const timer of this.botTimers) clearTimeout(timer); this.botTimers.clear(); this.botActionTimers.clear(); this.botSkillTimers.clear(); this.botSkillPending.clear();
     this.broadcastSnapshots(); this.emitAll('battleEnded', this.result); this.hooks.ended(this);
   }
   forfeit(playerId: string, reason: BattleDecision['reason'] = 'FORFEIT') { if (this.phase !== 'FINISHED') this.finish({ winnerId: this.other(playerId).id, reason, endedAt: Date.now() }) }
-  rematch(playerId: string) { if (this.phase !== 'FINISHED') return false; this.rematchReady.add(playerId); this.broadcastSnapshots(); return this.other(playerId).isBot || this.rematchReady.size === 2 }
+  rematch(playerId: string) { if (this.phase !== 'FINISHED' || this.exitedPlayers.size || this.exitedPlayers.has(playerId)) return false; this.rematchReady.add(playerId); this.broadcastSnapshots(); return this.other(playerId).isBot || this.rematchReady.size === 2 }
+  exit(playerId: string) { if (this.phase !== 'FINISHED' || !this.player(playerId)) return false; this.rematchReady.delete(playerId); this.exitedPlayers.add(playerId); if (this.exitedPlayers.size === this.players.filter((player) => !player.isBot).length) this.effects.clear(); return true }
+
+  private queueAbilityAttack(value: QueueAbilityAttack) { const now = Date.now(); const frenzy = this.isFrenzy ? BATTLE_CONFIG.frenzyAttackMultiplier : 1; const attack = this.effects.outgoing({ id: id('attack'), sourceId: value.sourceId, targetId: value.targetId, damage: Math.round(value.amount * frenzy), kind: 'SKILL', createdAt: now, arrivesAt: now + value.travelMs, sourceAbilityId: value.sourceAbilityId, sourceTags: value.tags, shieldBypassRatio: value.shieldBypassRatio }, now); this.pendingAttacks.push(attack); const stats = this.stats[value.sourceId]!; stats.totalDamageGenerated += attack.damage; stats.attacksQueued++; this.emitAll('combatEvent', { type: 'ATTACK_QUEUED', at: now, attack } satisfies CombatEvent); return attack }
+  private effectShield(participantId: string, requested: number, abilityId: string): EffectResult { const player = this.player(participantId)!; const multiplier = (this.isFrenzy ? BATTLE_CONFIG.frenzyShieldMultiplier : 1) * this.effects.shieldMultiplier(participantId); const finalAmount = Math.round(requested * multiplier), actualShieldGain = applyShield(player, finalAmount); const stats = this.stats[participantId]!; stats.shieldGained += actualShieldGain; stats.bonusShieldFromEffects += actualShieldGain; stats.shieldByAbilityId[abilityId] = (stats.shieldByAbilityId[abilityId] ?? 0) + actualShieldGain; this.emitAll('combatEvent', { type: 'SHIELD_GAINED', at: Date.now(), participantId, amount: actualShieldGain } satisfies CombatEvent); return { requestedAmount: requested, finalAmount, actualShieldGain } }
+  private effectHeal(participantId: string, requested: number, abilityId: string): EffectResult { const player = this.player(participantId)!; const frenzy = this.isFrenzy ? BATTLE_CONFIG.frenzyHealMultiplier : 1, received = this.effects.healingMultiplier(participantId); const finalAmount = Math.round(requested * frenzy * received), actualHealing = applyHeal(player, finalAmount), overhealing = Math.max(0, finalAmount - actualHealing); const prevented = Math.max(0, Math.round(requested * frenzy) - finalAmount), stats = this.stats[participantId]!; stats.healingDone += actualHealing; stats.healingPrevented += prevented; stats.healingByAbilityId[abilityId] = (stats.healingByAbilityId[abilityId] ?? 0) + actualHealing; this.emitAll('combatEvent', { type: 'HEALED', at: Date.now(), participantId, amount: actualHealing } satisfies CombatEvent); return { requestedAmount: requested, finalAmount, actualHealing, overhealing } }
+  private effectMana(participantId: string, requested: number): EffectResult { const player = this.player(participantId)!; const finalAmount = applyGauge(player, requested); this.stats[participantId]!.manaGained += finalAmount; this.emitAll('combatEvent', { type: 'GAUGE_GAINED', at: Date.now(), participantId, amount: finalAmount } satisfies CombatEvent); return { requestedAmount: requested, finalAmount } }
+  private emitAbility(participantId: string, ability: AbilityDefinition) { if (ability.kind === 'support' && ability.trigger.type === 'shield_broken') this.stats[participantId]!.countersTriggered++; if (ability.kind === 'support' && ability.trigger.type === 'hp_threshold_crossed') this.stats[participantId]!.emergencyHealsTriggered++; this.emitAll('combatEvent', { type: 'ABILITY_TRIGGERED', at: Date.now(), participantId, abilityId: ability.id, abilityName: ability.name, kind: ability.kind } satisfies CombatEvent) }
+  private incrementEffectStat(participantId: string, field: string, abilityId?: string, amount = 1) { const stats = this.stats[participantId] as unknown as Record<string, unknown>; if (abilityId) { const map = stats[field] as Record<string, number>; map[abilityId] = (map[abilityId] ?? 0) + amount } else stats[field] = Number(stats[field] ?? 0) + amount }
 
   debug(playerId: string, action: 'deterministicBoard' | 'swordMove' | 'shieldMove' | 'healMove' | 'manaMove' | 'time35' | 'time5' | 'win' | 'lose') {
     if (process.env.NODE_ENV === 'production' || (process.env.ENABLE_TEST_API !== 'true' && process.env.NODE_ENV !== 'development')) return;
@@ -219,7 +242,7 @@ export class Battle {
       const bot = this.player(botId), diagnostics = this.botDiagnostics.get(botId); let moved = false;
       if (this.phase === 'PLAYING' && bot && bot.gauge >= 100 && !bot.board.processing) {
         if (diagnostics) diagnostics.skillDecisionCount++;
-        if (shouldBotUseSkill(this.other(botId), this.isFrenzy)) {
+        if (shouldBotUseAbility(bot, this.other(botId), this.effects.activeDefinition(botId), this.pendingAttacks.filter((attack) => attack.targetId === botId), this.isFrenzy)) {
           if (this.useSkill(bot.id, id('bot-skill')) && diagnostics) diagnostics.skillUseCount++;
         } else moved = this.performBotMove(botId);
       }

@@ -1,0 +1,44 @@
+{
+  "id": "eda_curse_verdict",
+  "kind": "active",
+  "name": "회복 봉인 감정",
+  "shortDescription": "피해 155 · 회복량 45% 감소",
+  "fullDescription": "적에게 피해를 주고 7초 동안 회복 효율을 감소시킵니다.",
+  "trigger": {
+    "type": "active_requested"
+  },
+  "cost": 100,
+  "cooldownMs": 0,
+  "oncePerBattle": false,
+  "maxTriggersPerBattle": null,
+  "conditions": [],
+  "effects": [
+    {
+      "type": "deal_damage",
+      "target": "opponent",
+      "amount": 155,
+      "travelMs": 650,
+      "tags": [
+        "active_skill",
+        "disruption"
+      ]
+    },
+    {
+      "type": "schedule_effects",
+      "delayMs": 650,
+      "effects": [
+        {
+          "type": "apply_status",
+          "target": "opponent",
+          "statusId": "healing_reduction"
+        }
+      ]
+    }
+  ],
+  "tags": [
+    "offense",
+    "disruption"
+  ],
+  "contentVersion": 1,
+  "enabled": true
+}

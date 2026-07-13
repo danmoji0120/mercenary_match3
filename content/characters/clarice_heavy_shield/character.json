@@ -1,0 +1,32 @@
+{
+  "id": "clarice_heavy_shield",
+  "name": "중갑 방패기사 클라리스",
+  "shortName": "클라리스",
+  "rarity": "SR",
+  "race": "human",
+  "tags": [
+    "human",
+    "shield",
+    "defense",
+    "heavy"
+  ],
+  "description": "거대한 방패로 버티는 기사",
+  "enabled": true,
+  "starter": true,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "portraitAsset": "/characters/clarice_heavy_shield.svg",
+  "combatant": {
+    "skillId": "clarice_fortress_stance"
+  },
+  "support": {
+    "effectId": "clarice_heavy_guard"
+  },
+  "defaultSlots": [
+    "bot_combatant"
+  ]
+}

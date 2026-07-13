@@ -1,0 +1,32 @@
+{
+  "id": "evelyn_trauma_stitcher",
+  "name": "외상 봉합사 이브린",
+  "shortName": "이브린",
+  "rarity": "SR",
+  "race": "human",
+  "tags": [
+    "human",
+    "heal",
+    "support",
+    "medic"
+  ],
+  "description": "빠른 봉합으로 아군을 돕는 의무병",
+  "enabled": true,
+  "starter": true,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "support",
+  "portraitAsset": "/characters/evelyn_trauma_stitcher.svg",
+  "combatant": {
+    "skillId": "evelyn_field_surgery"
+  },
+  "support": {
+    "effectId": "evelyn_emergency_stitch"
+  },
+  "defaultSlots": [
+    "account_support_2"
+  ]
+}

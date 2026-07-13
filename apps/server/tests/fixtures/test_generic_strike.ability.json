@@ -1,0 +1,20 @@
+{
+  "id": "test_generic_strike",
+  "kind": "active",
+  "name": "Squire Strike",
+  "shortDescription": "Damage 100 and shield 50",
+  "fullDescription": "Uses only generic damage and shield primitives.",
+  "trigger": { "type": "active_requested" },
+  "cost": 100,
+  "cooldownMs": 0,
+  "oncePerBattle": false,
+  "maxTriggersPerBattle": null,
+  "conditions": [],
+  "effects": [
+    { "type": "deal_damage", "target": "opponent", "amount": 100, "travelMs": 0, "tags": ["offense"] },
+    { "type": "gain_shield", "target": "self", "amount": 50 }
+  ],
+  "tags": ["offense", "shield"],
+  "contentVersion": 1,
+  "enabled": true
+}

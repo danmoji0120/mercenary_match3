@@ -4,7 +4,7 @@ import { Battle, createParticipant } from '../src/battle';
 afterEach(() => { vi.restoreAllMocks(); vi.useRealTimers() });
 
 describe('bot scheduler', () => {
-  it('waits for both initial thinking and skill reaction before firing', () => {
+  it('waits for both initial thinking and skill reaction before using its data-defined skill', () => {
     vi.useFakeTimers(); vi.setSystemTime(new Date('2026-01-01T00:00:00Z')); vi.spyOn(Math, 'random').mockReturnValue(0);
     const human = createParticipant('human', 'h', 'Human', false, 1), bot = createParticipant('bot', 'b', 'Bot', true, 2);
     bot.gauge = 100;
@@ -13,8 +13,8 @@ describe('bot scheduler', () => {
     vi.advanceTimersByTime(2_199); expect(battle.pendingAttacks).toHaveLength(0);
     vi.advanceTimersByTime(1); expect(battle.pendingAttacks).toHaveLength(0);
     vi.advanceTimersByTime(999); expect(battle.pendingAttacks).toHaveLength(0);
-    vi.advanceTimersByTime(1); expect(battle.pendingAttacks).toHaveLength(1);
-    expect(battle.pendingAttacks[0]?.kind).toBe('SKILL'); battle.forfeit('human');
+    vi.advanceTimersByTime(1); expect(battle.pendingAttacks).toHaveLength(0);
+    expect(bot.shield).toBe(230); expect(battle.snapshotFor('human').botDiagnostics?.skillUseCount).toBe(1); battle.forfeit('human');
   });
   it('rechecks gauge after the reaction delay', () => {
     vi.useFakeTimers(); vi.setSystemTime(new Date('2026-01-01T00:00:00Z')); vi.spyOn(Math, 'random').mockReturnValue(0);

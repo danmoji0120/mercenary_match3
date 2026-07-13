@@ -1,5 +1,6 @@
 import { BATTLE_CONFIG, findMatches, listLegalSwaps, swapTiles, type BattleParticipant, type PendingAttack, type Position, type TileType } from '@mercenary/shared';
 import { BOT_CONFIG, type BotConfig } from './bot-config.js';
+import type { AbilityDefinition } from './effect-types.js';
 
 export type BotPickTier = 'optimal' | 'top' | 'random';
 export interface BotDecision { from: Position; to: Position; score: number; highValue: boolean; maxMatched: number; primaryType: TileType; pickTier?: BotPickTier }
@@ -81,4 +82,12 @@ export function botSkillUseChance(opponent: BattleParticipant, isFrenzy: boolean
 
 export function shouldBotUseSkill(opponent: BattleParticipant, isFrenzy: boolean, random = Math.random, config: BotConfig = BOT_CONFIG): boolean {
   return random() < botSkillUseChance(opponent, isFrenzy, config);
+}
+
+export function shouldBotUseAbility(bot: BattleParticipant, opponent: BattleParticipant, ability: Pick<AbilityDefinition, 'tags'>, incoming: PendingAttack[], isFrenzy: boolean, random = Math.random, config: BotConfig = BOT_CONFIG): boolean {
+  let chance = botSkillUseChance(opponent, isFrenzy, config);
+  if (ability.tags.includes('defense') || ability.tags.includes('shield')) { const danger = incoming.some((attack) => attack.kind === 'SKILL' || attack.damage >= 115); chance += danger ? .3 : bot.hp <= BATTLE_CONFIG.maxHp * .6 || bot.shield <= BATTLE_CONFIG.maxShield * .25 ? .15 : -.2 }
+  if (ability.tags.includes('heal')) chance += bot.hp <= BATTLE_CONFIG.maxHp * .45 ? .3 : -.35;
+  if (ability.tags.includes('disruption')) chance += opponent.hp >= BATTLE_CONFIG.maxHp * .5 ? .05 : -.05;
+  return random() < Math.max(.1, Math.min(.9, chance));
 }

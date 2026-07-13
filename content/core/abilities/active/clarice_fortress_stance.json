@@ -1,0 +1,33 @@
+{
+  "id": "clarice_fortress_stance",
+  "kind": "active",
+  "name": "철벽 태세",
+  "shortDescription": "보호막 230 · 받는 피해 25% 감소",
+  "fullDescription": "보호막을 얻고 4초 동안 받는 피해를 감소시킵니다.",
+  "trigger": {
+    "type": "active_requested"
+  },
+  "cost": 100,
+  "cooldownMs": 0,
+  "oncePerBattle": false,
+  "maxTriggersPerBattle": null,
+  "conditions": [],
+  "effects": [
+    {
+      "type": "gain_shield",
+      "target": "self",
+      "amount": 230
+    },
+    {
+      "type": "apply_status",
+      "target": "self",
+      "statusId": "damage_reduction"
+    }
+  ],
+  "tags": [
+    "defense",
+    "shield"
+  ],
+  "contentVersion": 1,
+  "enabled": true
+}

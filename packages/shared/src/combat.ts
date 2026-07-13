@@ -2,7 +2,7 @@ import { BATTLE_CONFIG } from './config.js';
 import type { BattleDecision, BattleParticipant, BattleStats, PendingAttack } from './types.js';
 
 export function createBattleStats(): BattleStats {
-  return { totalDamageGenerated: 0, hpDamageDealt: 0, shieldDamageDealt: 0, totalDamageReceived: 0, hpDamageReceived: 0, damageBlockedByShield: 0, shieldGained: 0, healingDone: 0, manaGained: 0, swordMatchCount: 0, shieldMatchCount: 0, healMatchCount: 0, manaMatchCount: 0, swordTilesMatched: 0, shieldTilesMatched: 0, healTilesMatched: 0, manaTilesMatched: 0, maxChain: 0, skillUseCount: 0, attacksQueued: 0, attacksFullyBlocked: 0, shieldBreakCount: 0 };
+  return { totalDamageGenerated: 0, hpDamageDealt: 0, shieldDamageDealt: 0, totalDamageReceived: 0, hpDamageReceived: 0, damageBlockedByShield: 0, shieldGained: 0, healingDone: 0, manaGained: 0, swordMatchCount: 0, shieldMatchCount: 0, healMatchCount: 0, manaMatchCount: 0, swordTilesMatched: 0, shieldTilesMatched: 0, healTilesMatched: 0, manaTilesMatched: 0, maxChain: 0, skillUseCount: 0, attacksQueued: 0, attacksFullyBlocked: 0, shieldBreakCount: 0, activeSkillUsesById: {}, supportEffectTriggersById: {}, damageByAbilityId: {}, healingByAbilityId: {}, shieldByAbilityId: {}, directHpDamageBypass: 0, healingPrevented: 0, damageReduced: 0, bonusShieldFromEffects: 0, emergencyHealsTriggered: 0, countersTriggered: 0 };
 }
 
 export function applyShield(player: BattleParticipant, amount: number): number {
@@ -22,9 +22,11 @@ export function applyGauge(player: BattleParticipant, amount: number): number {
 }
 export function resolveAttack(target: BattleParticipant, attack: PendingAttack): { absorbed: number; hpDamage: number; shieldBroken: boolean } {
   const shieldBefore = target.shield;
-  const absorbed = Math.min(target.shield, attack.damage);
+  const bypassDamage = Math.min(target.hp, Math.round(attack.damage * Math.min(.5, Math.max(0, attack.shieldBypassRatio ?? 0))));
+  const normalDamage = attack.damage - bypassDamage;
+  const absorbed = Math.min(target.shield, normalDamage);
   target.shield -= absorbed;
-  const hpDamage = Math.min(target.hp, attack.damage - absorbed);
+  const hpDamage = Math.min(target.hp, bypassDamage + normalDamage - absorbed);
   target.hp -= hpDamage;
   return { absorbed, hpDamage, shieldBroken: shieldBefore > 0 && target.shield === 0 };
 }

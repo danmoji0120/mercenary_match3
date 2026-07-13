@@ -138,3 +138,57 @@ Board presentation values live in `apps/client/src/board-animation-config.ts`. D
 Frenzy values live in the shared `BATTLE_CONFIG`: `frenzyStartRemainingMs`, `frenzyAttackMultiplier`, `frenzyShieldMultiplier`, `frenzyHealMultiplier`, and `frenzyManaMultiplier`. The server emits the transition once, includes the complete Frenzy state in every battle snapshot, and remains the only authority for all multiplied values.
 
 Every battle also keeps server-owned per-player statistics for generated/actual damage, shield absorption, actual shield/healing/mana gains, match group and tile counts, maximum chain, skill uses, queued/fully-blocked attacks, and shield breaks. The final result freezes both players' statistics plus duration, explicit end reason, end-reason flags, and Frenzy duration. Reconnect snapshots preserve live statistics; rematches create a fresh battle and zero them.
+## Supabase account and character foundation
+
+The browser uses Supabase Auth only. It restores the persisted browser session or calls anonymous sign-in once, then sends the access token to this server. The browser never reads or writes the account tables directly. Express verifies the bearer token and performs profile, ownership, and loadout operations with the server-only secret key. Socket.IO independently verifies the same access token during its handshake while the existing `sessionStorage` battle token remains responsible only for reconnecting an active battle.
+
+Required browser build variables are `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`. Required server variables are `SUPABASE_URL` and `SUPABASE_SECRET_KEY`.
+
+Enable Anonymous Sign-Ins in Supabase Auth before running the client. A publishable key is intended for browser use under Auth and RLS rules; the secret key bypasses RLS and must exist only in the server environment. Never create a `VITE_SUPABASE_SECRET_KEY`. On Render, add all four variables to the Web Service. The two `VITE_` values are embedded at build time, so changing them requires a new deployment.
+
+The migration creates these RLS-enabled, server-only tables:
+
+- `auth.users`: Supabase anonymous identity.
+- `match3_profiles`: display name and account timestamps.
+- `match3_user_characters`: one ownership row per character ID.
+- `match3_user_loadouts`: combatant plus two distinct supports and an optimistic version.
+
+`match3_bootstrap_user` is an idempotent, atomic, `SECURITY DEFINER` RPC. It verifies the Auth user, repairs missing starter ownership, and creates only missing profile/loadout data. Table access and function execution are revoked from `public`, `anon`, and `authenticated`; only `service_role` can execute the bootstrap RPC.
+
+Apply and regenerate types from the already linked Supabase project:
+
+```bash
+npx supabase db push --dry-run
+npx supabase db push
+npm run supabase:types
+```
+
+Review the dry run before `db push`. The migration is additive and does not remove account data. Generated types use the CLI link state; no project reference or key is stored in source.
+
+### Character content packs
+
+Official definitions live under `content/characters/<character-id>/character.json`. Every pack requires an ID, names, rarity, race, tags, description, enable/starter flags, content version, allowed slots, recommended role, portrait path, and placeholder combatant/support effect IDs. Server startup rejects malformed definitions, duplicate IDs, invalid rarities, an incorrect starter count, or missing default-loadout characters. Disabled characters are omitted from account responses and cannot enter a new match.
+
+The initial starter roster is Yuria, Clarice, Marta, Evelyn, and Eda. The default human loadout is Yuria/Marta/Evelyn; the bot uses Clarice/Marta/Eda. These loadouts are immutable battle snapshots, but character-specific stats and effects are deliberately not active in this foundation release. Every character still uses the existing HP, match effects, frenzy rules, and common Focus Barrage skill.
+
+### Local and test operation
+
+Copy the example variables to local untracked environment files and run `npm run dev` to use the linked remote Supabase project. Automated tests set `ACCOUNT_TEST_MODE` and `VITE_ACCOUNT_TEST_MODE` only in non-production and use fake Auth plus an in-memory repository, so they never create remote users. Production rejects that test path.
+
+Anonymous accounts persist with Supabase even when the game server restarts. However, clearing the browser's Supabase storage before linking the identity to email or OAuth makes that anonymous identity unrecoverable from that browser. Active matches remain in server memory and are still lost on a Render process restart.
+
+## Generic Character Effect Engine
+
+Combat abilities are server-authoritative JSON content under `content/core`. The engine exposes normalized triggers, composable conditions, generic effect executors, status modifiers, cooldowns, once-per-battle limits, charges, deterministic scheduled effects, scoped caps, and earlier-effect result references. Production combat code dispatches normalized events and never branches on a character or ability ID.
+
+Damage order is: base amount, chain/frenzy multiplier where applicable, outgoing status modifiers, incoming status modifiers, one final rounding step, shield-bypass split (capped at 50%), shield damage, HP damage, then shield-break, HP-threshold, and after-damage triggers. Healing applies frenzy and healing-received modifiers before one rounding step, separates actual healing from overhealing, and then runs overflow effects. Shield gain applies frenzy and shield-gain modifiers before its cap.
+
+### Adding a character
+
+When existing primitives are sufficient, add only a CharacterDefinition JSON, active and support AbilityDefinition JSON files, optional StatusDefinition JSON, portrait content, and tests. TypeScript changes are not needed. New primitives require a schema extension, a generic executor or evaluator, primitive tests, and this documentation. Character-specific handlers are prohibited.
+
+Official active/support pairs: Yuria (Counter Break / Revenge Edge), Clarice (Fortress Stance / Heavy Guard), Marta (Guard Command / Intercept Order), Evelyn (Field Surgery / Emergency Stitch), and Eda (Curse Verdict / Exposed Flaw).
+
+### Result exit
+
+Return to lobby is an explicit, idempotent server request. It cancels rematch readiness, detaches the participant from the finished battle, rotates the battle reconnection token, notifies the opponent, keeps Socket.IO and the Supabase/account session alive, preserves ownership and the saved loadout, and allows a fresh queue entry. Scheduled combat work is cleared when the battle finishes or is abandoned.
