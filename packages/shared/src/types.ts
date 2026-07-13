@@ -1,8 +1,10 @@
+import type { ResolvedCombatantStats } from './character-stats.js';
+
 export const TILE_TYPES = ['SWORD', 'SHIELD', 'HEAL', 'MANA'] as const;
 export type TileType = (typeof TILE_TYPES)[number];
 
 export type CharacterId = string;
-export type CharacterRarity = 'R' | 'SR' | 'SSR';
+export type CharacterRarity = 'R' | 'SR' | 'SSR' | 'EX';
 export type CharacterSlot = 'combatant' | 'support';
 export interface CharacterDefinition {
   id: CharacterId;
@@ -18,6 +20,7 @@ export interface CharacterDefinition {
   allowedSlots: CharacterSlot[];
   recommendedRole: CharacterSlot;
   portraitAsset: string;
+  stats: ResolvedCombatantStats;
   defaultSlots?: Array<'account_combatant' | 'account_support_1' | 'account_support_2' | 'bot_combatant' | 'bot_support_1' | 'bot_support_2'>;
   combatant: { skillId: string; ability?: AbilitySummary };
   support: { effectId: string; ability?: AbilitySummary };
@@ -27,8 +30,11 @@ export type AbilityTag = 'offense' | 'defense' | 'heal' | 'disruption' | 'shield
 export interface AbilitySummary { id: string; kind: AbilityKind; name: string; shortDescription: string; fullDescription: string; cost: number; cooldownMs: number; tags: AbilityTag[] }
 export interface StatusSnapshot { id: string; name: string; sourceParticipantId: string; targetParticipantId: string; stackCount: number; expiresAt: number; visible: boolean }
 export interface AbilityRuntimeSnapshot { runtimeKey: string; abilityId: string; cooldownEndsAt: number; triggersUsed: number; usedThisBattle: boolean; remainingCharges: number }
-export interface ScheduledEffectSnapshot { id: string; executeAt: number; sourceParticipantId: string; targetParticipantId: string; sourceAbilityId: string; sourceAttackId?: string; sequence: number }
-export interface EffectRuntimeSnapshot { activeAbility: AbilitySummary; supportAbilities: [AbilitySummary, AbilitySummary]; statuses: StatusSnapshot[]; abilities: AbilityRuntimeSnapshot[]; scheduledEffects: ScheduledEffectSnapshot[]; runtimeFlags: Record<string, number | boolean | string>; messages: string[] }
+export type EffectOriginType = 'TILE_MATCH' | 'ACTIVE_ABILITY' | 'SUPPORT_ABILITY' | 'STATUS' | 'SCHEDULED' | 'COPIED' | 'CONVERTED' | 'CUSTOM';
+export interface EffectOriginSnapshot { eventId: string; rootEventId: string; parentEventId?: string; sourceCharacterId: string; sourceAbilityId: string; originType: EffectOriginType; generationDepth: number; canTriggerSupport: boolean; canBeCopied: boolean; canBeConverted: boolean }
+export interface ScheduledEffectSnapshot { id: string; executeAt: number; sourceParticipantId: string; targetParticipantId: string; sourceAbilityId: string; sourceAttackId?: string; sequence: number; origin?: EffectOriginSnapshot }
+export type RuntimeJsonValue = null | boolean | number | string | RuntimeJsonValue[] | { [key: string]: RuntimeJsonValue };
+export interface EffectRuntimeSnapshot { activeAbility: AbilitySummary; supportAbilities: [AbilitySummary, AbilitySummary]; statuses: StatusSnapshot[]; abilities: AbilityRuntimeSnapshot[]; scheduledEffects: ScheduledEffectSnapshot[]; runtimeFlags: Record<string, number | boolean | string>; customState: Record<string, RuntimeJsonValue>; messages: string[] }
 export interface OwnedCharacter { characterId: CharacterId; acquiredAt: string; acquisitionSource: string }
 export interface UserProfile { displayName: string; createdAt: string; updatedAt: string; lastSeenAt: string }
 export interface UserLoadout {
@@ -54,7 +60,8 @@ export interface UpdateLoadoutRequest {
 }
 export interface UpdateLoadoutResponse { loadout: UserLoadout }
 export interface LoadoutCharacterSnapshot { characterId: CharacterId; name: string; portraitAsset: string; rarity: CharacterRarity }
-export interface BattleLoadoutSnapshot { combatant: LoadoutCharacterSnapshot; supports: [LoadoutCharacterSnapshot, LoadoutCharacterSnapshot] }
+export interface CombatantLoadoutSnapshot extends LoadoutCharacterSnapshot { combatStats: ResolvedCombatantStats }
+export interface BattleLoadoutSnapshot { schemaVersion: 2; combatant: CombatantLoadoutSnapshot; supports: [LoadoutCharacterSnapshot, LoadoutCharacterSnapshot] }
 
 export type BattlePhase =
   | 'LOBBY'
@@ -174,6 +181,8 @@ export interface BattleParticipant {
   isBot: boolean;
   connected: boolean;
   hp: number;
+  maxHp: number;
+  combatStats: ResolvedCombatantStats;
   shield: number;
   gauge: number;
   board: BoardState;
@@ -192,9 +201,10 @@ export interface PendingAttack {
   sourceAbilityId?: string;
   sourceTags?: string[];
   shieldBypassRatio?: number;
+  origin?: EffectOriginSnapshot;
 }
 
-export type CombatEvent =
+export type CombatEvent = (
   | { type: 'ATTACK_QUEUED'; at: number; attack: PendingAttack }
   | { type: 'ATTACK_RESOLVED'; at: number; attackId: string; absorbed: number; hpDamage: number; shieldBroken: boolean }
   | { type: 'SHIELD_GAINED'; at: number; participantId: string; amount: number }
@@ -202,9 +212,9 @@ export type CombatEvent =
   | { type: 'GAUGE_GAINED'; at: number; participantId: string; amount: number }
   | { type: 'ABILITY_TRIGGERED'; at: number; participantId: string; abilityId: string; abilityName: string; kind: AbilityKind }
   | { type: 'STATUS_CHANGED'; at: number; participantId: string; statusId: string; active: boolean }
-  | { type: 'BATTLE_MESSAGE'; at: number; participantId: string; message: string };
+  | { type: 'BATTLE_MESSAGE'; at: number; participantId: string; message: string }) & { origin?: EffectOriginSnapshot };
 
-export interface PublicParticipant { id: string; name: string; isBot: boolean; connected: boolean; hp: number; shield: number; gauge: number; loadout: BattleLoadoutSnapshot; effectRuntime?: EffectRuntimeSnapshot }
+export interface PublicParticipant { id: string; name: string; isBot: boolean; connected: boolean; hp: number; maxHp: number; shield: number; gauge: number; combatStats: ResolvedCombatantStats; loadout: BattleLoadoutSnapshot; effectRuntime?: EffectRuntimeSnapshot }
 export interface BattleSnapshot {
   battleId: string;
   phase: BattlePhase;

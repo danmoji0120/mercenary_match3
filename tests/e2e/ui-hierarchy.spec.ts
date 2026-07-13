@@ -1,8 +1,9 @@
 import { expect, test } from '@playwright/test';
+import { startGuest } from './helpers';
 
 test('combat hierarchy is compact, accessible, and responsive', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 360, height: 640 });
-  await page.goto('/');
+  await startGuest(page);
   await expect(page.getByTestId('lobby-ready')).toBeVisible();
   await expect(page.getByTestId('connection-banner')).toHaveCount(0);
   await page.getByRole('button', { name: '\uBD07 \uB300\uC804' }).click();
@@ -29,6 +30,7 @@ test('combat hierarchy is compact, accessible, and responsive', async ({ page },
 
 test('major viewports keep lobby and central battle viewport within bounds', async ({ page }, testInfo) => {
   const sizes = [{ width: 320, height: 568 }, { width: 375, height: 667 }, { width: 390, height: 844 }, { width: 412, height: 915 }, { width: 768, height: 1024 }, { width: 1280, height: 720 }, { width: 1920, height: 1080 }];
+  await startGuest(page);
   for (const size of sizes) {
     await page.setViewportSize(size); await page.goto('/'); await expect(page.getByTestId('normal-match')).toBeVisible();
     const shell = await page.locator('.shell').boundingBox();

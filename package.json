@@ -12,6 +12,15 @@
     "packages/*"
   ],
   "scripts": {
+    "content:validate": "node scripts/content-compiler.mjs --validate",
+    "content:generate": "node scripts/content-compiler.mjs && node scripts/generate-content-docs.mjs",
+    "content:check": "node scripts/content-compiler.mjs --check && node scripts/generate-content-docs.mjs --check",
+    "content:docs": "node scripts/generate-content-docs.mjs",
+    "content:docs:check": "node scripts/generate-content-docs.mjs --check",
+    "predev": "npm run content:generate",
+    "pretypecheck": "npm run content:generate",
+    "pretest": "npm run content:generate",
+    "prebuild": "npm run content:generate",
     "dev": "concurrently -k -n server,client -c yellow,cyan \"npm run dev -w @mercenary/server\" \"npm run dev -w @mercenary/client\"",
     "clean": "node scripts/clean-dist.mjs",
     "build": "npm run clean && npm run build -w @mercenary/shared && npm run build -w @mercenary/client && npm run build -w @mercenary/server",

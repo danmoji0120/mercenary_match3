@@ -1,0 +1,16 @@
+{
+  "id": "custom_test_active",
+  "kind": "ACTIVE",
+  "displayName": "Fixture Command",
+  "shortDescription": "Returns shield and mana commands.",
+  "fullDescription": "Test-only trusted custom handler.",
+  "manaCost": 100,
+  "effects": [
+    { "type": "CUSTOM", "handlerId": "custom_test_character.commandPair", "parameters": { "shield": 10, "mana": 5 } }
+  ],
+  "tags": ["defense"],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

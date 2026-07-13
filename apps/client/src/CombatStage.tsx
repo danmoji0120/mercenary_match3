@@ -11,8 +11,8 @@ function CombatantSummary({ participant, selfId, side, activeAbilityId }: { part
   const sideLabel = side === 'self' ? '나' : '상대';
   return <section className={`combat-summary ${side}`} aria-label={`${participant.name} 전투 정보`}>
     <header><span>{side === 'self' ? 'MY PARTY' : 'ENEMY'}</span><strong>{main.name}</strong><small>{participant.name}</small></header>
-    <div className="combat-summary-hp"><b data-testid={`${side}-hp`}>HP {participant.hp}</b><span>/ 1000</span>{participant.hp <= 250 && <em>위험</em>}</div>
-    <ResourceBar value={participant.hp} max={1000} kind="hp" label={`${sideLabel} HP`}/>
+    <div className="combat-summary-hp"><b data-testid={`${side}-hp`}>HP {participant.hp}</b><span>/ {participant.maxHp}</span>{participant.hp <= participant.maxHp * .25 && <em>위험</em>}</div>
+    <ResourceBar value={participant.hp} max={participant.maxHp} kind="hp" label={`${sideLabel} HP`}/>
     <div className={`combat-summary-shield ${participant.shield <= 0 ? 'empty' : ''}`} data-testid={participant.shield > 0 ? `${side}-shield` : undefined}>
       <span>◇ {participant.shield}</span><ResourceBar value={participant.shield} max={500} kind="shield" label={`${sideLabel} 보호막`}/>
     </div>

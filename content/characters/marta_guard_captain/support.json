@@ -1,0 +1,72 @@
+{
+  "id": "marta_intercept_order",
+  "kind": "SUPPORT",
+  "displayName": "선제 엄호",
+  "shortDescription": "강한 공격 직전 보호막 75",
+  "fullDescription": "강한 공격이 도착하기 직전 부족한 보호막을 보충합니다.",
+  "trigger": {
+    "event": "BEFORE_ATTACK_IMPACT",
+    "leadTimeMs": 150,
+    "filter": {
+      "type": "AND",
+      "conditions": [
+        {
+          "type": "OR",
+          "conditions": [
+            {
+              "type": "COMPARE",
+              "left": {
+                "type": "EVENT_VALUE",
+                "path": "damage.currentAmount"
+              },
+              "operator": "GTE",
+              "right": {
+                "type": "CONSTANT",
+                "value": 150
+              }
+            },
+            {
+              "type": "HAS_TAG",
+              "target": "SOURCE",
+              "tag": "active_skill"
+            }
+          ]
+        },
+        {
+          "type": "COMPARE",
+          "left": {
+            "type": "RESOURCE",
+            "target": "SELF",
+            "resource": "SHIELD"
+          },
+          "operator": "LT",
+          "right": {
+            "type": "CONSTANT",
+            "value": 100
+          }
+        }
+      ]
+    }
+  },
+  "cooldownMs": 10000,
+  "battleLimit": null,
+  "chainLimit": null,
+  "effects": [
+    {
+      "type": "ADD_SHIELD",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 75
+      }
+    }
+  ],
+  "tags": [
+    "defense",
+    "shield"
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

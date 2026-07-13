@@ -1,16 +1,30 @@
 {
   "id": "marta_guard_captain",
-  "name": "방패 경비반장 마르타",
+  "displayName": "방패 경비반장 마르타",
   "shortName": "마르타",
   "rarity": "SR",
-  "race": "human",
+  "race": "HUMAN",
+  "role": "SUPPORT",
+  "combatStyle": "SUPPORT",
+  "stats": {
+    "maxHp": 1000,
+    "swordEffectPct": 100,
+    "shieldEffectPct": 100,
+    "healEffectPct": 100,
+    "manaGainPct": 100
+  },
+  "activeAbilityId": "marta_guard_command",
+  "supportAbilityId": "marta_intercept_order",
   "tags": [
-    "human",
-    "shield",
-    "support",
-    "guard"
+    "HUMAN",
+    "SHIELD",
+    "SUPPORT",
+    "GUARD"
   ],
-  "description": "대오를 지키는 경비반장",
+  "description": {
+    "summary": "대오를 지키는 경비반장",
+    "details": "대오를 지키는 경비반장"
+  },
   "enabled": true,
   "starter": true,
   "contentVersion": 1,
@@ -20,12 +34,6 @@
   ],
   "recommendedRole": "support",
   "portraitAsset": "/characters/marta_guard_captain.svg",
-  "combatant": {
-    "skillId": "marta_guard_command"
-  },
-  "support": {
-    "effectId": "marta_intercept_order"
-  },
   "defaultSlots": [
     "account_support_1",
     "bot_support_1"

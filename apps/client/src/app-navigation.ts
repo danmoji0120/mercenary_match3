@@ -13,6 +13,7 @@ export function pathForTab(tab: AppTab) { return paths[tab] }
 
 export function tabForPath(pathname: string): AppTab | null {
   const normalized = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
+  if (normalized === '/account') return 'lobby';
   if (normalized === '/mercenaries' || normalized.startsWith('/mercenaries/')) return 'mercenaries';
   return APP_TABS.find((tab) => paths[tab] === normalized) ?? (normalized === '/' ? 'lobby' : null);
 }

@@ -1,0 +1,2856 @@
+{
+  "abilities": {
+    "battleLimit": "null or positive integer",
+    "chainLimit": "null or {maxTriggers: positive integer}; enforced per runtimeKey and scopeKey",
+    "cooldownUnit": "milliseconds",
+    "fields": {
+      "ACTIVE": {
+        "activationCondition": {
+          "required": false,
+          "type": "ConditionExpression"
+        },
+        "contentVersion": {
+          "default": 1,
+          "required": false,
+          "type": "positive integer"
+        },
+        "copyPolicy": {
+          "required": false,
+          "type": "DENY_COPIED"
+        },
+        "displayName": {
+          "required": true,
+          "type": "string"
+        },
+        "effects": {
+          "required": true,
+          "type": "EffectDefinition[]"
+        },
+        "enabled": {
+          "default": true,
+          "required": false,
+          "type": "boolean"
+        },
+        "fullDescription": {
+          "required": true,
+          "type": "string"
+        },
+        "id": {
+          "required": true,
+          "type": "stable lowercase identifier"
+        },
+        "kind": {
+          "required": true,
+          "type": "ACTIVE|SUPPORT"
+        },
+        "manaCost": {
+          "required": true,
+          "type": "integer 0..100"
+        },
+        "presentationKey": {
+          "note": "Not explicitly rejected, but the current normalizer drops it; presentation integration is unavailable.",
+          "required": false,
+          "type": "string"
+        },
+        "recursionPolicy": {
+          "required": false,
+          "type": "SAFE_DEFAULT"
+        },
+        "shortDescription": {
+          "required": true,
+          "type": "string"
+        },
+        "tags": {
+          "default": [],
+          "required": false,
+          "type": "AbilityTag[]"
+        }
+      },
+      "SUPPORT": {
+        "activationCondition": {
+          "required": false,
+          "type": "ConditionExpression"
+        },
+        "battleLimit": {
+          "required": true,
+          "type": "null|positive integer"
+        },
+        "chainLimit": {
+          "required": true,
+          "type": "null|{maxTriggers: positive integer}"
+        },
+        "contentVersion": {
+          "default": 1,
+          "required": false,
+          "type": "positive integer"
+        },
+        "cooldownMs": {
+          "required": true,
+          "runtimeDefaultWhenNull": 0,
+          "type": "null|non-negative integer"
+        },
+        "copyPolicy": {
+          "required": false,
+          "type": "DENY_COPIED"
+        },
+        "displayName": {
+          "required": true,
+          "type": "string"
+        },
+        "effects": {
+          "required": true,
+          "type": "EffectDefinition[]"
+        },
+        "enabled": {
+          "default": true,
+          "required": false,
+          "type": "boolean"
+        },
+        "fullDescription": {
+          "required": true,
+          "type": "string"
+        },
+        "id": {
+          "required": true,
+          "type": "stable lowercase identifier"
+        },
+        "kind": {
+          "required": true,
+          "type": "ACTIVE|SUPPORT"
+        },
+        "presentationKey": {
+          "note": "Not explicitly rejected, but the current normalizer drops it; presentation integration is unavailable.",
+          "required": false,
+          "type": "string"
+        },
+        "recursionPolicy": {
+          "required": false,
+          "type": "SAFE_DEFAULT"
+        },
+        "shortDescription": {
+          "required": true,
+          "type": "string"
+        },
+        "tags": {
+          "default": [],
+          "required": false,
+          "type": "AbilityTag[]"
+        },
+        "trigger": {
+          "required": true,
+          "type": "TriggerDefinition"
+        }
+      }
+    }
+  },
+  "character": {
+    "fields": {
+      "$.activeAbilityId": {
+        "example": "sample_active",
+        "required": true,
+        "runtime": "combatant ability lookup",
+        "type": "string",
+        "validation": "must equal active.json id"
+      },
+      "$.allowedSlots": {
+        "example": [
+          "combatant",
+          "support"
+        ],
+        "required": true,
+        "runtime": "loadout validation",
+        "type": "array<combatant|support>",
+        "validation": "all entries must be combatant or support"
+      },
+      "$.combatStyle": {
+        "example": "SWORD",
+        "required": true,
+        "runtime": "metadata only",
+        "type": "non-empty string ID",
+        "validation": "normalization-required; no dedicated compiler check"
+      },
+      "$.description.details": {
+        "example": "Detailed description.",
+        "required": true,
+        "runtime": "presentation metadata",
+        "type": "string",
+        "validation": "normalization-required; no dedicated compiler check"
+      },
+      "$.description.summary": {
+        "example": "Short summary.",
+        "required": true,
+        "runtime": "CharacterDefinition.description",
+        "type": "string",
+        "validation": "normalization-required; no dedicated compiler check"
+      },
+      "$.displayName": {
+        "example": "Sample Mercenary",
+        "required": true,
+        "runtime": "display name",
+        "type": "string",
+        "validation": "normalization-required; runtime registry rejects missing name"
+      },
+      "$.id": {
+        "example": "sample_character",
+        "required": true,
+        "runtime": "stable character ID",
+        "type": "package ID",
+        "validation": "must equal manifest and folder id"
+      },
+      "$.race": {
+        "example": "HUMAN",
+        "required": true,
+        "runtime": "metadata and tags",
+        "type": "non-empty string",
+        "validation": "explicit"
+      },
+      "$.rarity": {
+        "example": "SR",
+        "required": true,
+        "runtime": "metadata only",
+        "type": "enum",
+        "validation": "explicit",
+        "values": [
+          "EX",
+          "R",
+          "SR",
+          "SSR"
+        ]
+      },
+      "$.role": {
+        "example": "ATTACK",
+        "required": true,
+        "runtime": "content metadata",
+        "type": "enum",
+        "validation": "explicit",
+        "values": [
+          "ATTACK",
+          "DEFENSE",
+          "DISRUPT",
+          "HEAL",
+          "SUPPORT"
+        ]
+      },
+      "$.shortName": {
+        "example": "Sample",
+        "required": true,
+        "runtime": "compact display name",
+        "type": "string",
+        "validation": "normalization-required; runtime registry rejects missing shortName"
+      },
+      "$.stats.healEffectPct": {
+        "example": 100,
+        "required": true,
+        "runtime": "base HEAL tile only",
+        "type": "non-negative safe integer",
+        "validation": "100 is neutral"
+      },
+      "$.stats.manaGainPct": {
+        "example": 100,
+        "required": true,
+        "runtime": "base MANA tile only",
+        "type": "non-negative safe integer",
+        "validation": "100 is neutral"
+      },
+      "$.stats.maxHp": {
+        "example": 1000,
+        "required": true,
+        "runtime": "combatant starting and maximum HP",
+        "type": "positive safe integer",
+        "validation": "explicit"
+      },
+      "$.stats.shieldEffectPct": {
+        "example": 100,
+        "required": true,
+        "runtime": "base SHIELD tile only",
+        "type": "non-negative safe integer",
+        "validation": "100 is neutral"
+      },
+      "$.stats.swordEffectPct": {
+        "example": 100,
+        "required": true,
+        "runtime": "base SWORD tile only",
+        "type": "non-negative safe integer",
+        "validation": "100 is neutral"
+      },
+      "$.supportAbilityId": {
+        "example": "sample_support",
+        "required": true,
+        "runtime": "support ability lookup",
+        "type": "string",
+        "validation": "must equal support.json id"
+      },
+      "$.tags": {
+        "example": [
+          "ATTACK"
+        ],
+        "required": true,
+        "runtime": "metadata and HAS_TAG source tags where supplied",
+        "type": "string[]",
+        "validation": "normalization-required; runtime registry requires a non-empty array"
+      }
+    },
+    "statsPolicy": {
+      "appliesTo": [
+        "base SWORD tile damage",
+        "base SHIELD tile shield",
+        "base HEAL tile healing",
+        "base MANA tile gain"
+      ],
+      "boardOwner": "combatant slot only",
+      "doesNotApplyTo": [
+        "active effects",
+        "support effects",
+        "status effects",
+        "scheduled effects",
+        "custom commands"
+      ],
+      "neutralPercentage": 100,
+      "rounding": "Math.round after match-size, chain, and frenzy calculation"
+    }
+  },
+  "conditions": {
+    "AND": {
+      "example": {
+        "conditions": [
+          {
+            "type": "TRUE"
+          },
+          {
+            "type": "FALSE"
+          }
+        ],
+        "type": "AND"
+      },
+      "required": [
+        "conditions"
+      ]
+    },
+    "COMPARE": {
+      "example": {
+        "left": {
+          "resource": "HP_RATIO",
+          "target": "SELF",
+          "type": "RESOURCE"
+        },
+        "operator": "LTE",
+        "right": {
+          "type": "CONSTANT",
+          "value": 0.3
+        },
+        "type": "COMPARE"
+      },
+      "required": [
+        "left",
+        "operator",
+        "right"
+      ]
+    },
+    "EVENT_SOURCE": {
+      "example": {
+        "source": "enemy_attack",
+        "type": "EVENT_SOURCE"
+      },
+      "required": [
+        "source"
+      ]
+    },
+    "EVENT_TYPE": {
+      "example": {
+        "event": "BATTLE_STARTED",
+        "type": "EVENT_TYPE"
+      },
+      "required": [
+        "event"
+      ]
+    },
+    "FALSE": {
+      "example": {
+        "type": "FALSE"
+      },
+      "required": []
+    },
+    "HAS_STATUS": {
+      "example": {
+        "statusId": "damage_reduction",
+        "target": "ENEMY",
+        "type": "HAS_STATUS"
+      },
+      "optional": [
+        "negated"
+      ],
+      "required": [
+        "target",
+        "statusId"
+      ]
+    },
+    "HAS_TAG": {
+      "example": {
+        "source": "EVENT_SOURCE",
+        "tag": "offense",
+        "type": "HAS_TAG"
+      },
+      "required": [
+        "source",
+        "tag"
+      ]
+    },
+    "NOT": {
+      "example": {
+        "condition": {
+          "type": "FALSE"
+        },
+        "type": "NOT"
+      },
+      "required": [
+        "condition"
+      ]
+    },
+    "OR": {
+      "example": {
+        "conditions": [
+          {
+            "type": "TRUE"
+          },
+          {
+            "type": "FALSE"
+          }
+        ],
+        "type": "OR"
+      },
+      "required": [
+        "conditions"
+      ]
+    },
+    "RESULT_COMPARE": {
+      "example": {
+        "operator": "EQ",
+        "path": "shieldBroken",
+        "resultKey": "previous",
+        "type": "RESULT_COMPARE",
+        "value": true
+      },
+      "required": [
+        "resultKey",
+        "path",
+        "operator",
+        "value"
+      ]
+    },
+    "TRUE": {
+      "example": {
+        "type": "TRUE"
+      },
+      "required": []
+    }
+  },
+  "customHandlers": {
+    "commands": {
+      "addShield": "addShield(amount)",
+      "applyStatus": "applyStatus(statusId, target='self')",
+      "clearRuntimeFlag": "clearRuntimeFlag(flag)",
+      "consumeResource": "consumeResource(resource, amount, allowPartial=false)",
+      "dealDamage": "dealDamage(amount, target='opponent')",
+      "heal": "heal(amount)",
+      "modifyMana": "modifyMana(amount)",
+      "removeStatus": "removeStatus(statusId, target='self')",
+      "schedule": "schedule(delayMs, effects)",
+      "setRuntimeFlag": "setRuntimeFlag(flag, value)",
+      "storeValue": "storeValue(key, value)"
+    },
+    "constraints": [
+      "synchronous only",
+      "commands only; no direct battle mutation",
+      "JSON-only namespaced statePatch",
+      "seeded context.rng only",
+      "file system/network/database/environment/timers are forbidden by trusted-code contract, not sandbox enforcement"
+    ],
+    "context": [
+      "actor",
+      "enemy",
+      "triggeringEvent",
+      "results",
+      "runtimeFlags",
+      "customState",
+      "rng",
+      "command"
+    ],
+    "detectedBuilderCommands": [
+      "addShield",
+      "applyStatus",
+      "clearRuntimeFlag",
+      "consumeResource",
+      "dealDamage",
+      "heal",
+      "modifyMana",
+      "removeStatus",
+      "schedule",
+      "setRuntimeFlag",
+      "storeValue"
+    ],
+    "presentationEvents": "Type field exists, but BattleEffectEngine currently ignores returned presentationEvents.",
+    "result": [
+      "commands",
+      "statePatch?",
+      "presentationEvents?"
+    ],
+    "runtimeSandbox": false,
+    "serverModule": "{ characterId, handlers[] }",
+    "trustedInternalOnly": true
+  },
+  "effects": {
+    "ADD_SHIELD": {
+      "amountType": "ValueExpression",
+      "conditionSupported": true,
+      "example": {
+        "amount": {
+          "type": "CONSTANT",
+          "value": 50
+        },
+        "target": "SELF",
+        "type": "ADD_SHIELD"
+      },
+      "exampleValidatorStatus": "PASSED",
+      "note": "scope currently normalizes only to chain_step.",
+      "optionalFields": [
+        "cap",
+        "condition",
+        "resultKey",
+        "scope",
+        "target"
+      ],
+      "requiredFields": [
+        "amount"
+      ],
+      "resultKeySupported": true,
+      "resultSchema": [
+        "actualShieldGain",
+        "finalAmount",
+        "requestedAmount"
+      ],
+      "runtimeType": "gain_shield",
+      "supportStatus": "SUPPORTED",
+      "targetValues": [
+        "ENEMY",
+        "SELF"
+      ]
+    },
+    "APPLY_STATUS": {
+      "amountType": null,
+      "conditionSupported": true,
+      "example": {
+        "durationMs": 1000,
+        "resultKey": "applied",
+        "statusId": "damage_reduction",
+        "target": "SELF",
+        "type": "APPLY_STATUS"
+      },
+      "exampleValidatorStatus": "PASSED",
+      "note": null,
+      "optionalFields": [
+        "condition",
+        "durationMs",
+        "resultKey",
+        "target"
+      ],
+      "requiredFields": [
+        "statusId"
+      ],
+      "resultKeySupported": true,
+      "resultSchema": [
+        "statusApplied"
+      ],
+      "runtimeType": "apply_status",
+      "supportStatus": "SUPPORTED",
+      "targetValues": [
+        "ENEMY",
+        "SELF"
+      ]
+    },
+    "CLEAR_RUNTIME_FLAG": {
+      "amountType": null,
+      "conditionSupported": true,
+      "example": {
+        "flag": "example.flag",
+        "type": "CLEAR_RUNTIME_FLAG"
+      },
+      "exampleValidatorStatus": "PASSED",
+      "note": null,
+      "optionalFields": [
+        "condition"
+      ],
+      "requiredFields": [
+        "flag"
+      ],
+      "resultKeySupported": false,
+      "resultSchema": [],
+      "runtimeType": "consume_runtime_flag",
+      "supportStatus": "RUNTIME_PATH_PRESENT_UNVERIFIED",
+      "targetValues": []
+    },
+    "CONSUME_RESOURCE": {
+      "amountType": "ValueExpression",
+      "conditionSupported": true,
+      "example": {
+        "allowPartial": true,
+        "amount": {
+          "type": "CONSTANT",
+          "value": 160
+        },
+        "canReduceHpBelowOne": false,
+        "resource": "SHIELD",
+        "resultKey": "shieldCost",
+        "target": "SELF",
+        "type": "CONSUME_RESOURCE"
+      },
+      "exampleValidatorStatus": "PASSED",
+      "note": null,
+      "optionalFields": [
+        "allowPartial",
+        "canReduceHpBelowOne",
+        "condition",
+        "resultKey",
+        "target"
+      ],
+      "requiredFields": [
+        "amount",
+        "resource"
+      ],
+      "resultKeySupported": true,
+      "resultSchema": [
+        "consumedAmount",
+        "finalAmount",
+        "requestedAmount"
+      ],
+      "runtimeType": "consume_resource",
+      "supportStatus": "RUNTIME_PATH_PRESENT_UNVERIFIED",
+      "targetValues": [
+        "ENEMY",
+        "SELF"
+      ]
+    },
+    "CONVERT_OVERHEAL_TO_SHIELD": {
+      "amountType": null,
+      "conditionSupported": true,
+      "example": {
+        "condition": {
+          "operator": "GT",
+          "path": "overhealing",
+          "resultKey": "heal",
+          "type": "RESULT_COMPARE",
+          "value": 0
+        },
+        "maximum": 50,
+        "ratio": 0.5,
+        "target": "SELF",
+        "type": "CONVERT_OVERHEAL_TO_SHIELD"
+      },
+      "exampleValidatorStatus": "PASSED",
+      "note": null,
+      "optionalFields": [
+        "condition",
+        "maximum",
+        "resultKey",
+        "target"
+      ],
+      "requiredFields": [
+        "ratio"
+      ],
+      "resultKeySupported": true,
+      "resultSchema": [
+        "actualShieldGain",
+        "finalAmount",
+        "requestedAmount"
+      ],
+      "runtimeType": "convert_overheal_to_shield",
+      "supportStatus": "SUPPORTED",
+      "targetValues": [
+        "ENEMY",
+        "SELF"
+      ]
+    },
+    "CUSTOM": {
+      "amountType": null,
+      "conditionSupported": true,
+      "example": {
+        "handlerId": "example_character.handler",
+        "parameters": {
+          "shield": 10
+        },
+        "type": "CUSTOM"
+      },
+      "exampleValidatorStatus": "PASSED",
+      "note": null,
+      "optionalFields": [
+        "condition",
+        "parameters"
+      ],
+      "requiredFields": [
+        "handlerId"
+      ],
+      "resultKeySupported": false,
+      "resultSchema": [],
+      "runtimeType": "custom",
+      "supportStatus": "SUPPORTED",
+      "targetValues": []
+    },
+    "DAMAGE": {
+      "amountType": "ValueExpression",
+      "conditionSupported": true,
+      "example": {
+        "amount": {
+          "type": "CONSTANT",
+          "value": 180
+        },
+        "target": "ENEMY",
+        "type": "DAMAGE"
+      },
+      "exampleValidatorStatus": "PASSED",
+      "note": null,
+      "optionalFields": [
+        "condition",
+        "resultKey",
+        "shieldBypassPct",
+        "tags",
+        "target",
+        "travelMs"
+      ],
+      "requiredFields": [
+        "amount"
+      ],
+      "resultKeySupported": true,
+      "resultSchema": [
+        "finalAmount",
+        "hpDamage",
+        "requestedAmount",
+        "shieldBroken",
+        "shieldDamage",
+        "targetDefeated"
+      ],
+      "runtimeType": "deal_damage",
+      "supportStatus": "SUPPORTED",
+      "targetValues": [
+        "ENEMY",
+        "SELF"
+      ]
+    },
+    "HEAL": {
+      "amountType": "ValueExpression",
+      "conditionSupported": true,
+      "example": {
+        "amount": {
+          "type": "CONSTANT",
+          "value": 100
+        },
+        "target": "SELF",
+        "type": "HEAL"
+      },
+      "exampleValidatorStatus": "PASSED",
+      "note": null,
+      "optionalFields": [
+        "condition",
+        "resultKey",
+        "target"
+      ],
+      "requiredFields": [
+        "amount"
+      ],
+      "resultKeySupported": true,
+      "resultSchema": [
+        "actualHealing",
+        "finalAmount",
+        "overhealing",
+        "requestedAmount"
+      ],
+      "runtimeType": "heal",
+      "supportStatus": "SUPPORTED",
+      "targetValues": [
+        "ENEMY",
+        "SELF"
+      ]
+    },
+    "IF": {
+      "amountType": null,
+      "conditionSupported": true,
+      "example": {
+        "condition": {
+          "left": {
+            "resource": "HP_RATIO",
+            "target": "SELF",
+            "type": "RESOURCE"
+          },
+          "operator": "LTE",
+          "right": {
+            "type": "CONSTANT",
+            "value": 0.3
+          },
+          "type": "COMPARE"
+        },
+        "else": [],
+        "then": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 120
+            },
+            "target": "SELF",
+            "type": "HEAL"
+          }
+        ],
+        "type": "IF"
+      },
+      "exampleValidatorStatus": "PASSED",
+      "note": null,
+      "optionalFields": [
+        "else"
+      ],
+      "requiredFields": [
+        "condition",
+        "then"
+      ],
+      "resultKeySupported": false,
+      "resultSchema": [],
+      "runtimeType": "conditional",
+      "supportStatus": "SUPPORTED",
+      "targetValues": []
+    },
+    "MODIFY_EVENT": {
+      "amountType": "ValueExpression",
+      "conditionSupported": true,
+      "example": {
+        "amount": {
+          "type": "CONSTANT",
+          "value": 0
+        },
+        "ratio": 0.8,
+        "resultKey": "modified",
+        "type": "MODIFY_EVENT"
+      },
+      "exampleValidatorStatus": "PASSED",
+      "note": null,
+      "optionalFields": [
+        "amount",
+        "condition",
+        "ratio",
+        "resultKey"
+      ],
+      "requiredFields": [],
+      "resultKeySupported": true,
+      "resultSchema": [
+        "finalAmount",
+        "requestedAmount"
+      ],
+      "runtimeType": "modify_event_amount",
+      "supportStatus": "RUNTIME_PATH_PRESENT_UNVERIFIED",
+      "targetValues": []
+    },
+    "MODIFY_MANA": {
+      "amountType": "ValueExpression",
+      "conditionSupported": true,
+      "example": {
+        "amount": {
+          "type": "CONSTANT",
+          "value": 10
+        },
+        "resultKey": "manaGain",
+        "target": "SELF",
+        "type": "MODIFY_MANA"
+      },
+      "exampleValidatorStatus": "PASSED",
+      "note": null,
+      "optionalFields": [
+        "condition",
+        "resultKey",
+        "target"
+      ],
+      "requiredFields": [
+        "amount"
+      ],
+      "resultKeySupported": true,
+      "resultSchema": [
+        "finalAmount",
+        "requestedAmount"
+      ],
+      "runtimeType": "gain_mana",
+      "supportStatus": "SUPPORTED",
+      "targetValues": [
+        "ENEMY",
+        "SELF"
+      ]
+    },
+    "REMOVE_STATUS": {
+      "amountType": null,
+      "conditionSupported": true,
+      "example": {
+        "statusId": "damage_reduction",
+        "target": "SELF",
+        "type": "REMOVE_STATUS"
+      },
+      "exampleValidatorStatus": "PASSED",
+      "note": null,
+      "optionalFields": [
+        "condition",
+        "target"
+      ],
+      "requiredFields": [
+        "statusId"
+      ],
+      "resultKeySupported": false,
+      "resultSchema": [],
+      "runtimeType": "remove_status",
+      "supportStatus": "RUNTIME_PATH_PRESENT_UNVERIFIED",
+      "targetValues": [
+        "ENEMY",
+        "SELF"
+      ]
+    },
+    "SCHEDULE": {
+      "amountType": null,
+      "conditionSupported": true,
+      "example": {
+        "delayMs": 250,
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 50
+            },
+            "target": "ENEMY",
+            "type": "DAMAGE"
+          }
+        ],
+        "type": "SCHEDULE"
+      },
+      "exampleValidatorStatus": "PASSED",
+      "note": null,
+      "optionalFields": [
+        "condition",
+        "target"
+      ],
+      "requiredFields": [
+        "delayMs",
+        "effects"
+      ],
+      "resultKeySupported": false,
+      "resultSchema": [],
+      "runtimeType": "schedule_effects",
+      "supportStatus": "SUPPORTED",
+      "targetValues": [
+        "ENEMY",
+        "SELF"
+      ]
+    },
+    "SET_RUNTIME_FLAG": {
+      "amountType": null,
+      "conditionSupported": true,
+      "example": {
+        "flag": "example.flag",
+        "type": "SET_RUNTIME_FLAG",
+        "value": true
+      },
+      "exampleValidatorStatus": "PASSED",
+      "note": null,
+      "optionalFields": [
+        "condition"
+      ],
+      "requiredFields": [
+        "flag",
+        "value"
+      ],
+      "resultKeySupported": false,
+      "resultSchema": [],
+      "runtimeType": "set_runtime_flag",
+      "supportStatus": "RUNTIME_PATH_PRESENT_UNVERIFIED",
+      "targetValues": []
+    },
+    "STORE_VALUE": {
+      "amountType": null,
+      "conditionSupported": true,
+      "example": {
+        "resultKey": "stored",
+        "type": "STORE_VALUE",
+        "value": {
+          "type": "CONSTANT",
+          "value": 42
+        }
+      },
+      "exampleValidatorStatus": "PASSED",
+      "note": null,
+      "optionalFields": [
+        "condition",
+        "resultKey"
+      ],
+      "requiredFields": [
+        "value"
+      ],
+      "resultKeySupported": true,
+      "resultSchema": [
+        "finalAmount"
+      ],
+      "runtimeType": "store_value",
+      "supportStatus": "RUNTIME_PATH_PRESENT_UNVERIFIED",
+      "targetValues": []
+    }
+  },
+  "engineApiVersion": 1,
+  "eventPaths": {
+    "chain.depth": {
+      "availableEvents": [
+        "TILE_MATCH_RESOLVED"
+      ],
+      "example": 2,
+      "type": "integer"
+    },
+    "damage.currentAmount": {
+      "availableEvents": [
+        "BEFORE_ATTACK_IMPACT"
+      ],
+      "example": 180,
+      "type": "number"
+    },
+    "damage.finalAmount": {
+      "availableEvents": [],
+      "example": 135,
+      "note": "Validator accepts this path, but no emitted support trigger currently supplies finalAmount.",
+      "type": "number"
+    },
+    "damage.shieldBroken": {
+      "availableEvents": [
+        "AFTER_DAMAGE",
+        "SHIELD_BROKEN"
+      ],
+      "example": true,
+      "type": "boolean"
+    },
+    "hp.threshold": {
+      "availableEvents": [
+        "HP_THRESHOLD_CROSSED"
+      ],
+      "example": 25,
+      "type": "number"
+    },
+    "match.count": {
+      "availableEvents": [
+        "TILE_MATCH_RESOLVED"
+      ],
+      "example": 4,
+      "type": "integer"
+    },
+    "match.tileType": {
+      "availableEvents": [
+        "TILE_MATCH_RESOLVED"
+      ],
+      "example": "SWORD",
+      "type": "TileType"
+    }
+  },
+  "evidence": {
+    "emittedRuntimeTriggers": [
+      "after_damage",
+      "battle_finished",
+      "battle_started",
+      "before_attack_impact",
+      "hp_threshold_crossed",
+      "match_group_resolved",
+      "shield_broken"
+    ],
+    "runtimeAllowedEffects": [
+      "apply_status",
+      "cancel_current_effect",
+      "cap_value",
+      "conditional",
+      "consume_charge",
+      "consume_resource",
+      "consume_runtime_flag",
+      "convert_overheal_to_shield",
+      "custom",
+      "deal_damage",
+      "emit_battle_message",
+      "gain_mana",
+      "gain_shield",
+      "grant_charge",
+      "heal",
+      "modify_event_amount",
+      "refresh_status",
+      "remove_status",
+      "schedule_effects",
+      "set_runtime_flag",
+      "set_shield_bypass_ratio",
+      "store_value"
+    ],
+    "runtimeConditions": [
+      "all",
+      "any",
+      "charge_available",
+      "compare_number",
+      "compare_ratio",
+      "cooldown_ready",
+      "effect_result_compare",
+      "event_type_is",
+      "expression_compare",
+      "hp_threshold_crossed",
+      "incoming_damage",
+      "matched_tile_count",
+      "not",
+      "once_per_battle_available",
+      "opponent_hp_ratio",
+      "opponent_shield_amount",
+      "self_hp_ratio",
+      "self_shield_amount",
+      "shield_was_broken",
+      "source_has_tag",
+      "source_type_is",
+      "target_has_status",
+      "target_lacks_status",
+      "tile_type_is"
+    ],
+    "runtimeExecutorEffects": [
+      "apply_status",
+      "cancel_current_effect",
+      "cap_value",
+      "conditional",
+      "consume_charge",
+      "consume_resource",
+      "consume_runtime_flag",
+      "convert_overheal_to_shield",
+      "custom",
+      "deal_damage",
+      "emit_battle_message",
+      "gain_mana",
+      "gain_shield",
+      "grant_charge",
+      "heal",
+      "modify_event_amount",
+      "refresh_status",
+      "remove_status",
+      "schedule_effects",
+      "set_runtime_flag",
+      "set_shield_bypass_ratio",
+      "store_value"
+    ],
+    "runtimeTriggerTypes": [
+      "active_requested",
+      "after_damage",
+      "after_heal",
+      "after_shield_gain",
+      "attack_created",
+      "battle_finished",
+      "battle_started",
+      "before_attack_impact",
+      "before_damage",
+      "chain_step_resolved",
+      "hp_threshold_crossed",
+      "match_group_resolved",
+      "shield_broken",
+      "status_applied",
+      "status_expired"
+    ],
+    "runtimeVerifiedEffects": [
+      "active_requested",
+      "all",
+      "apply_status",
+      "conditional",
+      "convert_overheal_to_shield",
+      "custom",
+      "deal_damage",
+      "gain_mana",
+      "gain_shield",
+      "heal",
+      "match_group_resolved",
+      "matched_tile_count",
+      "not",
+      "schedule_effects",
+      "tile_type_is"
+    ]
+  },
+  "examples": {
+    "consumedShieldDamage": {
+      "ability": {
+        "effects": [
+          {
+            "allowPartial": true,
+            "amount": {
+              "type": "CONSTANT",
+              "value": 160
+            },
+            "canReduceHpBelowOne": false,
+            "resource": "SHIELD",
+            "resultKey": "shieldCost",
+            "target": "SELF",
+            "type": "CONSUME_RESOURCE"
+          },
+          {
+            "amount": {
+              "type": "ADD",
+              "values": [
+                {
+                  "type": "CONSTANT",
+                  "value": 150
+                },
+                {
+                  "type": "MULTIPLY",
+                  "values": [
+                    {
+                      "path": "consumedAmount",
+                      "resultKey": "shieldCost",
+                      "type": "RESULT_VALUE"
+                    },
+                    {
+                      "type": "CONSTANT",
+                      "value": 1.2
+                    }
+                  ]
+                }
+              ]
+            },
+            "target": "ENEMY",
+            "type": "DAMAGE"
+          }
+        ],
+        "manaCost": 100
+      },
+      "kind": "ACTIVE",
+      "validatorStatus": "PASSED"
+    },
+    "customHandler": {
+      "ability": {
+        "effects": [
+          {
+            "handlerId": "example_character.handler",
+            "parameters": {
+              "shield": 10
+            },
+            "type": "CUSTOM"
+          }
+        ],
+        "manaCost": 100
+      },
+      "kind": "ACTIVE",
+      "validatorStatus": "PASSED"
+    },
+    "eventModification": {
+      "ability": {
+        "battleLimit": null,
+        "chainLimit": null,
+        "cooldownMs": 0,
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 0
+            },
+            "ratio": 0.8,
+            "resultKey": "modified",
+            "type": "MODIFY_EVENT"
+          }
+        ],
+        "trigger": {
+          "event": "BEFORE_ATTACK_IMPACT"
+        }
+      },
+      "kind": "SUPPORT",
+      "validatorStatus": "PASSED"
+    },
+    "healAndShield": {
+      "ability": {
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 100
+            },
+            "target": "SELF",
+            "type": "HEAL"
+          },
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 50
+            },
+            "target": "SELF",
+            "type": "ADD_SHIELD"
+          }
+        ],
+        "manaCost": 100
+      },
+      "kind": "ACTIVE",
+      "validatorStatus": "PASSED"
+    },
+    "hpConditional": {
+      "ability": {
+        "effects": [
+          {
+            "condition": {
+              "left": {
+                "resource": "HP_RATIO",
+                "target": "SELF",
+                "type": "RESOURCE"
+              },
+              "operator": "LTE",
+              "right": {
+                "type": "CONSTANT",
+                "value": 0.3
+              },
+              "type": "COMPARE"
+            },
+            "else": [],
+            "then": [
+              {
+                "amount": {
+                  "type": "CONSTANT",
+                  "value": 120
+                },
+                "target": "SELF",
+                "type": "HEAL"
+              }
+            ],
+            "type": "IF"
+          }
+        ],
+        "manaCost": 100
+      },
+      "kind": "ACTIVE",
+      "validatorStatus": "PASSED"
+    },
+    "manaModification": {
+      "ability": {
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 10
+            },
+            "resultKey": "manaGain",
+            "target": "SELF",
+            "type": "MODIFY_MANA"
+          }
+        ],
+        "manaCost": 0
+      },
+      "kind": "ACTIVE",
+      "validatorStatus": "PASSED"
+    },
+    "overhealConversion": {
+      "ability": {
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 100
+            },
+            "resultKey": "heal",
+            "target": "SELF",
+            "type": "HEAL"
+          },
+          {
+            "condition": {
+              "operator": "GT",
+              "path": "overhealing",
+              "resultKey": "heal",
+              "type": "RESULT_COMPARE",
+              "value": 0
+            },
+            "maximum": 50,
+            "ratio": 0.5,
+            "target": "SELF",
+            "type": "CONVERT_OVERHEAL_TO_SHIELD"
+          }
+        ],
+        "manaCost": 100
+      },
+      "kind": "ACTIVE",
+      "validatorStatus": "PASSED"
+    },
+    "runtimeFlags": {
+      "ability": {
+        "effects": [
+          {
+            "flag": "example.flag",
+            "type": "SET_RUNTIME_FLAG",
+            "value": true
+          },
+          {
+            "flag": "example.flag",
+            "type": "CLEAR_RUNTIME_FLAG"
+          }
+        ],
+        "manaCost": 100
+      },
+      "kind": "ACTIVE",
+      "validatorStatus": "PASSED"
+    },
+    "scheduledFollowup": {
+      "ability": {
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 100
+            },
+            "target": "ENEMY",
+            "type": "DAMAGE"
+          },
+          {
+            "delayMs": 250,
+            "effects": [
+              {
+                "amount": {
+                  "type": "CONSTANT",
+                  "value": 50
+                },
+                "target": "ENEMY",
+                "type": "DAMAGE"
+              }
+            ],
+            "type": "SCHEDULE"
+          }
+        ],
+        "manaCost": 100
+      },
+      "kind": "ACTIVE",
+      "validatorStatus": "PASSED"
+    },
+    "shieldBrokenResult": {
+      "ability": {
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 180
+            },
+            "resultKey": "mainHit",
+            "target": "ENEMY",
+            "type": "DAMAGE"
+          },
+          {
+            "condition": {
+              "operator": "EQ",
+              "path": "shieldBroken",
+              "resultKey": "mainHit",
+              "type": "RESULT_COMPARE",
+              "value": true
+            },
+            "else": [],
+            "then": [
+              {
+                "amount": {
+                  "type": "CONSTANT",
+                  "value": 50
+                },
+                "target": "SELF",
+                "type": "ADD_SHIELD"
+              }
+            ],
+            "type": "IF"
+          }
+        ],
+        "manaCost": 100
+      },
+      "kind": "ACTIVE",
+      "validatorStatus": "PASSED"
+    },
+    "shieldBrokenSupport": {
+      "ability": {
+        "battleLimit": null,
+        "chainLimit": null,
+        "cooldownMs": 9000,
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 75
+            },
+            "target": "ENEMY",
+            "type": "DAMAGE"
+          }
+        ],
+        "trigger": {
+          "event": "SHIELD_BROKEN"
+        }
+      },
+      "kind": "SUPPORT",
+      "validatorStatus": "PASSED"
+    },
+    "shieldBypassAttack": {
+      "ability": {
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 180
+            },
+            "resultKey": "hit",
+            "shieldBypassPct": {
+              "type": "CONSTANT",
+              "value": 30
+            },
+            "target": "ENEMY",
+            "type": "DAMAGE"
+          }
+        ],
+        "manaCost": 100
+      },
+      "kind": "ACTIVE",
+      "validatorStatus": "PASSED"
+    },
+    "simpleActiveDamage": {
+      "ability": {
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 180
+            },
+            "target": "ENEMY",
+            "type": "DAMAGE"
+          }
+        ],
+        "manaCost": 100
+      },
+      "kind": "ACTIVE",
+      "validatorStatus": "PASSED"
+    },
+    "statusApplyAndRemove": {
+      "ability": {
+        "effects": [
+          {
+            "durationMs": 1000,
+            "resultKey": "applied",
+            "statusId": "damage_reduction",
+            "target": "SELF",
+            "type": "APPLY_STATUS"
+          },
+          {
+            "statusId": "damage_reduction",
+            "target": "SELF",
+            "type": "REMOVE_STATUS"
+          }
+        ],
+        "manaCost": 100
+      },
+      "kind": "ACTIVE",
+      "validatorStatus": "PASSED"
+    },
+    "storedValue": {
+      "ability": {
+        "effects": [
+          {
+            "resultKey": "stored",
+            "type": "STORE_VALUE",
+            "value": {
+              "type": "CONSTANT",
+              "value": 42
+            }
+          },
+          {
+            "amount": {
+              "path": "finalAmount",
+              "resultKey": "stored",
+              "type": "RESULT_VALUE"
+            },
+            "target": "SELF",
+            "type": "ADD_SHIELD"
+          }
+        ],
+        "manaCost": 100
+      },
+      "kind": "ACTIVE",
+      "validatorStatus": "PASSED"
+    },
+    "swordFourSupport": {
+      "ability": {
+        "battleLimit": null,
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "cooldownMs": 0,
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 40
+            },
+            "target": "SELF",
+            "type": "ADD_SHIELD"
+          }
+        ],
+        "trigger": {
+          "event": "TILE_MATCH_RESOLVED",
+          "filter": {
+            "conditions": [
+              {
+                "left": {
+                  "path": "match.tileType",
+                  "type": "EVENT_VALUE"
+                },
+                "operator": "EQ",
+                "right": {
+                  "type": "CONSTANT",
+                  "value": "SWORD"
+                },
+                "type": "COMPARE"
+              },
+              {
+                "left": {
+                  "path": "match.count",
+                  "type": "EVENT_VALUE"
+                },
+                "operator": "GTE",
+                "right": {
+                  "type": "CONSTANT",
+                  "value": 4
+                },
+                "type": "COMPARE"
+              }
+            ],
+            "type": "AND"
+          }
+        }
+      },
+      "kind": "SUPPORT",
+      "validatorStatus": "PASSED"
+    }
+  },
+  "formatVersion": 1,
+  "generatedWarning": "AUTO-GENERATED FILE. DO NOT EDIT.",
+  "idRules": {
+    "abilityIdPattern": "^[a-z][a-z0-9_.]*$",
+    "characterId": "must equal package and folder ID",
+    "customHandlerNamespaceRequired": true,
+    "globalDuplicatesRejected": [
+      "characterId",
+      "abilityId",
+      "customHandlerId"
+    ],
+    "optionalFiles": [
+      "presentation.json",
+      "server.ts"
+    ],
+    "packageIdPattern": "^[a-z][a-z0-9_]*$",
+    "pathTraversalForbidden": true,
+    "requiredFiles": [
+      "manifest.json",
+      "character.json",
+      "active.json",
+      "support.json"
+    ]
+  },
+  "operators": {
+    "comparison": [
+      "EQ",
+      "GTE",
+      "GT",
+      "LTE",
+      "LT",
+      "NE"
+    ]
+  },
+  "policies": {
+    "convertedEffectsCanBeConvertedAgain": false,
+    "copiedEffectsCanBeCopiedAgain": false,
+    "copy": [
+      "DENY_COPIED"
+    ],
+    "copyAndConversionPrimitives": "metadata only; no package Effect primitive",
+    "copyPolicyRuntimeUse": "validated then dropped by the normalizer; no copy primitive currently exists",
+    "customRootEventPreserved": true,
+    "maximumGenerationDepth": 8,
+    "originTypes": [
+      "ACTIVE_ABILITY",
+      "CONVERTED",
+      "COPIED",
+      "CUSTOM",
+      "SCHEDULED",
+      "STATUS",
+      "SUPPORT_ABILITY",
+      "TILE_MATCH"
+    ],
+    "recursion": [
+      "SAFE_DEFAULT"
+    ],
+    "recursionPolicyRuntimeUse": "validated then dropped; hard engine safety rules apply",
+    "sameSupportSelfRetriggerBlocked": true,
+    "scheduledRootEventPreserved": true
+  },
+  "rarities": [
+    "EX",
+    "R",
+    "SR",
+    "SSR"
+  ],
+  "resources": {
+    "HP": {
+      "consumable": true,
+      "modifiable": true,
+      "readable": true
+    },
+    "HP_RATIO": {
+      "consumable": false,
+      "modifiable": false,
+      "readable": true
+    },
+    "MANA": {
+      "consumable": true,
+      "modifiable": true,
+      "readable": true
+    },
+    "SHIELD": {
+      "consumable": true,
+      "modifiable": true,
+      "readable": true
+    }
+  },
+  "resultPathAllowlist": [
+    "actualHealing",
+    "actualShieldGain",
+    "chargeConsumed",
+    "consumedAmount",
+    "finalAmount",
+    "hpDamage",
+    "overhealing",
+    "requestedAmount",
+    "shieldBroken",
+    "shieldDamage",
+    "statusApplied",
+    "targetDefeated"
+  ],
+  "resultSchemas": {
+    "ADD_SHIELD": [
+      "actualShieldGain",
+      "finalAmount",
+      "requestedAmount"
+    ],
+    "APPLY_STATUS": [
+      "statusApplied"
+    ],
+    "CONSUME_RESOURCE": [
+      "consumedAmount",
+      "finalAmount",
+      "requestedAmount"
+    ],
+    "CONVERT_OVERHEAL_TO_SHIELD": [
+      "actualShieldGain",
+      "finalAmount",
+      "requestedAmount"
+    ],
+    "DAMAGE": [
+      "finalAmount",
+      "hpDamage",
+      "requestedAmount",
+      "shieldBroken",
+      "shieldDamage",
+      "targetDefeated"
+    ],
+    "HEAL": [
+      "actualHealing",
+      "finalAmount",
+      "overhealing",
+      "requestedAmount"
+    ],
+    "MODIFY_EVENT": [
+      "finalAmount",
+      "requestedAmount"
+    ],
+    "MODIFY_MANA": [
+      "finalAmount",
+      "requestedAmount"
+    ],
+    "STORE_VALUE": [
+      "finalAmount"
+    ]
+  },
+  "roles": [
+    "ATTACK",
+    "DEFENSE",
+    "DISRUPT",
+    "HEAL",
+    "SUPPORT"
+  ],
+  "runtimeInternalEffects": [
+    {
+      "supportStatus": "RUNTIME_INTERNAL_ONLY",
+      "type": "cancel_current_effect"
+    },
+    {
+      "supportStatus": "RUNTIME_INTERNAL_ONLY",
+      "type": "cap_value"
+    },
+    {
+      "supportStatus": "RUNTIME_INTERNAL_ONLY",
+      "type": "consume_charge"
+    },
+    {
+      "supportStatus": "RUNTIME_INTERNAL_ONLY",
+      "type": "emit_battle_message"
+    },
+    {
+      "supportStatus": "RUNTIME_INTERNAL_ONLY",
+      "type": "grant_charge"
+    },
+    {
+      "supportStatus": "RUNTIME_INTERNAL_ONLY",
+      "type": "refresh_status"
+    },
+    {
+      "supportStatus": "RUNTIME_INTERNAL_ONLY",
+      "type": "set_shield_bypass_ratio"
+    }
+  ],
+  "schemaVersion": 1,
+  "sources": [
+    "scripts/content-schema-metadata.mjs",
+    "scripts/content-compiler.mjs",
+    "apps/server/src/content-registry.ts",
+    "apps/server/src/effect-engine.ts",
+    "apps/server/src/effect-types.ts",
+    "apps/server/src/custom-ability.ts"
+  ],
+  "stats": [
+    "MAX_HP"
+  ],
+  "statuses": {
+    "definitions": {
+      "damage_reduction": {
+        "consumePolicy": null,
+        "durationMs": 4000,
+        "maxStacks": 1,
+        "modifiers": [
+          {
+            "type": "incoming_damage_multiplier",
+            "value": 0.75
+          }
+        ],
+        "name": "철벽 태세",
+        "refreshPolicy": "refresh",
+        "snapshot": "statusId, source/target participant, stackCount, expiresAt",
+        "stacking": "refresh",
+        "triggers": []
+      },
+      "emergency_guard": {
+        "consumePolicy": {
+          "consumeAfter": "attack_arrived",
+          "type": "on_next_incoming_attack"
+        },
+        "durationMs": 5000,
+        "maxStacks": 1,
+        "modifiers": [
+          {
+            "type": "incoming_damage_multiplier",
+            "value": 0.55
+          }
+        ],
+        "name": "긴급 방어",
+        "refreshPolicy": "refresh",
+        "snapshot": "statusId, source/target participant, stackCount, expiresAt",
+        "stacking": "refresh",
+        "triggers": []
+      },
+      "exposed_flaw_charge": {
+        "consumePolicy": {
+          "consumeAfter": "damage_created",
+          "type": "on_next_outgoing_damage"
+        },
+        "durationMs": 6000,
+        "maxStacks": 1,
+        "modifiers": [
+          {
+            "type": "shield_bypass_bonus",
+            "value": 0.3
+          }
+        ],
+        "name": "약점 충전",
+        "refreshPolicy": "refresh",
+        "snapshot": "statusId, source/target participant, stackCount, expiresAt",
+        "stacking": "refresh",
+        "triggers": []
+      },
+      "healing_reduction": {
+        "consumePolicy": null,
+        "durationMs": 7000,
+        "maxStacks": 1,
+        "modifiers": [
+          {
+            "type": "healing_received_multiplier",
+            "value": 0.55
+          }
+        ],
+        "name": "회복 봉인",
+        "refreshPolicy": "refresh",
+        "snapshot": "statusId, source/target participant, stackCount, expiresAt",
+        "stacking": "refresh",
+        "triggers": []
+      }
+    },
+    "durationUnit": "milliseconds",
+    "idPattern": "^[a-z0-9_]+$",
+    "refreshPolicies": [
+      "extend",
+      "ignore",
+      "refresh",
+      "replace",
+      "stack"
+    ],
+    "snapshot": "StatusSnapshot stores id, source/target, stackCount, expiresAt and visibility."
+  },
+  "targets": [
+    "ENEMY",
+    "SELF"
+  ],
+  "tileTypes": [
+    "HEAL",
+    "MANA",
+    "SHIELD",
+    "SWORD"
+  ],
+  "triggers": {
+    "ACTIVE_USED": {
+      "actor": "undefined for content",
+      "eventPaths": [],
+      "example": {
+        "battleLimit": null,
+        "chainLimit": null,
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "copyPolicy": "DENY_COPIED",
+        "displayName": "Example SUPPORT",
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 10
+            },
+            "target": "SELF",
+            "type": "ADD_SHIELD"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "Validated by the current content compiler.",
+        "id": "example_support",
+        "kind": "SUPPORT",
+        "recursionPolicy": "SAFE_DEFAULT",
+        "shortDescription": "Generated valid example.",
+        "tags": [
+          "defense"
+        ],
+        "trigger": {
+          "event": "ACTIVE_USED"
+        }
+      },
+      "exampleValidatorStatus": "PASSED",
+      "originType": "Inherited from the triggering effect when present",
+      "payload": [],
+      "runtimeType": "active_requested",
+      "supportStatus": "TYPE_DEFINED_NOT_EMITTED",
+      "target": "undefined for content",
+      "timing": "not emitted"
+    },
+    "AFTER_DAMAGE": {
+      "actor": "attacker",
+      "eventPaths": [
+        "damage.shieldBroken"
+      ],
+      "example": {
+        "battleLimit": null,
+        "chainLimit": null,
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "copyPolicy": "DENY_COPIED",
+        "displayName": "Example SUPPORT",
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 10
+            },
+            "target": "SELF",
+            "type": "ADD_SHIELD"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "Validated by the current content compiler.",
+        "id": "example_support",
+        "kind": "SUPPORT",
+        "recursionPolicy": "SAFE_DEFAULT",
+        "shortDescription": "Generated valid example.",
+        "tags": [
+          "defense"
+        ],
+        "trigger": {
+          "event": "AFTER_DAMAGE"
+        }
+      },
+      "exampleValidatorStatus": "PASSED",
+      "originType": "Inherited from the triggering effect when present",
+      "payload": [
+        "shieldBefore",
+        "shieldAfter",
+        "hpBefore",
+        "hpAfter",
+        "shieldBroken"
+      ],
+      "runtimeType": "after_damage",
+      "supportStatus": "EMITTED_AND_SUPPORTED",
+      "target": "damaged participant",
+      "timing": "after"
+    },
+    "ATTACK_CREATED": {
+      "actor": "undefined for content",
+      "eventPaths": [],
+      "example": {
+        "battleLimit": null,
+        "chainLimit": null,
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "copyPolicy": "DENY_COPIED",
+        "displayName": "Example SUPPORT",
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 10
+            },
+            "target": "SELF",
+            "type": "ADD_SHIELD"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "Validated by the current content compiler.",
+        "id": "example_support",
+        "kind": "SUPPORT",
+        "recursionPolicy": "SAFE_DEFAULT",
+        "shortDescription": "Generated valid example.",
+        "tags": [
+          "defense"
+        ],
+        "trigger": {
+          "event": "ATTACK_CREATED"
+        }
+      },
+      "exampleValidatorStatus": "PASSED",
+      "originType": "Inherited from the triggering effect when present",
+      "payload": [],
+      "runtimeType": "attack_created",
+      "supportStatus": "TYPE_DEFINED_NOT_EMITTED",
+      "target": "undefined for content",
+      "timing": "not emitted"
+    },
+    "BATTLE_STARTED": {
+      "actor": "each participant",
+      "eventPaths": [],
+      "example": {
+        "battleLimit": null,
+        "chainLimit": null,
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "copyPolicy": "DENY_COPIED",
+        "displayName": "Example SUPPORT",
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 10
+            },
+            "target": "SELF",
+            "type": "ADD_SHIELD"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "Validated by the current content compiler.",
+        "id": "example_support",
+        "kind": "SUPPORT",
+        "recursionPolicy": "SAFE_DEFAULT",
+        "shortDescription": "Generated valid example.",
+        "tags": [
+          "defense"
+        ],
+        "trigger": {
+          "event": "BATTLE_STARTED"
+        }
+      },
+      "exampleValidatorStatus": "PASSED",
+      "originType": "Inherited from the triggering effect when present",
+      "payload": [
+        "serverTime"
+      ],
+      "runtimeType": "battle_started",
+      "supportStatus": "EMITTED_AND_SUPPORTED",
+      "target": "opponent",
+      "timing": "after countdown"
+    },
+    "BEFORE_ATTACK_IMPACT": {
+      "actor": "defender/support owner",
+      "eventPaths": [
+        "damage.currentAmount"
+      ],
+      "example": {
+        "battleLimit": null,
+        "chainLimit": null,
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "copyPolicy": "DENY_COPIED",
+        "displayName": "Example SUPPORT",
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 10
+            },
+            "target": "SELF",
+            "type": "ADD_SHIELD"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "Validated by the current content compiler.",
+        "id": "example_support",
+        "kind": "SUPPORT",
+        "recursionPolicy": "SAFE_DEFAULT",
+        "shortDescription": "Generated valid example.",
+        "tags": [
+          "defense"
+        ],
+        "trigger": {
+          "event": "BEFORE_ATTACK_IMPACT"
+        }
+      },
+      "exampleValidatorStatus": "PASSED",
+      "originType": "Inherited from the triggering effect when present",
+      "payload": [
+        "attackId",
+        "currentAmount",
+        "sourceType",
+        "sourceTags"
+      ],
+      "runtimeType": "before_attack_impact",
+      "supportStatus": "EMITTED_AND_SUPPORTED",
+      "target": "attacker",
+      "timing": "before impact (within 150ms)"
+    },
+    "BEFORE_DAMAGE": {
+      "actor": "undefined for content",
+      "eventPaths": [],
+      "example": {
+        "battleLimit": null,
+        "chainLimit": null,
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "copyPolicy": "DENY_COPIED",
+        "displayName": "Example SUPPORT",
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 10
+            },
+            "target": "SELF",
+            "type": "ADD_SHIELD"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "Validated by the current content compiler.",
+        "id": "example_support",
+        "kind": "SUPPORT",
+        "recursionPolicy": "SAFE_DEFAULT",
+        "shortDescription": "Generated valid example.",
+        "tags": [
+          "defense"
+        ],
+        "trigger": {
+          "event": "BEFORE_DAMAGE"
+        }
+      },
+      "exampleValidatorStatus": "PASSED",
+      "originType": "Inherited from the triggering effect when present",
+      "payload": [],
+      "runtimeType": "before_damage",
+      "supportStatus": "TYPE_DEFINED_NOT_EMITTED",
+      "target": "undefined for content",
+      "timing": "not emitted"
+    },
+    "CHAIN_STEP_RESOLVED": {
+      "actor": "undefined for content",
+      "eventPaths": [],
+      "example": {
+        "battleLimit": null,
+        "chainLimit": null,
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "copyPolicy": "DENY_COPIED",
+        "displayName": "Example SUPPORT",
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 10
+            },
+            "target": "SELF",
+            "type": "ADD_SHIELD"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "Validated by the current content compiler.",
+        "id": "example_support",
+        "kind": "SUPPORT",
+        "recursionPolicy": "SAFE_DEFAULT",
+        "shortDescription": "Generated valid example.",
+        "tags": [
+          "defense"
+        ],
+        "trigger": {
+          "event": "CHAIN_STEP_RESOLVED"
+        }
+      },
+      "exampleValidatorStatus": "PASSED",
+      "originType": "Inherited from the triggering effect when present",
+      "payload": [],
+      "runtimeType": "chain_step_resolved",
+      "supportStatus": "TYPE_DEFINED_NOT_EMITTED",
+      "target": "undefined for content",
+      "timing": "not emitted"
+    },
+    "DEFEATED": {
+      "actor": "each participant",
+      "eventPaths": [],
+      "example": {
+        "battleLimit": null,
+        "chainLimit": null,
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "copyPolicy": "DENY_COPIED",
+        "displayName": "Example SUPPORT",
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 10
+            },
+            "target": "SELF",
+            "type": "ADD_SHIELD"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "Validated by the current content compiler.",
+        "id": "example_support",
+        "kind": "SUPPORT",
+        "recursionPolicy": "SAFE_DEFAULT",
+        "shortDescription": "Generated valid example.",
+        "tags": [
+          "defense"
+        ],
+        "trigger": {
+          "event": "DEFEATED"
+        }
+      },
+      "exampleValidatorStatus": "PASSED",
+      "originType": "Inherited from the triggering effect when present",
+      "payload": [
+        "serverTime"
+      ],
+      "runtimeType": "battle_finished",
+      "supportStatus": "EMITTED_AND_SUPPORTED",
+      "target": "opponent",
+      "timing": "after result decided"
+    },
+    "HEALED": {
+      "actor": "undefined for content",
+      "eventPaths": [],
+      "example": {
+        "battleLimit": null,
+        "chainLimit": null,
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "copyPolicy": "DENY_COPIED",
+        "displayName": "Example SUPPORT",
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 10
+            },
+            "target": "SELF",
+            "type": "ADD_SHIELD"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "Validated by the current content compiler.",
+        "id": "example_support",
+        "kind": "SUPPORT",
+        "recursionPolicy": "SAFE_DEFAULT",
+        "shortDescription": "Generated valid example.",
+        "tags": [
+          "defense"
+        ],
+        "trigger": {
+          "event": "HEALED"
+        }
+      },
+      "exampleValidatorStatus": "PASSED",
+      "originType": "Inherited from the triggering effect when present",
+      "payload": [],
+      "runtimeType": "after_heal",
+      "supportStatus": "TYPE_DEFINED_NOT_EMITTED",
+      "target": "undefined for content",
+      "timing": "not emitted"
+    },
+    "HP_THRESHOLD_CROSSED": {
+      "actor": "damaged participant",
+      "eventPaths": [
+        "hp.threshold"
+      ],
+      "example": {
+        "battleLimit": null,
+        "chainLimit": null,
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "copyPolicy": "DENY_COPIED",
+        "displayName": "Example SUPPORT",
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 10
+            },
+            "target": "SELF",
+            "type": "ADD_SHIELD"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "Validated by the current content compiler.",
+        "id": "example_support",
+        "kind": "SUPPORT",
+        "recursionPolicy": "SAFE_DEFAULT",
+        "shortDescription": "Generated valid example.",
+        "tags": [
+          "defense"
+        ],
+        "trigger": {
+          "event": "HP_THRESHOLD_CROSSED"
+        }
+      },
+      "exampleValidatorStatus": "PASSED",
+      "originType": "Inherited from the triggering effect when present",
+      "payload": [
+        "hpThresholdCrossed"
+      ],
+      "runtimeType": "hp_threshold_crossed",
+      "supportStatus": "EMITTED_AND_SUPPORTED",
+      "target": "attacker",
+      "timing": "after damage"
+    },
+    "SHIELD_BROKEN": {
+      "actor": "damaged participant",
+      "eventPaths": [
+        "damage.shieldBroken"
+      ],
+      "example": {
+        "battleLimit": null,
+        "chainLimit": null,
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "copyPolicy": "DENY_COPIED",
+        "displayName": "Example SUPPORT",
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 10
+            },
+            "target": "SELF",
+            "type": "ADD_SHIELD"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "Validated by the current content compiler.",
+        "id": "example_support",
+        "kind": "SUPPORT",
+        "recursionPolicy": "SAFE_DEFAULT",
+        "shortDescription": "Generated valid example.",
+        "tags": [
+          "defense"
+        ],
+        "trigger": {
+          "event": "SHIELD_BROKEN"
+        }
+      },
+      "exampleValidatorStatus": "PASSED",
+      "originType": "Inherited from the triggering effect when present",
+      "payload": [
+        "shieldBroken",
+        "shieldBefore",
+        "shieldAfter"
+      ],
+      "runtimeType": "shield_broken",
+      "supportStatus": "EMITTED_AND_SUPPORTED",
+      "target": "attacker",
+      "timing": "after damage"
+    },
+    "SHIELD_GAINED": {
+      "actor": "undefined for content",
+      "eventPaths": [],
+      "example": {
+        "battleLimit": null,
+        "chainLimit": null,
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "copyPolicy": "DENY_COPIED",
+        "displayName": "Example SUPPORT",
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 10
+            },
+            "target": "SELF",
+            "type": "ADD_SHIELD"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "Validated by the current content compiler.",
+        "id": "example_support",
+        "kind": "SUPPORT",
+        "recursionPolicy": "SAFE_DEFAULT",
+        "shortDescription": "Generated valid example.",
+        "tags": [
+          "defense"
+        ],
+        "trigger": {
+          "event": "SHIELD_GAINED"
+        }
+      },
+      "exampleValidatorStatus": "PASSED",
+      "originType": "Inherited from the triggering effect when present",
+      "payload": [],
+      "runtimeType": "after_shield_gain",
+      "supportStatus": "TYPE_DEFINED_NOT_EMITTED",
+      "target": "undefined for content",
+      "timing": "not emitted"
+    },
+    "STATUS_APPLIED": {
+      "actor": "undefined for content",
+      "eventPaths": [],
+      "example": {
+        "battleLimit": null,
+        "chainLimit": null,
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "copyPolicy": "DENY_COPIED",
+        "displayName": "Example SUPPORT",
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 10
+            },
+            "target": "SELF",
+            "type": "ADD_SHIELD"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "Validated by the current content compiler.",
+        "id": "example_support",
+        "kind": "SUPPORT",
+        "recursionPolicy": "SAFE_DEFAULT",
+        "shortDescription": "Generated valid example.",
+        "tags": [
+          "defense"
+        ],
+        "trigger": {
+          "event": "STATUS_APPLIED"
+        }
+      },
+      "exampleValidatorStatus": "PASSED",
+      "originType": "Inherited from the triggering effect when present",
+      "payload": [],
+      "runtimeType": "status_applied",
+      "supportStatus": "TYPE_DEFINED_NOT_EMITTED",
+      "target": "undefined for content",
+      "timing": "not emitted"
+    },
+    "STATUS_REMOVED": {
+      "actor": "undefined for content",
+      "eventPaths": [],
+      "example": {
+        "battleLimit": null,
+        "chainLimit": null,
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "copyPolicy": "DENY_COPIED",
+        "displayName": "Example SUPPORT",
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 10
+            },
+            "target": "SELF",
+            "type": "ADD_SHIELD"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "Validated by the current content compiler.",
+        "id": "example_support",
+        "kind": "SUPPORT",
+        "recursionPolicy": "SAFE_DEFAULT",
+        "shortDescription": "Generated valid example.",
+        "tags": [
+          "defense"
+        ],
+        "trigger": {
+          "event": "STATUS_REMOVED"
+        }
+      },
+      "exampleValidatorStatus": "PASSED",
+      "originType": "Inherited from the triggering effect when present",
+      "payload": [],
+      "runtimeType": "status_expired",
+      "supportStatus": "TYPE_DEFINED_NOT_EMITTED",
+      "target": "undefined for content",
+      "timing": "not emitted"
+    },
+    "TILE_MATCH_RESOLVED": {
+      "actor": "board owner",
+      "eventPaths": [
+        "chain.depth",
+        "match.count",
+        "match.tileType"
+      ],
+      "example": {
+        "battleLimit": null,
+        "chainLimit": null,
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "copyPolicy": "DENY_COPIED",
+        "displayName": "Example SUPPORT",
+        "effects": [
+          {
+            "amount": {
+              "type": "CONSTANT",
+              "value": 10
+            },
+            "target": "SELF",
+            "type": "ADD_SHIELD"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "Validated by the current content compiler.",
+        "id": "example_support",
+        "kind": "SUPPORT",
+        "recursionPolicy": "SAFE_DEFAULT",
+        "shortDescription": "Generated valid example.",
+        "tags": [
+          "defense"
+        ],
+        "trigger": {
+          "event": "TILE_MATCH_RESOLVED"
+        }
+      },
+      "exampleValidatorStatus": "PASSED",
+      "originType": "Inherited from the triggering effect when present",
+      "payload": [
+        "tileType",
+        "matchedTileCount",
+        "chainLevel",
+        "scopeKey"
+      ],
+      "runtimeType": "match_group_resolved",
+      "supportStatus": "EMITTED_AND_SUPPORTED",
+      "target": "opponent",
+      "timing": "after base tile effects are applied"
+    }
+  },
+  "unsupportedFeatures": [
+    {
+      "feature": "Active/support automatic stat scaling",
+      "status": "UNSUPPORTED_SCHEMA"
+    },
+    {
+      "feature": "BEFORE_DEFEAT and preventDefeat",
+      "status": "ENGINE_EVENT_REQUIRED"
+    },
+    {
+      "feature": "Time rewind",
+      "status": "ENGINE_PRIMITIVE_REQUIRED"
+    },
+    {
+      "feature": "Active or tile-effect copy primitive",
+      "status": "METADATA_ONLY_NO_PRIMITIVE"
+    },
+    {
+      "feature": "Damage/heal event conversion",
+      "status": "METADATA_ONLY_NO_PRIMITIVE"
+    },
+    {
+      "feature": "Excess shield persistence",
+      "status": "UNSUPPORTED_SCHEMA"
+    },
+    {
+      "feature": "External user TypeScript or Lua/QuickJS/WASM",
+      "status": "FORBIDDEN"
+    },
+    {
+      "feature": "Arbitrary loops or dynamic function execution",
+      "status": "FORBIDDEN"
+    },
+    {
+      "feature": "Custom handler file system, network, database, or environment access",
+      "status": "FORBIDDEN"
+    },
+    {
+      "feature": "Recent tile history in custom state",
+      "requiredEvents": [
+        "TILE_MATCH_RESOLVED"
+      ],
+      "status": "CUSTOM_HANDLER_POSSIBLE"
+    }
+  ],
+  "valueExpressions": {
+    "ABS": {
+      "example": {
+        "type": "ABS",
+        "value": {
+          "type": "CONSTANT",
+          "value": 2.4
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "returns": "number"
+    },
+    "ADD": {
+      "example": {
+        "type": "ADD",
+        "values": [
+          {
+            "type": "CONSTANT",
+            "value": 6
+          },
+          {
+            "type": "CONSTANT",
+            "value": 2
+          }
+        ]
+      },
+      "required": [
+        "values"
+      ],
+      "returns": "number"
+    },
+    "CEIL": {
+      "example": {
+        "type": "CEIL",
+        "value": {
+          "type": "CONSTANT",
+          "value": 2.4
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "returns": "integer"
+    },
+    "CLAMP": {
+      "example": {
+        "max": {
+          "type": "CONSTANT",
+          "value": 10
+        },
+        "min": {
+          "type": "CONSTANT",
+          "value": 0
+        },
+        "type": "CLAMP",
+        "value": {
+          "type": "CONSTANT",
+          "value": 5
+        }
+      },
+      "required": [
+        "value",
+        "min",
+        "max"
+      ],
+      "returns": "number"
+    },
+    "CONSTANT": {
+      "example": {
+        "type": "CONSTANT",
+        "value": 180
+      },
+      "required": [
+        "value"
+      ],
+      "returns": "number|boolean|string"
+    },
+    "DIVIDE": {
+      "errors": [
+        "VALUE_DIVIDE_BY_ZERO",
+        "VALUE_NON_FINITE"
+      ],
+      "example": {
+        "type": "DIVIDE",
+        "values": [
+          {
+            "type": "CONSTANT",
+            "value": 6
+          },
+          {
+            "type": "CONSTANT",
+            "value": 2
+          }
+        ]
+      },
+      "required": [
+        "values"
+      ],
+      "returns": "number"
+    },
+    "EVENT_VALUE": {
+      "example": {
+        "path": "match.count",
+        "type": "EVENT_VALUE"
+      },
+      "required": [
+        "path"
+      ],
+      "returns": "number|boolean|string"
+    },
+    "FLOOR": {
+      "example": {
+        "type": "FLOOR",
+        "value": {
+          "type": "CONSTANT",
+          "value": 2.4
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "returns": "integer"
+    },
+    "MAX": {
+      "example": {
+        "type": "MAX",
+        "values": [
+          {
+            "type": "CONSTANT",
+            "value": 6
+          },
+          {
+            "type": "CONSTANT",
+            "value": 2
+          }
+        ]
+      },
+      "required": [
+        "values"
+      ],
+      "returns": "number"
+    },
+    "MIN": {
+      "example": {
+        "type": "MIN",
+        "values": [
+          {
+            "type": "CONSTANT",
+            "value": 6
+          },
+          {
+            "type": "CONSTANT",
+            "value": 2
+          }
+        ]
+      },
+      "required": [
+        "values"
+      ],
+      "returns": "number"
+    },
+    "MULTIPLY": {
+      "example": {
+        "type": "MULTIPLY",
+        "values": [
+          {
+            "type": "CONSTANT",
+            "value": 6
+          },
+          {
+            "type": "CONSTANT",
+            "value": 2
+          }
+        ]
+      },
+      "required": [
+        "values"
+      ],
+      "returns": "number"
+    },
+    "RESOURCE": {
+      "example": {
+        "resource": "HP_RATIO",
+        "target": "SELF",
+        "type": "RESOURCE"
+      },
+      "required": [
+        "target",
+        "resource"
+      ],
+      "returns": "number"
+    },
+    "RESULT_VALUE": {
+      "example": {
+        "path": "finalAmount",
+        "resultKey": "previous",
+        "type": "RESULT_VALUE"
+      },
+      "required": [
+        "resultKey",
+        "path"
+      ],
+      "returns": "number|boolean"
+    },
+    "ROUND": {
+      "example": {
+        "type": "ROUND",
+        "value": {
+          "type": "CONSTANT",
+          "value": 2.4
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "returns": "integer"
+    },
+    "STAT": {
+      "example": {
+        "stat": "MAX_HP",
+        "target": "SELF",
+        "type": "STAT"
+      },
+      "required": [
+        "target",
+        "stat"
+      ],
+      "returns": "number"
+    },
+    "SUBTRACT": {
+      "example": {
+        "type": "SUBTRACT",
+        "values": [
+          {
+            "type": "CONSTANT",
+            "value": 6
+          },
+          {
+            "type": "CONSTANT",
+            "value": 2
+          }
+        ]
+      },
+      "required": [
+        "values"
+      ],
+      "returns": "number"
+    }
+  }
+}

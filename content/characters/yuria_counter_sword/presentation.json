@@ -1,0 +1,9 @@
+{
+  "abilityPresentation": {
+    "yuria_counter_break": {
+      "animationKey": "counter_break",
+      "soundKey": "sword_heavy",
+      "resultLabel": "반격 파쇄"
+    }
+  }
+}

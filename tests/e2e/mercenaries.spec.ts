@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test';
+import { startGuest } from './helpers';
 
 test('collection search, filters, detail route, and focus restoration', async ({ page }) => {
-  await page.goto('/mercenaries');
+  await startGuest(page, '/mercenaries');
   await expect(page.getByText('보유 5명')).toBeVisible();
   await expect(page.getByTestId('mercenary-card')).toHaveCount(5);
   await expect(page.locator('.collection-portrait em')).toHaveCount(3);
@@ -40,7 +41,7 @@ test('collection search, filters, detail route, and focus restoration', async ({
 });
 
 test('detail URLs refresh and invalid characters safely return to collection', async ({ page }) => {
-  await page.goto('/mercenaries/yuria_counter_sword');
+  await startGuest(page, '/mercenaries/yuria_counter_sword');
   await expect(page.getByTestId('mercenary-detail')).toBeVisible();
   await page.reload();
   await expect(page.getByTestId('mercenary-detail')).toContainText('유리아');
@@ -55,7 +56,7 @@ test('detail URLs refresh and invalid characters safely return to collection', a
 });
 
 test('loadout is separate, protects dirty draft, saves, and updates lobby', async ({ page }) => {
-  await page.goto('/lobby');
+  await startGuest(page);
   await page.getByTestId('edit-loadout').click();
   await expect(page).toHaveURL(/\/mercenaries\/loadout$/);
   await expect(page.getByTestId('bottom-navigation')).toHaveCount(0);
@@ -73,7 +74,7 @@ test('loadout is separate, protects dirty draft, saves, and updates lobby', asyn
   await expect(page).toHaveURL(/\/mercenaries\/loadout$/);
   await page.getByTestId('save-loadout').click();
   await expect(page).toHaveURL(/\/lobby$/);
-  await expect(page.getByRole('status')).toContainText('출전 편성을 저장했습니다');
+  await expect(page.locator('.loadout-saved-toast')).toContainText('출전 편성을 저장했습니다');
   await expect(page.locator('.home-loadout-summary')).toContainText('클라리스');
   await expect(page.locator('.home-loadout-summary')).toContainText('에다');
 
@@ -99,7 +100,7 @@ test('loadout is separate, protects dirty draft, saves, and updates lobby', asyn
 });
 
 test('save failure and version conflict keep the local draft', async ({ page }) => {
-  await page.goto('/mercenaries/loadout');
+  await startGuest(page, '/mercenaries/loadout');
   await page.getByRole('tab', { name: /전투원/ }).click();
   await page.locator('.loadout-candidate').filter({ hasText: '클라리스' }).click();
   await page.route('**/api/account/loadout', (route) => route.fulfill({ status: 500, contentType: 'application/json', body: '{}' }));

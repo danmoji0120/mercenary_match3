@@ -1,16 +1,30 @@
 {
   "id": "evelyn_trauma_stitcher",
-  "name": "외상 봉합사 이브린",
+  "displayName": "외상 봉합사 이브린",
   "shortName": "이브린",
   "rarity": "SR",
-  "race": "human",
+  "race": "HUMAN",
+  "role": "SUPPORT",
+  "combatStyle": "SUPPORT",
+  "stats": {
+    "maxHp": 1000,
+    "swordEffectPct": 100,
+    "shieldEffectPct": 100,
+    "healEffectPct": 100,
+    "manaGainPct": 100
+  },
+  "activeAbilityId": "evelyn_field_surgery",
+  "supportAbilityId": "evelyn_emergency_stitch",
   "tags": [
-    "human",
-    "heal",
-    "support",
-    "medic"
+    "HUMAN",
+    "HEAL",
+    "SUPPORT",
+    "MEDIC"
   ],
-  "description": "빠른 봉합으로 아군을 돕는 의무병",
+  "description": {
+    "summary": "빠른 봉합으로 아군을 돕는 의무병",
+    "details": "빠른 봉합으로 아군을 돕는 의무병"
+  },
   "enabled": true,
   "starter": true,
   "contentVersion": 1,
@@ -20,12 +34,6 @@
   ],
   "recommendedRole": "support",
   "portraitAsset": "/characters/evelyn_trauma_stitcher.svg",
-  "combatant": {
-    "skillId": "evelyn_field_surgery"
-  },
-  "support": {
-    "effectId": "evelyn_emergency_stitch"
-  },
   "defaultSlots": [
     "account_support_2"
   ]

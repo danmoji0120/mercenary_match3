@@ -1,0 +1,108 @@
+{
+  "id": "clarice_heavy_guard",
+  "kind": "SUPPORT",
+  "displayName": "중갑 방호",
+  "shortDescription": "방패 4+ 매치 시 추가 보호막",
+  "fullDescription": "큰 방패 매치로 연쇄 단계당 최대 80의 추가 보호막을 얻습니다.",
+  "trigger": {
+    "event": "TILE_MATCH_RESOLVED",
+    "filter": {
+      "type": "COMPARE",
+      "left": {
+        "type": "EVENT_VALUE",
+        "path": "match.tileType"
+      },
+      "operator": "EQ",
+      "right": {
+        "type": "CONSTANT",
+        "value": "SHIELD"
+      }
+    }
+  },
+  "cooldownMs": 0,
+  "battleLimit": null,
+  "chainLimit": null,
+  "effects": [
+    {
+      "type": "IF",
+      "condition": {
+        "type": "COMPARE",
+        "left": {
+          "type": "EVENT_VALUE",
+          "path": "match.count"
+        },
+        "operator": "GTE",
+        "right": {
+          "type": "CONSTANT",
+          "value": 6
+        }
+      },
+      "then": [
+        {
+          "type": "ADD_SHIELD",
+          "target": "SELF",
+          "amount": {
+            "type": "CONSTANT",
+            "value": 60
+          },
+          "scope": "CHAIN_STEP",
+          "cap": 80
+        }
+      ],
+      "else": []
+    },
+    {
+      "type": "IF",
+      "condition": {
+        "type": "AND",
+        "conditions": [
+          {
+            "type": "COMPARE",
+            "left": {
+              "type": "EVENT_VALUE",
+              "path": "match.count"
+            },
+            "operator": "GTE",
+            "right": {
+              "type": "CONSTANT",
+              "value": 4
+            }
+          },
+          {
+            "type": "COMPARE",
+            "left": {
+              "type": "EVENT_VALUE",
+              "path": "match.count"
+            },
+            "operator": "LT",
+            "right": {
+              "type": "CONSTANT",
+              "value": 6
+            }
+          }
+        ]
+      },
+      "then": [
+        {
+          "type": "ADD_SHIELD",
+          "target": "SELF",
+          "amount": {
+            "type": "CONSTANT",
+            "value": 35
+          },
+          "scope": "CHAIN_STEP",
+          "cap": 80
+        }
+      ],
+      "else": []
+    }
+  ],
+  "tags": [
+    "defense",
+    "shield"
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

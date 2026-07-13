@@ -3,7 +3,8 @@ import { LoadoutSummary } from './BattleUi';
 
 export function accountLoadoutSnapshot(account: UserAccountState): BattleLoadoutSnapshot {
   const convert = (id: string) => { const item = account.characters.find((character) => character.id === id)!; return { characterId: item.id, name: item.name, portraitAsset: item.portraitAsset, rarity: item.rarity } };
-  return { combatant: convert(account.loadout.combatantCharacterId), supports: [convert(account.loadout.supportCharacterId1), convert(account.loadout.supportCharacterId2)] };
+  const combatant = account.characters.find((character) => character.id === account.loadout.combatantCharacterId)!;
+  return { schemaVersion: 2, combatant: { ...convert(combatant.id), combatStats: { ...combatant.stats } }, supports: [convert(account.loadout.supportCharacterId1), convert(account.loadout.supportCharacterId2)] };
 }
 
 export function ConnectionStatusBanner({ connected, failed, accountBusy, onRetry }: { connected: boolean; failed: boolean; accountBusy: boolean; onRetry(): void }) {

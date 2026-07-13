@@ -1,16 +1,30 @@
 {
   "id": "eda_curse_appraiser",
-  "name": "저주 감정사 에다",
+  "displayName": "저주 감정사 에다",
   "shortName": "에다",
   "rarity": "SR",
-  "race": "human",
+  "race": "HUMAN",
+  "role": "SUPPORT",
+  "combatStyle": "CURSE",
+  "stats": {
+    "maxHp": 1000,
+    "swordEffectPct": 100,
+    "shieldEffectPct": 100,
+    "healEffectPct": 100,
+    "manaGainPct": 100
+  },
+  "activeAbilityId": "eda_curse_verdict",
+  "supportAbilityId": "eda_exposed_flaw",
   "tags": [
-    "human",
-    "curse",
-    "support",
-    "disruption"
+    "HUMAN",
+    "CURSE",
+    "SUPPORT",
+    "DISRUPTION"
   ],
-  "description": "저주의 흐름을 읽는 감정사",
+  "description": {
+    "summary": "저주의 흐름을 읽는 감정사",
+    "details": "저주의 흐름을 읽는 감정사"
+  },
   "enabled": true,
   "starter": true,
   "contentVersion": 1,
@@ -20,12 +34,6 @@
   ],
   "recommendedRole": "support",
   "portraitAsset": "/characters/eda_curse_appraiser.svg",
-  "combatant": {
-    "skillId": "eda_curse_verdict"
-  },
-  "support": {
-    "effectId": "eda_exposed_flaw"
-  },
   "defaultSlots": [
     "bot_support_2"
   ]

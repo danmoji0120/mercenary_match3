@@ -1,16 +1,30 @@
 {
   "id": "yuria_counter_sword",
-  "name": "반격검사 유리아",
+  "displayName": "반격검사 유리아",
   "shortName": "유리아",
   "rarity": "SR",
-  "race": "human",
+  "race": "HUMAN",
+  "role": "ATTACK",
+  "combatStyle": "SWORD",
+  "stats": {
+    "maxHp": 1000,
+    "swordEffectPct": 100,
+    "shieldEffectPct": 100,
+    "healEffectPct": 100,
+    "manaGainPct": 100
+  },
+  "activeAbilityId": "yuria_counter_break",
+  "supportAbilityId": "yuria_revenge_edge",
   "tags": [
-    "human",
-    "sword",
-    "counter",
-    "offense"
+    "HUMAN",
+    "SWORD",
+    "COUNTER",
+    "OFFENSE"
   ],
-  "description": "반격을 노리는 검사",
+  "description": {
+    "summary": "반격을 노리는 검사",
+    "details": "반격을 노리는 검사"
+  },
   "enabled": true,
   "starter": true,
   "contentVersion": 1,
@@ -20,12 +34,6 @@
   ],
   "recommendedRole": "combatant",
   "portraitAsset": "/characters/yuria_counter_sword.svg",
-  "combatant": {
-    "skillId": "yuria_counter_break"
-  },
-  "support": {
-    "effectId": "yuria_revenge_edge"
-  },
   "defaultSlots": [
     "account_combatant"
   ]

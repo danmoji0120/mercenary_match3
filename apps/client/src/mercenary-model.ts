@@ -27,7 +27,7 @@ export function ownedMercenaries(account: UserAccountState) {
   return account.characters.filter((character) => owned.has(character.id) && character.enabled);
 }
 
-const rarityRank: Record<CharacterDefinition['rarity'], number> = { SSR: 3, SR: 2, R: 1 };
+const rarityRank: Record<CharacterDefinition['rarity'], number> = { EX: 4, SSR: 3, SR: 2, R: 1 };
 
 export function filterMercenaries(characters: CharacterDefinition[], query: string, rarity: string, role: CollectionRole, sort: CollectionSort) {
   const term = query.trim().toLocaleLowerCase('ko-KR');

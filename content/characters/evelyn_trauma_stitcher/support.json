@@ -1,0 +1,66 @@
+{
+  "id": "evelyn_emergency_stitch",
+  "kind": "SUPPORT",
+  "displayName": "응급 봉합",
+  "shortDescription": "HP 25% 이하 진입 시 회복 150",
+  "fullDescription": "체력이 위험 수준으로 내려가면 경기당 한 번 응급 회복합니다.",
+  "trigger": {
+    "event": "HP_THRESHOLD_CROSSED",
+    "filter": {
+      "type": "AND",
+      "conditions": [
+        {
+          "type": "COMPARE",
+          "left": {
+            "type": "EVENT_VALUE",
+            "path": "hp.threshold"
+          },
+          "operator": "EQ",
+          "right": {
+            "type": "CONSTANT",
+            "value": 25
+          }
+        },
+        {
+          "type": "COMPARE",
+          "left": {
+            "type": "RESOURCE",
+            "target": "SELF",
+            "resource": "HP_RATIO"
+          },
+          "operator": "GT",
+          "right": {
+            "type": "CONSTANT",
+            "value": 0
+          }
+        }
+      ]
+    }
+  },
+  "cooldownMs": 0,
+  "battleLimit": 1,
+  "chainLimit": null,
+  "effects": [
+    {
+      "type": "SCHEDULE",
+      "delayMs": 0,
+      "effects": [
+        {
+          "type": "HEAL",
+          "target": "SELF",
+          "amount": {
+            "type": "CONSTANT",
+            "value": 150
+          }
+        }
+      ]
+    }
+  ],
+  "tags": [
+    "heal"
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

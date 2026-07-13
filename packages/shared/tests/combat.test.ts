@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { BATTLE_CONFIG, applyGauge, applyHeal, applyShield, chainMultiplier, effectFor, resolveAttack, timeResult, type BattleParticipant, type PendingAttack } from '../src/index';
+import { BATTLE_CONFIG, LEGACY_DEFAULT_COMBATANT_STATS, applyGauge, applyHeal, applyShield, chainMultiplier, effectFor, resolveAttack, timeResult, type BattleParticipant, type PendingAttack } from '../src/index';
 
-const player = (id = 'p'): BattleParticipant => ({ id, sessionToken: id, name: id, isBot: false, connected: true, hp: 1_000, shield: 0, gauge: 0, board: { tiles: [], version: 1, processing: false }, loadout: { id: 'x', displayName: 'x', activeSkillName: 'x' } });
+const player = (id = 'p'): BattleParticipant => ({ id, sessionToken: id, name: id, isBot: false, connected: true, hp: 1_000, maxHp: 1_000, combatStats: LEGACY_DEFAULT_COMBATANT_STATS, shield: 0, gauge: 0, board: { tiles: [], version: 1, processing: false }, loadout: { id: 'x', displayName: 'x', activeSkillName: 'x' } });
 const attack = (damage: number): PendingAttack => ({ id: 'a', sourceId: 's', targetId: 't', damage, kind: 'SWORD', createdAt: 0, arrivesAt: 1 });
 
 describe('combat rules', () => {

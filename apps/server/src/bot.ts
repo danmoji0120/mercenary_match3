@@ -11,7 +11,7 @@ const countRecent = (actions: TileType[], type: TileType) => actions.filter((act
 
 export function evaluateBotMoves(bot: BattleParticipant, opponent: BattleParticipant, incoming: PendingAttack[], random = Math.random, config: BotConfig = BOT_CONFIG, context: BotEvaluationContext = {}): BotDecision[] {
   const moves = listLegalSwaps(bot.board.tiles), recent = context.recentActions?.slice(-2) ?? [];
-  const hpRatio = bot.hp / BATTLE_CONFIG.maxHp, shieldRatio = bot.shield / BATTLE_CONFIG.maxShield;
+  const hpRatio = bot.hp / bot.maxHp, shieldRatio = bot.shield / BATTLE_CONFIG.maxShield;
   const strongIncoming = incoming.some((attack) => attack.kind === 'SKILL' || attack.damage >= 115);
   const lethalIncoming = incoming.reduce((sum, attack) => sum + attack.damage, 0) >= bot.hp + bot.shield;
   const seesStrongAttack = strongIncoming && random() < config.strongAttackDefenseAwarenessChance;
@@ -75,7 +75,7 @@ export function chooseBotMove(bot: BattleParticipant, opponent: BattleParticipan
 export function botSkillUseChance(opponent: BattleParticipant, isFrenzy: boolean, config: BotConfig = BOT_CONFIG): number {
   let chance = config.skillUseChance;
   if (opponent.shield >= BATTLE_CONFIG.maxShield * 0.6) chance -= 0.2;
-  if (opponent.hp <= BATTLE_CONFIG.maxHp * 0.3) chance += 0.15;
+  if (opponent.hp <= opponent.maxHp * 0.3) chance += 0.15;
   if (isFrenzy) chance += 0.1;
   return Math.max(0.1, Math.min(0.9, chance));
 }
@@ -86,8 +86,8 @@ export function shouldBotUseSkill(opponent: BattleParticipant, isFrenzy: boolean
 
 export function shouldBotUseAbility(bot: BattleParticipant, opponent: BattleParticipant, ability: Pick<AbilityDefinition, 'tags'>, incoming: PendingAttack[], isFrenzy: boolean, random = Math.random, config: BotConfig = BOT_CONFIG): boolean {
   let chance = botSkillUseChance(opponent, isFrenzy, config);
-  if (ability.tags.includes('defense') || ability.tags.includes('shield')) { const danger = incoming.some((attack) => attack.kind === 'SKILL' || attack.damage >= 115); chance += danger ? .3 : bot.hp <= BATTLE_CONFIG.maxHp * .6 || bot.shield <= BATTLE_CONFIG.maxShield * .25 ? .15 : -.2 }
-  if (ability.tags.includes('heal')) chance += bot.hp <= BATTLE_CONFIG.maxHp * .45 ? .3 : -.35;
-  if (ability.tags.includes('disruption')) chance += opponent.hp >= BATTLE_CONFIG.maxHp * .5 ? .05 : -.05;
+  if (ability.tags.includes('defense') || ability.tags.includes('shield')) { const danger = incoming.some((attack) => attack.kind === 'SKILL' || attack.damage >= 115); chance += danger ? .3 : bot.hp <= bot.maxHp * .6 || bot.shield <= BATTLE_CONFIG.maxShield * .25 ? .15 : -.2 }
+  if (ability.tags.includes('heal')) chance += bot.hp <= bot.maxHp * .45 ? .3 : -.35;
+  if (ability.tags.includes('disruption')) chance += opponent.hp >= opponent.maxHp * .5 ? .05 : -.05;
   return random() < Math.max(.1, Math.min(.9, chance));
 }

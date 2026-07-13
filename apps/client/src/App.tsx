@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { BattleResult, BattleSnapshot, CombatEvent, FrenzyState, MatchResolution, PendingAttack, SwapRequest, UserAccountState } from '@mercenary/shared';
-import { bootstrapAccount, resetAccountBootstrapForRetry, type AccountStage } from './account';
+import type { BattleResult, BattleSnapshot, CombatEvent, FrenzyState, MatchResolution, PendingAttack, SwapRequest } from '@mercenary/shared';
 import { Board } from './Board';
 import { AppShell } from './AppShell';
+import { AuthCallbackScreen, AuthEntryScreen } from './AuthUi';
 import { ActiveSkillControl, ResultSummary } from './BattleUi';
 import { CharacterCombatStage, CombatComparisonHud } from './CombatStage';
 import { ConnectionStatusBanner } from './LobbyUi';
@@ -10,12 +10,13 @@ import { pathForTab, tabForPath, type AppTab } from './app-navigation';
 import { appendFeedback, eventToPresentation, pruneFeedback, type BattlePresentationEvent } from './battle-presentation';
 import { setMuted, sound } from './audio';
 import { connectAuthenticated, socket } from './socket';
+import { useAccountAuth } from './useAccountAuth';
 
 export default function App() {
   const [connected, setConnected] = useState(socket.connected), [name, setName] = useState('Guest'), [queuedAt, setQueuedAt] = useState<number | null>(null), [snapshot, setSnapshot] = useState<BattleSnapshot | null>(null);
   const [muted, setMute] = useState(false), [reducedMotion, setReducedMotion] = useState(matchMedia('(prefers-reduced-motion: reduce)').matches), [ping, setPing] = useState(0), [clockOffset, setClockOffset] = useState(0), [resolution, setResolution] = useState<MatchResolution | null>(null);
-  const [connectionFailed, setConnectionFailed] = useState(false), [accountStage, setAccountStage] = useState<AccountStage>('INITIALIZING'), [account, setAccount] = useState<UserAccountState | null>(null), [accessToken, setAccessToken] = useState(''), [accountError, setAccountError] = useState('');
-  const initialPath = tabForPath(location.pathname) ? (location.pathname === '/' ? '/lobby' : location.pathname) : '/lobby';
+  const [connectionFailed, setConnectionFailed] = useState(false);
+  const initialPath = location.pathname === '/' || location.pathname === '/auth/callback' || location.pathname === '/account' || tabForPath(location.pathname) ? location.pathname : '/lobby';
   if (location.pathname !== initialPath) history.replaceState(null, '', initialPath);
   const [activeTab, setActiveTab] = useState<AppTab>(() => tabForPath(initialPath) ?? 'lobby'), [currentPath, setCurrentPath] = useState(initialPath);
   const [feedback, setFeedback] = useState<BattlePresentationEvent[]>([]), [activeAbilityId, setActiveAbilityId] = useState(''), [skillPending, setSkillPending] = useState(false), [opponentExit, setOpponentExit] = useState(false), [rematchPending, setRematchPending] = useState(false), [lobbyPending, setLobbyPending] = useState(false);
@@ -31,12 +32,9 @@ export default function App() {
     currentHistoryStateRef.current = options?.state ?? null;
     currentPathRef.current = path; setCurrentPath(path); setActiveTab(tabForPath(path) ?? 'lobby');
   }, []);
-
-  useEffect(() => {
-    let active = true, unsubscribe = () => {};
-    const start = async () => { setAccountStage('CHECKING_SESSION'); setAccountError(''); try { const result = await bootstrapAccount((token) => { if (!active) return; if (token) { setAccessToken(token); connectAuthenticated(token) } else { setAccessToken(''); setAccount(null); setAccountStage('RETRYABLE_ERROR'); socket.disconnect() } }); if (!active) { result.unsubscribe(); return } unsubscribe = result.unsubscribe; setAccessToken(result.accessToken); setAccount(result.account); setName(result.account.profile.displayName); setAccountStage('READY'); connectAuthenticated(result.accessToken) } catch (error) { if (!active) return; setAccountStage(error instanceof Error && error.message.includes('VITE_SUPABASE') ? 'FATAL_ERROR' : 'RETRYABLE_ERROR'); setAccountError(error instanceof Error ? error.message : 'ACCOUNT_ERROR') } };
-    void start(); return () => { active = false; unsubscribe() };
-  }, []);
+  const onAuthNavigate = useCallback((path: string, replace = false) => navigatePath(path, { replace }), [navigatePath]);
+  const { auth, account, setAccount, accountStage, accountError, accessToken, startGuest, requestEmailSignIn, linkEmail, checkLink, signOut, retryAccount } = useAccountAuth({ onNavigate: onAuthNavigate });
+  useEffect(() => { if (account) setName(account.profile.displayName); else if (auth.status === 'signed_out') { setName('Guest'); setQueuedAt(null) } }, [account, auth.status]);
 
   useEffect(() => {
     const onPopState = () => {
@@ -79,9 +77,13 @@ export default function App() {
   }, [reducedMotion, skillPending]);
 
   const toggleMute = () => { setMute((value) => { setMuted(!value); return !value }) };
-  const reconnect = () => { setConnectionFailed(false); connectAuthenticated(accessToken) };
+  const reconnect = () => { setConnectionFailed(false); connectAuthenticated(accessToken, auth.session?.userId) };
   const navigateTab = (tab: AppTab) => navigatePath(pathForTab(tab));
-  if (!snapshot) return <AppShell activeTab={activeTab} currentPath={currentPath} account={account} accountStage={accountStage} accountError={accountError} accessToken={accessToken} connected={connected} connectionFailed={connectionFailed} name={name} queuedAt={queuedAt} muted={muted} onNavigate={navigateTab} onNavigatePath={navigatePath} registerNavigationBlocker={registerNavigationBlocker} onRetryConnection={reconnect} onRetryAccount={() => { resetAccountBootstrapForRetry(); location.reload() }} onQueue={(immediateBot) => socket.emit('queueJoin', immediateBot ? { immediateBot: true } : {})} onLeaveQueue={() => socket.emit('queueLeave')} onToggleMute={toggleMute} onAccountSaved={setAccount}/>;
+  if (!snapshot && auth.session && !account && accountStage === 'RETRYABLE_ERROR') return <main className="shell auth-entry-screen"><section className="auth-entry-card" role="alert"><small>ACCOUNT</small><h1>용병단 기록을 불러오지 못했습니다</h1><p>{accountError}</p><button onClick={retryAccount}>다시 시도</button></section></main>;
+  if (!snapshot && (auth.status === 'loading' || (auth.session && !account))) return <main className="shell auth-entry-screen"><section className="auth-entry-card" role="status"><small>ACCOUNT</small><h1>용병단 기록 확인 중</h1><p>안전한 세션과 저장된 편성을 불러오고 있습니다.</p></section></main>;
+  if (!snapshot && auth.status === 'auth_error' && currentPath === '/auth/callback') return <AuthCallbackScreen error={auth.error} onRestart={() => navigatePath('/', { replace: true })}/>;
+  if (!snapshot && !auth.session) return <AuthEntryScreen auth={auth} onGuest={startGuest} onEmail={requestEmailSignIn}/>;
+  if (!snapshot) return <AppShell activeTab={activeTab} currentPath={currentPath} account={account} accountStage={accountStage} accountError={accountError} accessToken={accessToken} connected={connected} connectionFailed={connectionFailed} name={name} queuedAt={queuedAt} muted={muted} auth={auth} onNavigate={navigateTab} onNavigatePath={navigatePath} registerNavigationBlocker={registerNavigationBlocker} onRetryConnection={reconnect} onRetryAccount={retryAccount} onQueue={(immediateBot) => socket.emit('queueJoin', immediateBot ? { immediateBot: true } : {})} onLeaveQueue={() => socket.emit('queueLeave')} onToggleMute={toggleMute} onAccountSaved={setAccount} onLinkEmail={linkEmail} onCheckLink={async () => { await checkLink() }} onSignOut={signOut}/>;
 
   const useSkill = () => { if (skillPending) return; gaugeAtRequest.current = snapshot.self.gauge; setSkillPending(true); socket.emit('useSkillRequest', { requestId: crypto.randomUUID() }); setTimeout(() => setSkillPending(false), 3_000) };
   return <main className="shell battle-screen"><ConnectionStatusBanner connected={connected} failed={connectionFailed} accountBusy={false} onRetry={reconnect}/><CombatComparisonHud snapshot={snapshot} clockOffset={clockOffset} activeAbilityId={activeAbilityId}/><CharacterCombatStage snapshot={snapshot} events={feedback} attacks={visualAttacks} activeAbilityId={activeAbilityId} clockOffset={clockOffset} reducedMotion={reducedMotion}/><section className="board-wrap" aria-label="7×7 전투 보드"><Board key={snapshot.battleId} board={snapshot.board} resolution={resolution} reducedMotion={reducedMotion} active={snapshot.phase === 'PLAYING' && connected} onSwap={(request: SwapRequest) => socket.emit('swapRequest', request)}/>{snapshot.phase === 'COUNTDOWN' && <div className="overlay">전투 준비</div>}</section><ActiveSkillControl snapshot={snapshot} connected={connected} pending={skillPending} onUse={useSkill}/><nav className="battle-utilities" aria-label="보조 설정"><button onClick={() => socket.emit('forfeitRequest')}>기권</button><button onClick={toggleMute}>음소거 {muted ? 'OFF' : 'ON'}</button><label><input type="checkbox" checked={reducedMotion} onChange={(event) => setReducedMotion(event.target.checked)}/>연출 감소</label></nav>{snapshot.phase === 'FINISHED' && snapshot.result && <ResultSummary snapshot={snapshot} opponentExit={opponentExit} rematchPending={rematchPending || snapshot.rematchReady.includes(snapshot.selfId)} lobbyPending={lobbyPending} onRematch={() => { if (!rematchPending) { setRematchPending(true); socket.emit('rematchRequest') } }} onLobby={() => { if (!lobbyPending) { setLobbyPending(true); socket.emit('returnToLobbyRequest') } }}/>} {import.meta.env.DEV && <details className="debug"><summary>DEV</summary><code data-testid="debug-stats">{snapshot.battleId}<br/>socket {connected ? 'on' : 'off'} · ping {ping}ms · offset {Math.round(clockOffset)}ms<br/>HP {snapshot.self.hp}/{snapshot.opponent.hp} SH {snapshot.self.shield}/{snapshot.opponent.shield}<br/>gauge {snapshot.self.gauge} · board v{snapshot.board.version}<br/>frenzy {String(snapshot.frenzy.isFrenzy)} · ATK {snapshot.frenzy.attackMultiplier} SH {snapshot.frenzy.shieldMultiplier} HP {snapshot.frenzy.healMultiplier}<br/>generated {snapshot.stats[snapshot.selfId]?.totalDamageGenerated}/{snapshot.stats[snapshot.opponent.id]?.totalDamageGenerated} hpDamage {snapshot.stats[snapshot.selfId]?.hpDamageDealt}/{snapshot.stats[snapshot.opponent.id]?.hpDamageDealt}</code><div><button onClick={() => socket.emit('debugCommand', { action: 'deterministicBoard' })}>Test board</button><button data-testid="debug-sword" onClick={() => socket.emit('debugCommand', { action: 'swordMove' })}>Sword move</button><button data-testid="debug-shield" onClick={() => socket.emit('debugCommand', { action: 'shieldMove' })}>Shield move</button><button data-testid="debug-heal" onClick={() => socket.emit('debugCommand', { action: 'healMove' })}>Heal move</button><button data-testid="debug-mana" onClick={() => socket.emit('debugCommand', { action: 'manaMove' })}>Mana move</button><button data-testid="debug-time35" onClick={() => socket.emit('debugCommand', { action: 'time35' })}>35s</button><button data-testid="debug-time5" onClick={() => socket.emit('debugCommand', { action: 'time5' })}>5s</button><button data-testid="debug-win" onClick={() => socket.emit('debugCommand', { action: 'win' })}>Win</button><button onClick={() => socket.emit('debugCommand', { action: 'lose' })}>Lose</button></div></details>}</main>;

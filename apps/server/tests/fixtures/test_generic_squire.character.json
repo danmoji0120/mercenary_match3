@@ -12,6 +12,7 @@
   "allowedSlots": ["combatant", "support"],
   "recommendedRole": "combatant",
   "portraitAsset": "/characters/yuria_counter_sword.svg",
+  "stats": { "maxHp": 1234, "swordEffectPct": 150, "shieldEffectPct": 80, "healEffectPct": 125, "manaGainPct": 60 },
   "combatant": { "skillId": "test_generic_strike" },
   "support": { "effectId": "test_generic_mana_support" }
 }

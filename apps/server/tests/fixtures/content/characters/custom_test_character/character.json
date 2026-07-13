@@ -1,0 +1,20 @@
+{
+  "id": "custom_test_character",
+  "displayName": "Custom Test Character",
+  "shortName": "Custom",
+  "rarity": "R",
+  "race": "TEST",
+  "role": "SUPPORT",
+  "combatStyle": "FIXTURE",
+  "stats": { "maxHp": 1234, "swordEffectPct": 150, "shieldEffectPct": 80, "healEffectPct": 125, "manaGainPct": 60 },
+  "activeAbilityId": "custom_test_active",
+  "supportAbilityId": "custom_test_support",
+  "tags": ["TEST"],
+  "description": { "summary": "Test only", "details": "Never included in production content." },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": ["combatant", "support"],
+  "recommendedRole": "support",
+  "portraitAsset": "/characters/test.svg"
+}

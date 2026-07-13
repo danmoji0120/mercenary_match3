@@ -12,7 +12,7 @@ export function applyShield(player: BattleParticipant, amount: number): number {
 }
 export function applyHeal(player: BattleParticipant, amount: number): number {
   const previous = player.hp;
-  player.hp = Math.min(BATTLE_CONFIG.maxHp, player.hp + amount);
+  player.hp = Math.min(player.maxHp, player.hp + amount);
   return player.hp - previous;
 }
 export function applyGauge(player: BattleParticipant, amount: number): number {

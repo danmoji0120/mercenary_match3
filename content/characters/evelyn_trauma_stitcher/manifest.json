@@ -1,0 +1,8 @@
+{
+  "id": "evelyn_trauma_stitcher",
+  "schemaVersion": 1,
+  "engineApiVersion": 1,
+  "characterFile": "./character.json",
+  "activeFile": "./active.json",
+  "supportFile": "./support.json"
+}

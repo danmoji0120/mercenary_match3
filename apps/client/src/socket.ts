@@ -8,8 +8,19 @@ export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(soc
   auth: { sessionToken }, reconnection: true, autoConnect: false,
 });
 
-export function connectAuthenticated(accessToken: string) {
+let authenticatedUserId = '';
+
+export function connectAuthenticated(accessToken: string, userId = '') {
+  const userChanged = Boolean(authenticatedUserId && userId && authenticatedUserId !== userId);
+  if (userChanged) { sessionStorage.removeItem('mercenary-session'); socket.disconnect() }
+  authenticatedUserId = userId || authenticatedUserId;
   socket.auth = { sessionToken: sessionStorage.getItem('mercenary-session') ?? undefined, accessToken };
-  if (socket.connected) socket.disconnect();
-  socket.connect();
+  if (!socket.connected) socket.connect();
+}
+
+export function disconnectAuthenticated() {
+  authenticatedUserId = '';
+  sessionStorage.removeItem('mercenary-session');
+  socket.auth = {};
+  socket.disconnect();
 }

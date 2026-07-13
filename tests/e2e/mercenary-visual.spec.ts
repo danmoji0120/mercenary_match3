@@ -1,8 +1,9 @@
 import { expect, test } from '@playwright/test';
+import { startGuest } from './helpers';
 
 test('mercenary collection, detail, and loadout remain inside the app frame', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/mercenaries');
+  await startGuest(page, '/mercenaries');
   await expect(page.getByTestId('mercenary-card')).toHaveCount(5);
   await page.screenshot({ path: testInfo.outputPath('collection-390x844.png'), fullPage: true });
 

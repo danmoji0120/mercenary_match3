@@ -1,0 +1,118 @@
+{
+  "_generated": "AUTO-GENERATED FILE. DO NOT EDIT.",
+  "engineApiVersion": 1,
+  "packages": [
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "handlerId": "custom_test_character.commandPair",
+            "parameters": {
+              "mana": 5,
+              "shield": 10
+            },
+            "type": "custom"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "Test-only trusted custom handler.",
+        "id": "custom_test_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "Fixture Command",
+        "oncePerBattle": false,
+        "shortDescription": "Returns shield and mana commands.",
+        "tags": [
+          "defense"
+        ],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "combatant": {
+          "skillId": "custom_test_active"
+        },
+        "contentVersion": 1,
+        "description": "Test only",
+        "enabled": true,
+        "id": "custom_test_character",
+        "name": "Custom Test Character",
+        "portraitAsset": "/characters/test.svg",
+        "race": "TEST",
+        "rarity": "R",
+        "recommendedRole": "support",
+        "shortName": "Custom",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 125,
+          "manaGainPct": 60,
+          "maxHp": 1234,
+          "shieldEffectPct": 80,
+          "swordEffectPct": 150
+        },
+        "support": {
+          "effectId": "custom_test_support"
+        },
+        "tags": [
+          "TEST"
+        ]
+      },
+      "id": "custom_test_character",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 125,
+        "manaGainPct": 60,
+        "maxHp": 1234,
+        "shieldEffectPct": 80,
+        "swordEffectPct": 150
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [
+          {
+            "condition": {
+              "conditions": [],
+              "type": "all"
+            },
+            "type": "not"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 1,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "Exists only to complete the package.",
+        "id": "custom_test_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "Fixture Support",
+        "oncePerBattle": false,
+        "shortDescription": "Disabled by an impossible fixture condition.",
+        "tags": [
+          "defense"
+        ],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    }
+  ],
+  "schemaVersion": 1
+}

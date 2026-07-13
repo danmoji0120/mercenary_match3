@@ -1,0 +1,67 @@
+{
+  "id": "yuria_counter_break",
+  "kind": "ACTIVE",
+  "displayName": "반격 파쇄",
+  "shortDescription": "피해 180 · 보호막 무시 30%",
+  "fullDescription": "적에게 피해를 주고 보호막을 파괴하면 추가 참격을 가합니다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "DAMAGE",
+      "target": "ENEMY",
+      "resultKey": "primaryAttack",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 180
+      },
+      "travelMs": 550,
+      "shieldBypassPct": {
+        "type": "CONSTANT",
+        "value": 30
+      },
+      "tags": [
+        "active_skill",
+        "offense"
+      ]
+    },
+    {
+      "type": "IF",
+      "condition": {
+        "type": "RESULT_COMPARE",
+        "resultKey": "primaryAttack",
+        "path": "shieldBroken",
+        "operator": "EQ",
+        "value": true
+      },
+      "then": [
+        {
+          "type": "SCHEDULE",
+          "delayMs": 250,
+          "effects": [
+            {
+              "type": "DAMAGE",
+              "target": "ENEMY",
+              "amount": {
+                "type": "CONSTANT",
+                "value": 65
+              },
+              "travelMs": 0,
+              "tags": [
+                "followup",
+                "offense"
+              ]
+            }
+          ]
+        }
+      ],
+      "else": []
+    }
+  ],
+  "tags": [
+    "offense"
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

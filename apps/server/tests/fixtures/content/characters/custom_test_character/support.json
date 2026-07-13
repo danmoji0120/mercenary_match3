@@ -1,0 +1,17 @@
+{
+  "id": "custom_test_support",
+  "kind": "SUPPORT",
+  "displayName": "Fixture Support",
+  "shortDescription": "Disabled by an impossible fixture condition.",
+  "fullDescription": "Exists only to complete the package.",
+  "trigger": { "event": "TILE_MATCH_RESOLVED", "filter": { "type": "FALSE" } },
+  "cooldownMs": 0,
+  "battleLimit": null,
+  "chainLimit": null,
+  "effects": [{ "type": "ADD_SHIELD", "target": "SELF", "amount": { "type": "CONSTANT", "value": 1 } }],
+  "tags": ["defense"],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

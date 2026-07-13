@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
+import { startGuest } from './helpers';
 
 test('two players attack, defend, finish, and rematch', async ({ browser }) => {
   const aContext = await browser.newContext(), bContext = await browser.newContext();
   const a = await aContext.newPage(), b = await bContext.newPage();
   for (const [label, page] of [['a', a], ['b', b]] as const) { page.on('pageerror', (error) => console.log(`${label} pageerror: ${error.stack}`)); page.on('console', (message) => { if (message.type() === 'error') console.log(`${label} console: ${message.text()}`) }) }
-  await Promise.all([a.goto('/'), b.goto('/')]);
+  await Promise.all([startGuest(a), startGuest(b)]);
   await Promise.all([expect(a.getByTestId('lobby-ready')).toBeVisible(), expect(b.getByTestId('lobby-ready')).toBeVisible()]);
   await a.getByTestId('edit-loadout').click();
   await expect(a).toHaveURL(/\/mercenaries\/loadout$/);
@@ -55,5 +56,5 @@ test('two players attack, defend, finish, and rematch', async ({ browser }) => {
 });
 
 test('finished bot battle returns safely to lobby and can queue again', async ({ page }) => {
-  await page.goto('/'); await expect(page.getByTestId('lobby-ready')).toBeVisible(); await page.getByRole('button', { name: '\uBD07 \uB300\uC804' }).click(); await expect(page.locator('.board')).toBeVisible(); await page.locator('details.debug').evaluate((node: HTMLDetailsElement) => { node.open = true }); await page.getByTestId('debug-win').click(); await expect(page.getByTestId('result')).toBeVisible(); await page.getByTestId('return-lobby').click(); await expect(page.getByTestId('normal-match')).toBeVisible(); await expect(page.getByTestId('result')).toHaveCount(0); await page.getByRole('button', { name: '\uBD07 \uB300\uC804' }).click(); await expect(page.locator('.board')).toBeVisible();
+  await startGuest(page); await expect(page.getByTestId('lobby-ready')).toBeVisible(); await page.getByRole('button', { name: '\uBD07 \uB300\uC804' }).click(); await expect(page.locator('.board')).toBeVisible(); await page.locator('details.debug').evaluate((node: HTMLDetailsElement) => { node.open = true }); await page.getByTestId('debug-win').click(); await expect(page.getByTestId('result')).toBeVisible(); await page.getByTestId('return-lobby').click(); await expect(page.getByTestId('normal-match')).toBeVisible(); await expect(page.getByTestId('result')).toHaveCount(0); await page.getByRole('button', { name: '\uBD07 \uB300\uC804' }).click(); await expect(page.locator('.board')).toBeVisible();
 });

@@ -1,9 +1,10 @@
 import type { BattleConfig, LoadoutDefinition, TileType } from './types.js';
+import { LEGACY_DEFAULT_COMBATANT_STATS } from './character-stats.js';
 
 export const BATTLE_CONFIG: BattleConfig = {
   boardSize: 7,
   durationMs: 120_000,
-  maxHp: 1_000,
+  maxHp: LEGACY_DEFAULT_COMBATANT_STATS.maxHp,
   maxShield: 500,
   maxGauge: 100,
   frenzyStartRemainingMs: 30_000,

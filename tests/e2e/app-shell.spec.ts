@@ -1,8 +1,9 @@
 import { expect, test } from '@playwright/test';
+import { startGuest } from './helpers';
 
 test('app shell exposes five URL-backed mobile game tabs', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
+  await startGuest(page);
   await expect(page).toHaveURL(/\/lobby$/);
   const navigation = page.getByTestId('bottom-navigation');
   await expect(navigation.getByRole('button')).toHaveCount(5);
@@ -31,6 +32,7 @@ test('app shell exposes five URL-backed mobile game tabs', async ({ page }) => {
 });
 
 test('invalid paths fall back and battle temporarily replaces the app shell', async ({ page }) => {
+  await startGuest(page);
   await page.goto('/not-a-real-tab');
   await expect(page).toHaveURL(/\/lobby$/);
   await page.getByRole('button', { name: /봇 대전/ }).click();
@@ -48,7 +50,7 @@ test('invalid paths fall back and battle temporarily replaces the app shell', as
 test('app frame stays inside portrait and desktop viewports', async ({ page }) => {
   for (const size of [{ width: 320, height: 568 }, { width: 360, height: 640 }, { width: 390, height: 844 }, { width: 412, height: 915 }, { width: 768, height: 1024 }, { width: 1280, height: 720 }]) {
     await page.setViewportSize(size);
-    await page.goto('/mercenaries');
+    if (size.width === 320) await startGuest(page, '/mercenaries'); else await page.goto('/mercenaries');
     const shell = await page.getByTestId('app-shell').boundingBox();
     const nav = await page.getByTestId('bottom-navigation').boundingBox();
     expect(shell!.width).toBeLessThanOrEqual(Math.min(size.width, 540) + 1);

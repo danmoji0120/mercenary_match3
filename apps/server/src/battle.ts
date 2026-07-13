@@ -1,13 +1,14 @@
 import {
-  BATTLE_CONFIG, DEFAULT_LOADOUT as LEGACY_LOADOUT, SeededRandom, applyGauge, applyHeal, applyShield,
+  BATTLE_CONFIG, DEFAULT_LOADOUT as LEGACY_LOADOUT, SeededRandom, applyGauge, applyHeal, applyPercentage, applyShield,
   createBattleStats, effectFor, generateBoard, listLegalSwaps, resolveAttack, resolveSwap, shuffleBoard, swordTravelMs, timeResult,
+  migrateBattleLoadoutSnapshot, tileEffectPercentage,
   type BattleDecision, type BattleParticipant, type BattleResult, type BattleSnapshot, type BattleStats, type BotDiagnostics, type CombatEvent, type FrenzyState, type MatchResolution,
-  type PendingAttack, type SwapRequest, type TileType,
+  type PendingAttack, type SwapRequest, type TileType, type BattleLoadoutSnapshot, type BoardState, type LegacyBattleLoadoutSnapshot,
 } from '@mercenary/shared';
 import { chooseBotMove, shouldBotUseAbility, type BotDecision } from './bot.js';
 import { BOT_CONFIG, botActionDelay, botDefenseDelay, botSkillDelay } from './bot-config.js';
 import { BOT_LOADOUT, CharacterRegistry, DEFAULT_LOADOUT, loadCharacterRegistry } from './character-registry.js';
-import { BattleEffectEngine, type QueueAbilityAttack } from './effect-engine.js';
+import { BattleEffectEngine, type EffectEngineState, type QueueAbilityAttack } from './effect-engine.js';
 import type { AbilityDefinition, EffectResult } from './effect-types.js';
 
 export interface BattleHooks {
@@ -16,15 +17,42 @@ export interface BattleHooks {
   ended(battle: Battle): void;
 }
 
+export interface BattleRuntimeState {
+  readonly schemaVersion: 2;
+  readonly battleId: string;
+  readonly phase: BattleSnapshot['phase'];
+  readonly startsAt: number;
+  readonly endsAt: number;
+  readonly players: Array<{ id: string; hp: number; maxHp: number; shield: number; gauge: number; board: BoardState; battleLoadout: BattleLoadoutSnapshot }>;
+  readonly pendingAttacks: PendingAttack[];
+  readonly result: BattleResult | null;
+  readonly stats: Record<string, BattleStats>;
+  readonly isFrenzy: boolean;
+  readonly frenzyStartedAt: number | null;
+  readonly rngState: number;
+  readonly effectState: EffectEngineState;
+  readonly usedSkillRequests: string[];
+  readonly processedAttackIds: string[];
+  readonly battleStartedDispatched: boolean;
+  readonly rematchReady: string[];
+  readonly exitedPlayers: string[];
+}
+export interface LegacyBattleRuntimeState extends Omit<BattleRuntimeState, 'schemaVersion' | 'players'> {
+  readonly schemaVersion: 1;
+  readonly players: Array<{ id: string; hp: number; shield: number; gauge: number; board: BoardState; battleLoadout: LegacyBattleLoadoutSnapshot }>;
+}
+
 let sequence = 0;
 const id = (prefix: string) => `${prefix}-${Date.now().toString(36)}-${(++sequence).toString(36)}`;
 
-export function createParticipant(playerId: string, token: string, name: string, isBot = false, seed = Date.now(), battleLoadout = loadCharacterRegistry().snapshot(isBot ? BOT_LOADOUT : DEFAULT_LOADOUT)): BattleParticipant {
-  return { id: playerId, sessionToken: token, name, isBot, connected: true, hp: 1_000, shield: 0, gauge: 0, board: { tiles: generateBoard(new SeededRandom(seed)), version: 1, processing: false }, loadout: LEGACY_LOADOUT, battleLoadout };
+export function createParticipant(playerId: string, token: string, name: string, isBot = false, seed = Date.now(), battleLoadout: BattleLoadoutSnapshot | LegacyBattleLoadoutSnapshot = loadCharacterRegistry().snapshot(isBot ? BOT_LOADOUT : DEFAULT_LOADOUT)): BattleParticipant {
+  const frozenLoadout = migrateBattleLoadoutSnapshot(battleLoadout);
+  const combatStats = Object.freeze({ ...frozenLoadout.combatant.combatStats });
+  return { id: playerId, sessionToken: token, name, isBot, connected: true, hp: combatStats.maxHp, maxHp: combatStats.maxHp, combatStats, shield: 0, gauge: 0, board: { tiles: generateBoard(new SeededRandom(seed)), version: 1, processing: false }, loadout: LEGACY_LOADOUT, battleLoadout: frozenLoadout };
 }
 
 export class Battle {
-  readonly id = id('battle');
+  readonly id: string;
   phase: BattleSnapshot['phase'] = 'COUNTDOWN';
   startsAt: number;
   endsAt: number;
@@ -47,7 +75,8 @@ export class Battle {
   private effects: BattleEffectEngine;
   private battleStartedDispatched = false;
 
-  constructor(public players: [BattleParticipant, BattleParticipant], private hooks: BattleHooks, now = Date.now(), countdownMs = Number(process.env.COUNTDOWN_MS ?? 3_000), seed = now, private registry: CharacterRegistry = loadCharacterRegistry()) {
+  constructor(public players: [BattleParticipant, BattleParticipant], private hooks: BattleHooks, now = Date.now(), countdownMs = Number(process.env.COUNTDOWN_MS ?? 3_000), seed = now, private registry: CharacterRegistry = loadCharacterRegistry(), battleId = id('battle')) {
+    this.id = battleId;
     this.startsAt = now + countdownMs;
     this.endsAt = this.startsAt + BATTLE_CONFIG.durationMs;
     this.rng = new SeededRandom(seed);
@@ -55,7 +84,7 @@ export class Battle {
     this.effects = new BattleEffectEngine(this.id, players, registry, {
       participant: (participantId) => this.player(participantId), opponent: (participantId) => this.other(participantId), queueAbilityAttack: (value) => this.queueAbilityAttack(value),
       gainShield: (participantId, amount, abilityId) => this.effectShield(participantId, amount, abilityId), heal: (participantId, amount, abilityId) => this.effectHeal(participantId, amount, abilityId), gainMana: (participantId, amount) => this.effectMana(participantId, amount),
-      emitAbility: (participantId, ability) => this.emitAbility(participantId, ability), emitStatus: (participantId, statusId, active) => this.emitAll('combatEvent', { type: 'STATUS_CHANGED', at: Date.now(), participantId, statusId, active } satisfies CombatEvent), emitMessage: (participantId, message) => this.emitAll('combatEvent', { type: 'BATTLE_MESSAGE', at: Date.now(), participantId, message } satisfies CombatEvent), incrementStat: (participantId, field, abilityId, amount) => this.incrementEffectStat(participantId, field, abilityId, amount),
+      emitAbility: (participantId, ability, origin) => this.emitAbility(participantId, ability, origin), emitStatus: (participantId, statusId, active) => this.emitAll('combatEvent', { type: 'STATUS_CHANGED', at: Date.now(), participantId, statusId, active } satisfies CombatEvent), emitMessage: (participantId, message) => this.emitAll('combatEvent', { type: 'BATTLE_MESSAGE', at: Date.now(), participantId, message } satisfies CombatEvent), incrementStat: (participantId, field, abilityId, amount) => this.incrementEffectStat(participantId, field, abilityId, amount),
     });
     for (const player of players) if (player.isBot) this.botDiagnostics.set(player.id, { swapActionCount: 0, resolvedMatchGroupCount: 0, healDecisionCount: 0, shieldDecisionCount: 0, manaDecisionCount: 0, swordDecisionCount: 0, skillDecisionCount: 0, skillUseCount: 0, optimalMovePickCount: 0, topMovePickCount: 0, randomMovePickCount: 0, recentActions: [] });
     this.timer = setInterval(() => this.tick(), 25);
@@ -65,9 +94,27 @@ export class Battle {
 
   other(playerId: string) { return this.players.find((player) => player.id !== playerId)! }
   player(playerId: string) { return this.players.find((player) => player.id === playerId) }
+  serializeEffectState() { return this.effects.serializeState() }
+  restoreEffectState(state: EffectEngineState) { this.effects.restoreState(state) }
+  serializeRuntimeState(): BattleRuntimeState {
+    return structuredClone({ schemaVersion: 2, battleId: this.id, phase: this.phase, startsAt: this.startsAt, endsAt: this.endsAt, players: this.players.map((player) => ({ id: player.id, hp: player.hp, maxHp: player.maxHp, shield: player.shield, gauge: player.gauge, board: player.board, battleLoadout: player.battleLoadout! })), pendingAttacks: this.pendingAttacks, result: this.result, stats: this.stats, isFrenzy: this.isFrenzy, frenzyStartedAt: this.frenzyStartedAt, rngState: this.rng.serializeState(), effectState: this.effects.serializeState(), usedSkillRequests: [...this.usedSkillRequests], processedAttackIds: [...this.processedAttackIds], battleStartedDispatched: this.battleStartedDispatched, rematchReady: [...this.rematchReady], exitedPlayers: [...this.exitedPlayers] });
+  }
+  restoreRuntimeState(state: BattleRuntimeState | LegacyBattleRuntimeState): void {
+    const version: number = state.schemaVersion;
+    if (version !== 1 && version !== 2) throw new Error(`UNSUPPORTED_BATTLE_RUNTIME_SNAPSHOT_VERSION:${String(version)}`);
+    if (state.battleId !== this.id) throw new Error('BATTLE_RUNTIME_SNAPSHOT_ID_MISMATCH');
+    for (const saved of state.players) {
+      const player = this.player(saved.id); if (!player) throw new Error(`BATTLE_RUNTIME_SNAPSHOT_PLAYER_MISSING:${saved.id}`);
+      const loadout = migrateBattleLoadoutSnapshot(saved.battleLoadout), combatStats = loadout.combatant.combatStats;
+      const maxHp = 'maxHp' in saved ? saved.maxHp : combatStats.maxHp;
+      if (maxHp !== combatStats.maxHp || saved.hp < 0 || saved.hp > maxHp) throw new Error('BATTLE_RUNTIME_SNAPSHOT_STATS_INVALID');
+      player.hp = saved.hp; player.maxHp = maxHp; player.combatStats = Object.freeze({ ...combatStats }); player.shield = saved.shield; player.gauge = saved.gauge; player.board = structuredClone(saved.board); player.battleLoadout = loadout;
+    }
+    this.phase = state.phase; this.startsAt = state.startsAt; this.endsAt = state.endsAt; this.pendingAttacks = structuredClone(state.pendingAttacks); this.result = structuredClone(state.result); this.stats = structuredClone(state.stats); this.isFrenzy = state.isFrenzy; this.frenzyStartedAt = state.frenzyStartedAt; this.rng.restoreState(state.rngState); this.effects.restoreState(state.effectState); this.usedSkillRequests = new Set(state.usedSkillRequests); this.processedAttackIds = new Set(state.processedAttackIds); this.battleStartedDispatched = state.battleStartedDispatched; this.rematchReady = new Set(state.rematchReady); this.exitedPlayers = new Set(state.exitedPlayers);
+  }
 
   private publicPlayer(player: BattleParticipant, viewerId: string) {
-    return { id: player.id, name: player.name, isBot: player.isBot, connected: player.connected, hp: player.hp, shield: player.shield, gauge: player.gauge, loadout: player.battleLoadout!, effectRuntime: this.effects.snapshot(player.id, viewerId) };
+    return { id: player.id, name: player.name, isBot: player.isBot, connected: player.connected, hp: player.hp, maxHp: player.maxHp, combatStats: { ...player.combatStats }, shield: player.shield, gauge: player.gauge, loadout: player.battleLoadout!, effectRuntime: this.effects.snapshot(player.id, viewerId) };
   }
 
   private frenzyState(now = Date.now()): FrenzyState {
@@ -135,9 +182,12 @@ export class Battle {
     return resolution;
   }
 
-  private finalizeResolution(player: BattleParticipant, resolution: MatchResolution) {
+  finalizeResolution(player: BattleParticipant, resolution: MatchResolution) {
     this.recordMatches(player.id, resolution);
-    resolution.effects = resolution.effects.map((effect) => ({ ...effect, amount: effectFor(effect.type, effect.matched, effect.chain, this.isFrenzy) }));
+    resolution.effects = resolution.effects.map((effect) => {
+      const rawAmount = effectFor(effect.type, effect.matched, effect.chain, this.isFrenzy);
+      return { ...effect, amount: applyPercentage(rawAmount, tileEffectPercentage(player.combatStats, effect.type)) };
+    });
     this.applyEffects(player, resolution);
     for (const step of resolution.steps) for (let groupIndex = 0; groupIndex < step.groups.length; groupIndex++) { const group = step.groups[groupIndex]!; this.effects.dispatch('match_group_resolved', player.id, { tileType: group.type, matchedTileCount: group.cells.length, chainLevel: step.chain, scopeKey: `${player.id}:${player.board.version}:${step.chain}`, serverTime: Date.now() }) }
   }
@@ -189,11 +239,11 @@ export class Battle {
   rematch(playerId: string) { if (this.phase !== 'FINISHED' || this.exitedPlayers.size || this.exitedPlayers.has(playerId)) return false; this.rematchReady.add(playerId); this.broadcastSnapshots(); return this.other(playerId).isBot || this.rematchReady.size === 2 }
   exit(playerId: string) { if (this.phase !== 'FINISHED' || !this.player(playerId)) return false; this.rematchReady.delete(playerId); this.exitedPlayers.add(playerId); if (this.exitedPlayers.size === this.players.filter((player) => !player.isBot).length) this.effects.clear(); return true }
 
-  private queueAbilityAttack(value: QueueAbilityAttack) { const now = Date.now(); const frenzy = this.isFrenzy ? BATTLE_CONFIG.frenzyAttackMultiplier : 1; const attack = this.effects.outgoing({ id: id('attack'), sourceId: value.sourceId, targetId: value.targetId, damage: Math.round(value.amount * frenzy), kind: 'SKILL', createdAt: now, arrivesAt: now + value.travelMs, sourceAbilityId: value.sourceAbilityId, sourceTags: value.tags, shieldBypassRatio: value.shieldBypassRatio }, now); this.pendingAttacks.push(attack); const stats = this.stats[value.sourceId]!; stats.totalDamageGenerated += attack.damage; stats.attacksQueued++; this.emitAll('combatEvent', { type: 'ATTACK_QUEUED', at: now, attack } satisfies CombatEvent); return attack }
+  private queueAbilityAttack(value: QueueAbilityAttack) { const now = Date.now(); const frenzy = this.isFrenzy ? BATTLE_CONFIG.frenzyAttackMultiplier : 1; const attack = this.effects.outgoing({ id: id('attack'), sourceId: value.sourceId, targetId: value.targetId, damage: Math.round(value.amount * frenzy), kind: 'SKILL', createdAt: now, arrivesAt: now + value.travelMs, sourceAbilityId: value.sourceAbilityId, sourceTags: value.tags, shieldBypassRatio: value.shieldBypassRatio, origin: value.origin }, now); this.pendingAttacks.push(attack); const stats = this.stats[value.sourceId]!; stats.totalDamageGenerated += attack.damage; stats.attacksQueued++; this.emitAll('combatEvent', { type: 'ATTACK_QUEUED', at: now, attack, origin: value.origin } satisfies CombatEvent); return attack }
   private effectShield(participantId: string, requested: number, abilityId: string): EffectResult { const player = this.player(participantId)!; const multiplier = (this.isFrenzy ? BATTLE_CONFIG.frenzyShieldMultiplier : 1) * this.effects.shieldMultiplier(participantId); const finalAmount = Math.round(requested * multiplier), actualShieldGain = applyShield(player, finalAmount); const stats = this.stats[participantId]!; stats.shieldGained += actualShieldGain; stats.bonusShieldFromEffects += actualShieldGain; stats.shieldByAbilityId[abilityId] = (stats.shieldByAbilityId[abilityId] ?? 0) + actualShieldGain; this.emitAll('combatEvent', { type: 'SHIELD_GAINED', at: Date.now(), participantId, amount: actualShieldGain } satisfies CombatEvent); return { requestedAmount: requested, finalAmount, actualShieldGain } }
   private effectHeal(participantId: string, requested: number, abilityId: string): EffectResult { const player = this.player(participantId)!; const frenzy = this.isFrenzy ? BATTLE_CONFIG.frenzyHealMultiplier : 1, received = this.effects.healingMultiplier(participantId); const finalAmount = Math.round(requested * frenzy * received), actualHealing = applyHeal(player, finalAmount), overhealing = Math.max(0, finalAmount - actualHealing); const prevented = Math.max(0, Math.round(requested * frenzy) - finalAmount), stats = this.stats[participantId]!; stats.healingDone += actualHealing; stats.healingPrevented += prevented; stats.healingByAbilityId[abilityId] = (stats.healingByAbilityId[abilityId] ?? 0) + actualHealing; this.emitAll('combatEvent', { type: 'HEALED', at: Date.now(), participantId, amount: actualHealing } satisfies CombatEvent); return { requestedAmount: requested, finalAmount, actualHealing, overhealing } }
   private effectMana(participantId: string, requested: number): EffectResult { const player = this.player(participantId)!; const finalAmount = applyGauge(player, requested); this.stats[participantId]!.manaGained += finalAmount; this.emitAll('combatEvent', { type: 'GAUGE_GAINED', at: Date.now(), participantId, amount: finalAmount } satisfies CombatEvent); return { requestedAmount: requested, finalAmount } }
-  private emitAbility(participantId: string, ability: AbilityDefinition) { if (ability.kind === 'support' && ability.trigger.type === 'shield_broken') this.stats[participantId]!.countersTriggered++; if (ability.kind === 'support' && ability.trigger.type === 'hp_threshold_crossed') this.stats[participantId]!.emergencyHealsTriggered++; this.emitAll('combatEvent', { type: 'ABILITY_TRIGGERED', at: Date.now(), participantId, abilityId: ability.id, abilityName: ability.name, kind: ability.kind } satisfies CombatEvent) }
+  private emitAbility(participantId: string, ability: AbilityDefinition, origin?: QueueAbilityAttack['origin']) { if (ability.kind === 'support' && ability.trigger.type === 'shield_broken') this.stats[participantId]!.countersTriggered++; if (ability.kind === 'support' && ability.trigger.type === 'hp_threshold_crossed') this.stats[participantId]!.emergencyHealsTriggered++; this.emitAll('combatEvent', { type: 'ABILITY_TRIGGERED', at: Date.now(), participantId, abilityId: ability.id, abilityName: ability.name, kind: ability.kind, origin } satisfies CombatEvent) }
   private incrementEffectStat(participantId: string, field: string, abilityId?: string, amount = 1) { const stats = this.stats[participantId] as unknown as Record<string, unknown>; if (abilityId) { const map = stats[field] as Record<string, number>; map[abilityId] = (map[abilityId] ?? 0) + amount } else stats[field] = Number(stats[field] ?? 0) + amount }
 
   debug(playerId: string, action: 'deterministicBoard' | 'swordMove' | 'shieldMove' | 'healMove' | 'manaMove' | 'time35' | 'time5' | 'win' | 'lose') {

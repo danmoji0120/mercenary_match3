@@ -1,0 +1,759 @@
+{
+  "_generated": "AUTO-GENERATED FILE. DO NOT EDIT.",
+  "engineApiVersion": 1,
+  "packages": [
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 230,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "statusId": "damage_reduction",
+            "target": "self",
+            "type": "apply_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막을 얻고 4초 동안 받는 피해를 감소시킵니다.",
+        "id": "clarice_fortress_stance",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "철벽 태세",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 230 · 받는 피해 25% 감소",
+        "tags": [
+          "defense",
+          "shield"
+        ],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "combatant": {
+          "skillId": "clarice_fortress_stance"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [
+          "bot_combatant"
+        ],
+        "description": "거대한 방패로 버티는 기사",
+        "enabled": true,
+        "id": "clarice_heavy_shield",
+        "name": "중갑 방패기사 클라리스",
+        "portraitAsset": "/characters/clarice_heavy_shield.svg",
+        "race": "HUMAN",
+        "rarity": "SR",
+        "recommendedRole": "combatant",
+        "shortName": "클라리스",
+        "starter": true,
+        "stats": {
+          "healEffectPct": 100,
+          "manaGainPct": 100,
+          "maxHp": 1000,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 100
+        },
+        "support": {
+          "effectId": "clarice_heavy_guard"
+        },
+        "tags": [
+          "HUMAN",
+          "SHIELD",
+          "DEFENSE",
+          "HEAVY"
+        ]
+      },
+      "id": "clarice_heavy_shield",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 100,
+        "manaGainPct": 100,
+        "maxHp": 1000,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 100
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [
+          {
+            "tileType": "SHIELD",
+            "type": "tile_type_is"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 0,
+        "effects": [
+          {
+            "conditions": [
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 6
+              }
+            ],
+            "effects": [
+              {
+                "amount": 60,
+                "cap": 80,
+                "scope": "chain_step",
+                "target": "self",
+                "type": "gain_shield"
+              }
+            ],
+            "type": "conditional"
+          },
+          {
+            "conditions": [
+              {
+                "conditions": [
+                  {
+                    "operator": "gte",
+                    "type": "matched_tile_count",
+                    "value": 4
+                  },
+                  {
+                    "operator": "lt",
+                    "type": "matched_tile_count",
+                    "value": 6
+                  }
+                ],
+                "type": "all"
+              }
+            ],
+            "effects": [
+              {
+                "amount": 35,
+                "cap": 80,
+                "scope": "chain_step",
+                "target": "self",
+                "type": "gain_shield"
+              }
+            ],
+            "type": "conditional"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "큰 방패 매치로 연쇄 단계당 최대 80의 추가 보호막을 얻습니다.",
+        "id": "clarice_heavy_guard",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "중갑 방호",
+        "oncePerBattle": false,
+        "shortDescription": "방패 4+ 매치 시 추가 보호막",
+        "tags": [
+          "defense",
+          "shield"
+        ],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 155,
+            "tags": [
+              "active_skill",
+              "disruption"
+            ],
+            "target": "opponent",
+            "travelMs": 650,
+            "type": "deal_damage"
+          },
+          {
+            "delayMs": 650,
+            "effects": [
+              {
+                "statusId": "healing_reduction",
+                "target": "opponent",
+                "type": "apply_status"
+              }
+            ],
+            "type": "schedule_effects"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 피해를 주고 7초 동안 회복 효율을 감소시킵니다.",
+        "id": "eda_curse_verdict",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "회복 봉인 감정",
+        "oncePerBattle": false,
+        "shortDescription": "피해 155 · 회복량 45% 감소",
+        "tags": [
+          "offense",
+          "disruption"
+        ],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "combatant": {
+          "skillId": "eda_curse_verdict"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [
+          "bot_support_2"
+        ],
+        "description": "저주의 흐름을 읽는 감정사",
+        "enabled": true,
+        "id": "eda_curse_appraiser",
+        "name": "저주 감정사 에다",
+        "portraitAsset": "/characters/eda_curse_appraiser.svg",
+        "race": "HUMAN",
+        "rarity": "SR",
+        "recommendedRole": "support",
+        "shortName": "에다",
+        "starter": true,
+        "stats": {
+          "healEffectPct": 100,
+          "manaGainPct": 100,
+          "maxHp": 1000,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 100
+        },
+        "support": {
+          "effectId": "eda_exposed_flaw"
+        },
+        "tags": [
+          "HUMAN",
+          "CURSE",
+          "SUPPORT",
+          "DISRUPTION"
+        ]
+      },
+      "id": "eda_curse_appraiser",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 100,
+        "manaGainPct": 100,
+        "maxHp": 1000,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 100
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "MANA",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "statusId": "exposed_flaw_charge",
+            "target": "self",
+            "type": "apply_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "큰 마력 매치 후 다음 피해 공격 일부가 보호막을 무시합니다.",
+        "id": "eda_exposed_flaw",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "약점 감정",
+        "oncePerBattle": false,
+        "shortDescription": "마력 4+ 매치 후 보호막 무시 30%",
+        "tags": [
+          "disruption"
+        ],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 210,
+            "key": "primaryHeal",
+            "target": "self",
+            "type": "heal"
+          },
+          {
+            "conditions": [
+              {
+                "effectKey": "primaryHeal",
+                "field": "overhealing",
+                "operator": "gt",
+                "type": "effect_result_compare",
+                "value": 0
+              }
+            ],
+            "maximum": 70,
+            "ratio": 0.5,
+            "target": "self",
+            "type": "convert_overheal_to_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "체력을 회복하고 초과 회복량의 절반을 보호막으로 전환합니다.",
+        "id": "evelyn_field_surgery",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "전장 봉합",
+        "oncePerBattle": false,
+        "shortDescription": "회복 210 · 초과 회복을 보호막 전환",
+        "tags": [
+          "heal",
+          "shield"
+        ],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "combatant": {
+          "skillId": "evelyn_field_surgery"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [
+          "account_support_2"
+        ],
+        "description": "빠른 봉합으로 아군을 돕는 의무병",
+        "enabled": true,
+        "id": "evelyn_trauma_stitcher",
+        "name": "외상 봉합사 이브린",
+        "portraitAsset": "/characters/evelyn_trauma_stitcher.svg",
+        "race": "HUMAN",
+        "rarity": "SR",
+        "recommendedRole": "support",
+        "shortName": "이브린",
+        "starter": true,
+        "stats": {
+          "healEffectPct": 100,
+          "manaGainPct": 100,
+          "maxHp": 1000,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 100
+        },
+        "support": {
+          "effectId": "evelyn_emergency_stitch"
+        },
+        "tags": [
+          "HUMAN",
+          "HEAL",
+          "SUPPORT",
+          "MEDIC"
+        ]
+      },
+      "id": "evelyn_trauma_stitcher",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 100,
+        "manaGainPct": 100,
+        "maxHp": 1000,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 100
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "direction": "downward",
+                "operator": "eq",
+                "type": "hp_threshold_crossed",
+                "value": 25
+              },
+              {
+                "operator": "gt",
+                "type": "self_hp_ratio",
+                "value": 0
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 0,
+        "effects": [
+          {
+            "delayMs": 0,
+            "effects": [
+              {
+                "amount": 150,
+                "target": "self",
+                "type": "heal"
+              }
+            ],
+            "type": "schedule_effects"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "체력이 위험 수준으로 내려가면 경기당 한 번 응급 회복합니다.",
+        "id": "evelyn_emergency_stitch",
+        "kind": "support",
+        "maxTriggersPerBattle": 1,
+        "name": "응급 봉합",
+        "oncePerBattle": true,
+        "shortDescription": "HP 25% 이하 진입 시 회복 150",
+        "tags": [
+          "heal"
+        ],
+        "trigger": {
+          "type": "hp_threshold_crossed"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 120,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "statusId": "emergency_guard",
+            "target": "self",
+            "type": "apply_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막을 얻고 다음 한 번의 적 공격 피해를 크게 줄입니다.",
+        "id": "marta_guard_command",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "긴급 방어 명령",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 120 · 다음 공격 피해 45% 감소",
+        "tags": [
+          "defense",
+          "shield"
+        ],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "combatant": {
+          "skillId": "marta_guard_command"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [
+          "account_support_1",
+          "bot_support_1"
+        ],
+        "description": "대오를 지키는 경비반장",
+        "enabled": true,
+        "id": "marta_guard_captain",
+        "name": "방패 경비반장 마르타",
+        "portraitAsset": "/characters/marta_guard_captain.svg",
+        "race": "HUMAN",
+        "rarity": "SR",
+        "recommendedRole": "support",
+        "shortName": "마르타",
+        "starter": true,
+        "stats": {
+          "healEffectPct": 100,
+          "manaGainPct": 100,
+          "maxHp": 1000,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 100
+        },
+        "support": {
+          "effectId": "marta_intercept_order"
+        },
+        "tags": [
+          "HUMAN",
+          "SHIELD",
+          "SUPPORT",
+          "GUARD"
+        ]
+      },
+      "id": "marta_guard_captain",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 100,
+        "manaGainPct": 100,
+        "maxHp": 1000,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 100
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "conditions": [
+                  {
+                    "operator": "gte",
+                    "type": "incoming_damage",
+                    "value": 150
+                  },
+                  {
+                    "tag": "active_skill",
+                    "type": "source_has_tag"
+                  }
+                ],
+                "type": "any"
+              },
+              {
+                "operator": "lt",
+                "type": "self_shield_amount",
+                "value": 100
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 10000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 75,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "강한 공격이 도착하기 직전 부족한 보호막을 보충합니다.",
+        "id": "marta_intercept_order",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "선제 엄호",
+        "oncePerBattle": false,
+        "shortDescription": "강한 공격 직전 보호막 75",
+        "tags": [
+          "defense",
+          "shield"
+        ],
+        "trigger": {
+          "leadTimeMs": 150,
+          "type": "before_attack_impact"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 180,
+            "key": "primaryAttack",
+            "shieldBypassRatio": 0.3,
+            "tags": [
+              "active_skill",
+              "offense"
+            ],
+            "target": "opponent",
+            "travelMs": 550,
+            "type": "deal_damage"
+          },
+          {
+            "conditions": [
+              {
+                "effectKey": "primaryAttack",
+                "field": "shieldBroken",
+                "operator": "eq",
+                "type": "effect_result_compare",
+                "value": true
+              }
+            ],
+            "effects": [
+              {
+                "delayMs": 250,
+                "effects": [
+                  {
+                    "amount": 65,
+                    "tags": [
+                      "followup",
+                      "offense"
+                    ],
+                    "target": "opponent",
+                    "travelMs": 0,
+                    "type": "deal_damage"
+                  }
+                ],
+                "type": "schedule_effects"
+              }
+            ],
+            "type": "conditional"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 피해를 주고 보호막을 파괴하면 추가 참격을 가합니다.",
+        "id": "yuria_counter_break",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "반격 파쇄",
+        "oncePerBattle": false,
+        "shortDescription": "피해 180 · 보호막 무시 30%",
+        "tags": [
+          "offense"
+        ],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "combatant": {
+          "skillId": "yuria_counter_break"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [
+          "account_combatant"
+        ],
+        "description": "반격을 노리는 검사",
+        "enabled": true,
+        "id": "yuria_counter_sword",
+        "name": "반격검사 유리아",
+        "portraitAsset": "/characters/yuria_counter_sword.svg",
+        "race": "HUMAN",
+        "rarity": "SR",
+        "recommendedRole": "combatant",
+        "shortName": "유리아",
+        "starter": true,
+        "stats": {
+          "healEffectPct": 100,
+          "manaGainPct": 100,
+          "maxHp": 1000,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 100
+        },
+        "support": {
+          "effectId": "yuria_revenge_edge"
+        },
+        "tags": [
+          "HUMAN",
+          "SWORD",
+          "COUNTER",
+          "OFFENSE"
+        ]
+      },
+      "id": "yuria_counter_sword",
+      "presentation": {
+        "abilityPresentation": {
+          "yuria_counter_break": {
+            "animationKey": "counter_break",
+            "resultLabel": "반격 파쇄",
+            "soundKey": "sword_heavy"
+          }
+        }
+      },
+      "stats": {
+        "healEffectPct": 100,
+        "manaGainPct": 100,
+        "maxHp": 1000,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 100
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [
+          {
+            "type": "source_type_is",
+            "value": "enemy_attack"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 9000,
+        "cost": 0,
+        "effects": [
+          {
+            "delayMs": 0,
+            "effects": [
+              {
+                "amount": 75,
+                "tags": [
+                  "counter",
+                  "offense"
+                ],
+                "target": "opponent",
+                "travelMs": 0,
+                "type": "deal_damage"
+              }
+            ],
+            "type": "schedule_effects"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적의 공격으로 아군 보호막이 파괴되면 반격합니다.",
+        "id": "yuria_revenge_edge",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "복수의 칼날",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 파괴 시 피해 75 · 재사용 9초",
+        "tags": [
+          "offense"
+        ],
+        "trigger": {
+          "type": "shield_broken"
+        }
+      }
+    }
+  ],
+  "schemaVersion": 1
+}

@@ -11,6 +11,7 @@ import { InMemoryAccountRepository, InMemoryAuthVerifier, createSupabaseServices
 import { ensureAccount, installAccountApi } from './account-api.js';
 import { readSupabaseServerEnvironment } from './environment.js';
 import { loadCharacterRegistry } from './character-registry.js';
+import { installTestAuthApi } from './test-auth-api.js';
 
 export const SERVER_HOST = '0.0.0.0';
 export const DEFAULT_PORT = 3001;
@@ -56,6 +57,7 @@ export function createMercenaryServer(options: ServerOptions = {}) {
   const supabaseEnvironment = options.accountServices ? null : readSupabaseServerEnvironment(environment);
   const accountServices = options.accountServices ?? (supabaseEnvironment ? createSupabaseServices(supabaseEnvironment.url, supabaseEnvironment.secretKey, registry) : { auth: new InMemoryAuthVerifier(new Map(), true), accounts: new InMemoryAccountRepository(), registry });
   app.get('/health', (_request, response) => response.status(200).json({ status: 'ok', service: 'mercenary-match3', uptimeSeconds: Math.floor(process.uptime()), clientReady }));
+  if (!production && process.env.ACCOUNT_TEST_MODE === 'true') installTestAuthApi(app);
   installAccountApi(app, accountServices);
 
   if (clientReady) {

@@ -1,0 +1,40 @@
+{
+  "id": "evelyn_field_surgery",
+  "kind": "ACTIVE",
+  "displayName": "전장 봉합",
+  "shortDescription": "회복 210 · 초과 회복을 보호막 전환",
+  "fullDescription": "체력을 회복하고 초과 회복량의 절반을 보호막으로 전환합니다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "HEAL",
+      "target": "SELF",
+      "resultKey": "primaryHeal",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 210
+      }
+    },
+    {
+      "type": "CONVERT_OVERHEAL_TO_SHIELD",
+      "target": "SELF",
+      "condition": {
+        "type": "RESULT_COMPARE",
+        "resultKey": "primaryHeal",
+        "path": "overhealing",
+        "operator": "GT",
+        "value": 0
+      },
+      "ratio": 0.5,
+      "maximum": 70
+    }
+  ],
+  "tags": [
+    "heal",
+    "shield"
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

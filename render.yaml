@@ -20,3 +20,5 @@ services:
         sync: false
       - key: VITE_SUPABASE_PUBLISHABLE_KEY
         sync: false
+      - key: VITE_PUBLIC_APP_URL
+        sync: false

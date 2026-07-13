@@ -160,15 +160,29 @@ Frenzy values live in the shared `BATTLE_CONFIG`: `frenzyStartRemainingMs`, `fre
 Every battle also keeps server-owned per-player statistics for generated/actual damage, shield absorption, actual shield/healing/mana gains, match group and tile counts, maximum chain, skill uses, queued/fully-blocked attacks, and shield breaks. The final result freezes both players' statistics plus duration, explicit end reason, end-reason flags, and Frenzy duration. Reconnect snapshots preserve live statistics; rematches create a fresh battle and zero them.
 ## Supabase account and character foundation
 
-The browser uses Supabase Auth only. It restores the persisted browser session or calls anonymous sign-in once, then sends the access token to this server. The browser never reads or writes the account tables directly. Express verifies the bearer token and performs profile, ownership, and loadout operations with the server-only secret key. Socket.IO independently verifies the same access token during its handshake while the existing `sessionStorage` battle token remains responsible only for reconnecting an active battle.
+The browser uses Supabase Auth only. It restores an existing persisted session, but it never creates an anonymous user automatically. A signed-out player chooses either `게스트로 시작` or passwordless email login. Guest start calls anonymous sign-in exactly once, while email login requests a magic link with `shouldCreateUser: false`; a new player therefore starts as a guest and protects that same account by linking email later.
 
-Required browser build variables are `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`. Required server variables are `SUPABASE_URL` and `SUPABASE_SECRET_KEY`.
+`/account` shows whether the current user is a guest, waiting for email confirmation, or a protected email account. Linking calls Supabase `updateUser({ email })` on the signed-in anonymous user, not `signUp`. The callback at `/auth/callback` verifies the resulting session and requires the linked user ID to remain unchanged. Profile, owned-character, loadout, and loadout-version rows stay attached to that existing ID: they are neither copied nor reissued. Automatic guest/permanent account merging is deliberately unsupported.
 
-Enable Anonymous Sign-Ins in Supabase Auth before running the client. A publishable key is intended for browser use under Auth and RLS rules; the secret key bypasses RLS and must exist only in the server environment. Never create a `VITE_SUPABASE_SECRET_KEY`. On Render, add all four variables to the Web Service. The two `VITE_` values are embedded at build time, so changing them requires a new deployment.
+Permanent accounts may sign out and return through an email magic link on another browser or device. Signing out disconnects Socket.IO, clears client account/battle presentation state, and returns to the signed-out entry screen without creating a replacement guest. An unlinked guest must pass a destructive-action warning before abandoning the local session; the server does not delete or merge that guest's database rows.
+
+The browser never reads or writes the account tables directly. Express verifies the latest bearer token and performs profile, ownership, and loadout operations with the server-only secret key. Socket.IO independently verifies the same access token during its handshake. A refresh for the same user updates the socket credential without constructing a new socket or duplicating listeners; changing users performs a full disconnect and clears the previous battle reconnection token.
+
+Required browser build variables are `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`. `VITE_PUBLIC_APP_URL` controls the fixed callback origin and may fall back to `window.location.origin`; use `http://localhost:5173` locally and the public Render origin in production. Required server variables are `SUPABASE_URL` and `SUPABASE_SECRET_KEY`.
+
+Before deploying, configure these items manually in the Supabase Dashboard (this repository cannot change them):
+
+- Enable Anonymous Sign-Ins and the Email provider.
+- Enable Manual Identity Linking so an anonymous user can attach email to the same Auth user.
+- Set Site URL to the production public origin.
+- Allow `http://localhost:5173/auth/callback` for local development and the Render public origin's `/auth/callback` for production.
+- Verify the email template returns to `/auth/callback` and configure a production-capable email sender/SMTP service.
+
+A publishable key is intended for browser use under Auth and RLS rules; the secret key bypasses RLS and must exist only in the server environment. Never create a `VITE_SUPABASE_SECRET_KEY`. On Render, add the server variables and all three `VITE_` build variables to the Web Service. Changing a `VITE_` value requires a new deployment. Redirect destinations are code-controlled and never accepted from user input.
 
 The migration creates these RLS-enabled, server-only tables:
 
-- `auth.users`: Supabase anonymous identity.
+- `auth.users`: Supabase anonymous or email-linked identity.
 - `match3_profiles`: display name and account timestamps.
 - `match3_user_characters`: one ownership row per character ID.
 - `match3_user_loadouts`: combatant plus two distinct supports and an optimistic version.
@@ -187,27 +201,29 @@ Review the dry run before `db push`. The migration is additive and does not remo
 
 ### Character content packs
 
-Official definitions live under `content/characters/<character-id>/character.json`. Every pack requires an ID, names, rarity, race, tags, description, enable/starter flags, content version, allowed slots, recommended role, portrait path, and placeholder combatant/support effect IDs. Server startup rejects malformed definitions, duplicate IDs, invalid rarities, an incorrect starter count, or missing default-loadout characters. Disabled characters are omitted from account responses and cannot enter a new match.
+Official definitions live under `content/characters/<package-id>` as `manifest.json`, `character.json`, `active.json`, and `support.json`, with optional presentation metadata and a trusted internal server module. `npm run content:generate` validates and deterministically generates the server registry and capability reference before development, typecheck, tests, and production builds. Runtime directory scanning and character-ID combat branches are not used. See [Character Package & Skill Framework](docs/character-content-system.md) for the conceptual guide and [generated skill framework reference](docs/skill-framework-reference.generated.md) for the exact current validator/runtime capability matrix. Run `npm run content:docs` after schema changes and `npm run content:check` (which includes `content:docs:check`) to reject stale generated output.
 
-The initial starter roster is Yuria, Clarice, Marta, Evelyn, and Eda. The default human loadout is Yuria/Marta/Evelyn; the bot uses Clarice/Marta/Eda. These loadouts are immutable battle snapshots, but character-specific stats and effects are deliberately not active in this foundation release. Every character still uses the existing HP, match effects, frenzy rules, and common Focus Barrage skill.
+The initial starter roster is Yuria, Clarice, Marta, Evelyn, and Eda. The default human loadout is Yuria/Marta/Evelyn; the bot uses Clarice/Marta/Eda. Loadouts and resolved main-combatant stats are frozen into battle snapshots. `maxHp` supplies starting and maximum HP, while the four percentage stats scale only the corresponding base board-tile result; declared active, support, scheduled, status, and custom-command values are not implicitly scaled.
 
 ### Local and test operation
 
-Copy the example variables to local untracked environment files and run `npm run dev` to use the linked remote Supabase project. Automated tests set `ACCOUNT_TEST_MODE` and `VITE_ACCOUNT_TEST_MODE` only in non-production and use fake Auth plus an in-memory repository, so they never create remote users. Production rejects that test path.
+Copy the example variables to local untracked environment files and run `npm run dev` to use the linked remote Supabase project. Automated tests set `ACCOUNT_TEST_MODE` and `VITE_ACCOUNT_TEST_MODE` only in non-production and use fake Auth plus an in-memory repository. The fake covers no-session, anonymous/permanent sessions, link-pending, same-user callback, expired/used callbacks, token refresh, sign-out, duplicate email, and existing-user-only magic links without sending real email or creating remote users. Production rejects that test path.
 
-Anonymous accounts persist with Supabase even when the game server restarts. However, clearing the browser's Supabase storage before linking the identity to email or OAuth makes that anonymous identity unrecoverable from that browser. Active matches remain in server memory and are still lost on a Render process restart.
+Anonymous accounts persist with Supabase even when the game server restarts. However, signing out or clearing browser storage before linking email can make that identity unrecoverable. Email linking preserves the same Auth user ID and therefore preserves the existing profile, owned characters, and saved loadout without another starter grant. Existing RLS ownership checks remain user-ID based for both guest and permanent users, so this milestone requires no database migration or RLS change. Active matches remain in server memory and are still lost on a Render process restart.
+
+This milestone does not implement password login, Google or Apple login, account merging, account deletion, email changes, or two-factor authentication. CAPTCHA is also not enabled here; Supabase Auth remains the final rate-limit authority and the client adds only a 60-second resend cooldown.
 
 ## Generic Character Effect Engine
 
-Combat abilities are server-authoritative JSON content under `content/core`. The engine exposes normalized triggers, composable conditions, generic effect executors, status modifiers, cooldowns, once-per-battle limits, charges, deterministic scheduled effects, scoped caps, and earlier-effect result references. Production combat code dispatches normalized events and never branches on a character or ability ID.
+Combat abilities are server-authoritative package JSON under `content/characters`; shared status definitions remain under `content/core/statuses`. The engine exposes normalized triggers, composable conditions, generic effect executors, status modifiers, cooldowns, once-per-battle limits, charges, deterministic scheduled effects, scoped caps, structured value expressions, and earlier-effect result references. Production combat code dispatches normalized events and never branches on a character or ability ID.
 
 Damage order is: base amount, chain/frenzy multiplier where applicable, outgoing status modifiers, incoming status modifiers, one final rounding step, shield-bypass split (capped at 50%), shield damage, HP damage, then shield-break, HP-threshold, and after-damage triggers. Healing applies frenzy and healing-received modifiers before one rounding step, separates actual healing from overhealing, and then runs overflow effects. Shield gain applies frenzy and shield-gain modifiers before its cap.
 
 ### Adding a character
 
-When existing primitives are sufficient, add only a CharacterDefinition JSON, active and support AbilityDefinition JSON files, optional StatusDefinition JSON, portrait content, and tests. TypeScript changes are not needed. New primitives require a schema extension, a generic executor or evaluator, primitive tests, and this documentation. Character-specific handlers are prohibited.
+When existing primitives are sufficient, add only package JSON, portrait content, and tests. TypeScript changes are not needed. A trusted internal package may opt into a statically generated `server.ts` custom-handler module that returns engine commands without mutating battle state; externally uploaded code and runtime module discovery remain prohibited. New primitives require a schema extension, a generic executor or evaluator, primitive tests, and regenerated capability documentation.
 
-Official active/support pairs: Yuria (Counter Break / Revenge Edge), Clarice (Fortress Stance / Heavy Guard), Marta (Guard Command / Intercept Order), Evelyn (Field Surgery / Emergency Stitch), and Eda (Curse Verdict / Exposed Flaw).
+Official active/support pairs remain Yuria (Counter Break / Revenge Edge), Clarice (Fortress Stance / Heavy Guard), Marta (Guard Command / Intercept Order), Evelyn (Field Surgery / Emergency Stitch), and Eda (Curse Verdict / Exposed Flaw). Their existing IDs and battle values are preserved in the generated registry.
 
 ### Result exit
 
