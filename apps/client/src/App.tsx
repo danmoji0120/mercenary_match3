@@ -6,7 +6,7 @@ import { Character } from './Character';
 import { setMuted, sound } from './audio';
 
 const ko = {
-  title: '\uD3D0\uAE09\uC6A9\uBCD1\uB2E8 MATCH', normal: '\uC77C\uBC18\uC804 \uB9E4\uCE6D', bot: '\uBD07\uACFC \uC989\uC2DC \uB300\uC804', cancel: '\uB300\uAE30 \uCDE8\uC18C', rule: '\uAC80\uC73C\uB85C \uACF5\uACA9, \uBC29\uD328\uB85C \uBC29\uC5B4, \uC2ED\uC790\uB85C \uD68C\uBCF5, \uB9C8\uB825\uC73C\uB85C \uC2A4\uD0AC!', waiting: '\uB300\uAE30 \uC911', connected: '\uC5F0\uACB0\uB428', disconnected: '\uC7AC\uC5F0\uACB0 \uC911', focus: '\uC9D1\uC911 \uD3EC\uACA9', surrender: '\uAE30\uAD8C', rematch: '\uC7AC\uB300\uC804', win: '\uC2B9\uB9AC', lose: '\uD328\uBC30', draw: '\uBB34\uC2B9\uBD80', countdown: '\uC804\uD22C \uC900\uBE44', incoming: '\uACF5\uACA9 \uC811\uADFC', mute: '\uC74C\uC18C\uAC70', motion: '\uC5F0\uCD9C\uAC10\uC18C', frenzy: '\uACA9\uC804', frenzyEnter: '\uACA9\uC804 \uB3CC\uC785', attackUp: '\uACF5\uACA9 \uAC15\uD654', defenseDown: '\uBCF4\uD638\uB9C9\u00B7\uD68C\uBCF5 \uC57D\uD654', details: '\uB9E4\uCE58 \uC0C1\uC138' };
+  title: '\uD3D0\uAE09\uC6A9\uBCD1\uB2E8 MATCH', normal: '\uC77C\uBC18\uC804 \uB9E4\uCE6D', bot: '\uBD07\uACFC \uC989\uC2DC \uB300\uC804', cancel: '\uB300\uAE30 \uCDE8\uC18C', rule: '\uAC80\uC73C\uB85C \uACF5\uACA9, \uBC29\uD328\uB85C \uBC29\uC5B4, \uC2ED\uC790\uB85C \uD68C\uBCF5, \uB9C8\uB825\uC73C\uB85C \uC2A4\uD0AC!', waiting: '\uB300\uAE30 \uC911', connected: '\uC5F0\uACB0\uB428', disconnected: '\uC7AC\uC5F0\uACB0 \uC911', focus: '\uC9D1\uC911 \uD3EC\uACA9', surrender: '\uAE30\uAD8C', rematch: '\uC7AC\uB300\uC804', win: '\uC2B9\uB9AC', lose: '\uD328\uBC30', draw: '\uBB34\uC2B9\uBD80', countdown: '\uC804\uD22C \uC900\uBE44', incoming: '\uACF5\uACA9 \uC811\uADFC', mute: '\uC74C\uC18C\uAC70', motion: '\uC5F0\uCD9C\uAC10\uC18C', frenzy: '\uACA9\uC804', frenzyEnter: '\uACA9\uC804 \uB3CC\uC785', attackUp: '\uACF5\uACA9 \uAC15\uD654', defenseDown: '\uBCF4\uD638\uB9C9\u00B7\uD68C\uBCF5 \uC57D\uD654', details: '\uB9E4\uCE58 \uC0C1\uC138', retry: '\uC7AC\uC2DC\uB3C4', waking: '\uC11C\uBC84\uB97C \uAE68\uC6B0\uB294 \uC911\uC785\uB2C8\uB2E4' };
 
 function Bar({ value, max, kind }: { value: number; max: number; kind: string }) { return <div className={`bar ${kind}`}><i style={{ width: `${Math.max(0, value / max) * 100}%` }} /></div> }
 
@@ -20,11 +20,13 @@ export default function App() {
   const [queuedAt, setQueuedAt] = useState<number | null>(null), [snapshot, setSnapshot] = useState<BattleSnapshot | null>(null), [now, setNow] = useState(Date.now());
   const [muted, setMute] = useState(false), [reducedMotion, setReducedMotion] = useState(false), [effect, setEffect] = useState('idle'), [ping, setPing] = useState(0), [clockOffset, setClockOffset] = useState(0);
   const [resolution, setResolution] = useState<MatchResolution | null>(null);
-  const [frenzyAlert, setFrenzyAlert] = useState(false);
-  const battleId = useRef<string | null>(null), selfId = useRef<string | null>(null), effectTimer = useRef<ReturnType<typeof setTimeout> | null>(null), frenzyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [frenzyAlert, setFrenzyAlert] = useState(false), [connectionFailed, setConnectionFailed] = useState(false);
+  const battleId = useRef<string | null>(null), selfId = useRef<string | null>(null), effectTimer = useRef<ReturnType<typeof setTimeout> | null>(null), frenzyTimer = useRef<ReturnType<typeof setTimeout> | null>(null), connectionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     const interval = setInterval(() => setNow(Date.now()), 50);
-    const onConnect = () => setConnected(true), onDisconnect = () => setConnected(false);
+    const scheduleConnectionWarning = () => { if (connectionTimer.current) clearTimeout(connectionTimer.current); connectionTimer.current = setTimeout(() => setConnectionFailed(true), 8_000) };
+    const onConnect = () => { if (connectionTimer.current) clearTimeout(connectionTimer.current); setConnectionFailed(false); setConnected(true) }, onDisconnect = () => { setConnected(false); scheduleConnectionWarning() }, onConnectError = () => { setConnected(false); scheduleConnectionWarning() };
+    if (!socket.connected) scheduleConnectionWarning();
     const onSession = (data: { sessionToken: string; name: string }) => { sessionStorage.setItem('mercenary-session', data.sessionToken); setName(data.name) };
     const onQueue = (data: { queued: boolean; joinedAt?: number }) => setQueuedAt(data.queued ? data.joinedAt ?? Date.now() : null);
     const onSnapshot = (data: BattleSnapshot) => { if (battleId.current !== data.battleId) { battleId.current = data.battleId; setResolution(null); setFrenzyAlert(false) } selfId.current = data.selfId; setSnapshot(data) };
@@ -32,9 +34,9 @@ export default function App() {
     const onEnd = (result: BattleResult) => { if (effectTimer.current) clearTimeout(effectTimer.current); if (frenzyTimer.current) clearTimeout(frenzyTimer.current); setFrenzyAlert(false); setEffect('idle'); sound(result.winnerId === null ? 'match' : result.winnerId === selfId.current ? 'win' : 'lose') };
     const onResolved = (value: MatchResolution) => setResolution(value);
     const onFrenzy = (_state: FrenzyState) => { if (frenzyTimer.current) clearTimeout(frenzyTimer.current); setFrenzyAlert(true); frenzyTimer.current = setTimeout(() => setFrenzyAlert(false), reducedMotion ? 1_000 : 1_400) };
-    socket.on('connect', onConnect); socket.on('disconnect', onDisconnect); socket.on('session', onSession); socket.on('queueStatus', onQueue); socket.on('stateSnapshot', onSnapshot); socket.on('boardResolved', onResolved); socket.on('combatEvent', onEvent); socket.on('frenzyStarted', onFrenzy); socket.on('battleEnded', onEnd);
+    socket.on('connect', onConnect); socket.on('disconnect', onDisconnect); socket.on('connect_error', onConnectError); socket.on('session', onSession); socket.on('queueStatus', onQueue); socket.on('stateSnapshot', onSnapshot); socket.on('boardResolved', onResolved); socket.on('combatEvent', onEvent); socket.on('frenzyStarted', onFrenzy); socket.on('battleEnded', onEnd);
     const pingTimer = setInterval(() => { const sent = Date.now(); socket.emit('pingRequest', sent, (serverNow) => { const received = Date.now(); setPing(received - sent); setClockOffset(serverNow - (sent + received) / 2) }) }, 2_000);
-    return () => { clearInterval(interval); clearInterval(pingTimer); if (effectTimer.current) clearTimeout(effectTimer.current); if (frenzyTimer.current) clearTimeout(frenzyTimer.current); socket.off('connect', onConnect); socket.off('disconnect', onDisconnect); socket.off('session', onSession); socket.off('queueStatus', onQueue); socket.off('stateSnapshot', onSnapshot); socket.off('boardResolved', onResolved); socket.off('combatEvent', onEvent); socket.off('frenzyStarted', onFrenzy); socket.off('battleEnded', onEnd) };
+    return () => { clearInterval(interval); clearInterval(pingTimer); if (effectTimer.current) clearTimeout(effectTimer.current); if (frenzyTimer.current) clearTimeout(frenzyTimer.current); if (connectionTimer.current) clearTimeout(connectionTimer.current); socket.off('connect', onConnect); socket.off('disconnect', onDisconnect); socket.off('connect_error', onConnectError); socket.off('session', onSession); socket.off('queueStatus', onQueue); socket.off('stateSnapshot', onSnapshot); socket.off('boardResolved', onResolved); socket.off('combatEvent', onEvent); socket.off('frenzyStarted', onFrenzy); socket.off('battleEnded', onEnd) };
   }, []);
   const countdown = snapshot ? Math.max(0, Math.ceil((snapshot.startsAt - now - clockOffset) / 1000)) : 0;
   const remaining = snapshot ? Math.max(0, Math.ceil((snapshot.endsAt - now - clockOffset) / 1000)) : 0;
@@ -42,8 +44,8 @@ export default function App() {
   const toggleMute = () => { setMute((value) => { setMuted(!value); return !value }) };
   if (!snapshot) return <main className="shell lobby">
     <div className="crest"><span>7×7</span></div><h1>{ko.title}</h1><p>{ko.rule}</p>
-    <div className={`status ${connected ? 'online' : ''}`}>{connected ? ko.connected : ko.disconnected} · {name}</div>
-    {queuedAt ? <><div className="queue-time">{ko.waiting} {Math.floor((now - queuedAt) / 1000)}s</div><button onClick={() => socket.emit('queueLeave')}>{ko.cancel}</button></> : <><button data-testid="normal-match" onClick={() => socket.emit('queueJoin', {})}>{ko.normal}</button><button className="secondary" onClick={() => socket.emit('queueJoin', { immediateBot: true })}>{ko.bot}</button></>}
+    <div className={`status ${connected ? 'online' : ''}`}>{connected ? ko.connected : connectionFailed ? ko.waking : ko.disconnected} · {name}</div>{connectionFailed && <button className="icon-button" data-testid="retry-connection" onClick={() => { setConnectionFailed(false); socket.connect() }}>{ko.retry}</button>}
+    {queuedAt ? <><div className="queue-time">{ko.waiting} {Math.floor((now - queuedAt) / 1000)}s</div><button onClick={() => socket.emit('queueLeave')}>{ko.cancel}</button></> : <><button data-testid="normal-match" disabled={!connected} onClick={() => socket.emit('queueJoin', {})}>{ko.normal}</button><button className="secondary" disabled={!connected} onClick={() => socket.emit('queueJoin', { immediateBot: true })}>{ko.bot}</button></>}
     <button className="icon-button" onClick={toggleMute}>{ko.mute} {muted ? 'OFF' : 'ON'}</button>
   </main>;
   return <main className="shell battle-screen">

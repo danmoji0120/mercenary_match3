@@ -3,15 +3,25 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "workspaces": ["apps/*", "packages/*"],
+  "engines": {
+    "node": "24.x",
+    "npm": ">=11"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "concurrently -k -n server,client -c yellow,cyan \"npm run dev -w @mercenary/server\" \"npm run dev -w @mercenary/client\"",
-    "build": "npm run build -w @mercenary/shared && npm run build -w @mercenary/server && npm run build -w @mercenary/client",
+    "clean": "node scripts/clean-dist.mjs",
+    "build": "npm run clean && npm run build -w @mercenary/shared && npm run build -w @mercenary/client && npm run build -w @mercenary/server",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "lint": "eslint .",
     "typecheck": "npm run typecheck -w @mercenary/shared && npm run typecheck -w @mercenary/server && npm run typecheck -w @mercenary/client",
-    "start": "npm run start -w @mercenary/server"
+    "start": "node apps/server/dist/index.js",
+    "start:prod": "npm run start",
+    "test:production": "node scripts/production-smoke.mjs && playwright test -c playwright.production.config.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.0",

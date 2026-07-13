@@ -51,7 +51,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-The E2E test enables guarded development commands only for its spawned server. The development-only panel shows battle ID, socket status, ping, clock offset, both players' stats, incoming attacks, board version, deterministic moves, forced result controls, and instant bot entry. Production builds omit this panel, and the server ignores debug commands unless `ENABLE_TEST_API=true`.
+The E2E test enables guarded development commands only for its spawned development server. The development-only panel shows battle ID, socket status, ping, clock offset, both players' stats, incoming attacks, board version, deterministic moves, forced result controls, and instant bot entry. Production builds omit this panel, and the production server rejects debug commands regardless of `ENABLE_TEST_API`.
 
 ## Environment variables
 
@@ -73,6 +73,59 @@ Future combatants and two support mercenaries attach at `LoadoutDefinition` and 
 - There is one server process and no cross-process queue or battle migration.
 - Temporary geometric fighter art and synthesized effects are deliberately minimal.
 - The prototype has no spectator or replay system.
+
+## Render single-service deployment
+
+Production uses one Render Node Web Service. The built Express process serves `/health`, the Socket.IO endpoint, Vite static assets, and the React SPA from the same HTTP server and public origin. This keeps the in-memory queue and battles on the same instance as every connected client; do not create a separate Static Site or a second Web Service.
+
+### Blueprint deployment from GitHub
+
+1. Commit and push the repository, including `render.yaml` and `package-lock.json`, to GitHub.
+2. In the Render Dashboard, choose **New > Blueprint** and connect the GitHub repository.
+3. Render discovers the root `render.yaml`. Review the single `mercenary-match3` Web Service and apply it.
+4. Follow the build in the service Events/Logs view. A successful deploy runs the health check before accepting traffic.
+5. Open the service's generated `https://mercenary-match3-....onrender.com` URL shown in the dashboard.
+6. Open that same URL on two phones and choose normal matchmaking on both, or choose the immediate bot option on one phone.
+
+The Blueprint settings are:
+
+- Service Type: Web Service
+- Runtime: Node
+- Root Directory: repository root (leave the field empty in Render)
+- Region: Singapore
+- Instance Type / Plan: Free
+- Build Command: `npm ci --include=dev && npm run build`
+- Start Command: `npm run start`
+- Health Check Path: `/health`
+- Environment: `NODE_ENV=production`
+
+`PORT` is supplied by Render and must not be fixed in the Blueprint. `CLIENT_ORIGIN` and `VITE_SERVER_URL` are not required for the same-origin deployment. The server binds Render's port on `0.0.0.0`; the browser automatically uses HTTPS/WSS through the page origin.
+
+### Manual Web Service creation
+
+Choose **New > Web Service**, connect the GitHub repository, select Node, Singapore, and Free, then enter the same build/start/health values listed above. Keep the root directory at the repository root and add only `NODE_ENV=production`. Check the deploy logs for `staticClient=true`, the resolved client dist path, and a successful `/health` probe. Do not copy secrets or a fixed `PORT` into the service.
+
+### Local production verification
+
+```bash
+npm ci
+npm run build
+npm run start
+# open http://localhost:3001 and http://localhost:3001/health
+npm run test:production
+```
+
+`npm run start` executes only the compiled Node server; it does not use Vite, tsx, or ts-node. `npm run test:production` starts the compiled server on an available port, verifies health/index/assets/SPA/Socket.IO/matchmaking/bot/debug-command blocking/shutdown, and then runs mobile Chromium against the production server.
+
+### Free-instance behavior and troubleshooting
+
+- A free service can cold-start after being idle. The lobby disables matchmaking until Socket.IO reconnects and shows a retry control after a prolonged failure.
+- If the deploy reports a missing client build, confirm the build command is exactly `npm ci --include=dev && npm run build` and that the service root is the repository root.
+- If Render reports no bound port or a 502, confirm the start command is `npm run start`; never set a second frontend port.
+- If static assets return 404, inspect the build log for the Vite and server build steps and verify `/health` reports `clientReady: true`.
+- If Socket.IO fails only after deployment, remove `VITE_SERVER_URL` so the client uses its current `onrender.com` origin.
+- A service restart or redeploy loses all in-memory guest sessions, queues, and active battles. Players return to a fresh lobby.
+- Keep exactly one instance. Multiple instances would split the in-memory queue and battle authority. Before horizontal scaling, matchmaking, session routing, pending attacks, and battle state would need a shared external state/coordination layer such as Redis; that is intentionally outside this prototype.
 
 ## Playtest tuning
 

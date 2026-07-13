@@ -19,9 +19,11 @@ export class GameServer {
   readonly playerTokens = new Map<string, string>();
   readonly battles = new Map<string, Battle>();
   readonly queue: QueueEntry[] = [];
-  constructor(private io: TypedServer, private queueBotDelayMs = Number(process.env.QUEUE_BOT_DELAY_MS ?? 60_000), private reconnectGraceMs = Number(process.env.RECONNECT_GRACE_MS ?? 10_000)) {}
+  private shuttingDown = false;
+  constructor(private io: TypedServer, private queueBotDelayMs = Number(process.env.QUEUE_BOT_DELAY_MS ?? 60_000), private reconnectGraceMs = Number(process.env.RECONNECT_GRACE_MS ?? 10_000), private debugEnabled = process.env.NODE_ENV !== 'production') {}
 
   attach(socket: TypedSocket) {
+    if (this.shuttingDown) { socket.disconnect(true); return }
     const supplied = typeof socket.handshake.auth.sessionToken === 'string' ? socket.handshake.auth.sessionToken : '';
     let session = this.sessions.get(supplied);
     if (!session) {
@@ -43,7 +45,7 @@ export class GameServer {
     socket.on('rematchRequest', () => this.rematch(session!.playerId));
     socket.on('forfeitRequest', () => this.battleFor(session!.playerId)?.forfeit(session!.playerId));
     socket.on('pingRequest', (_sentAt, callback) => callback(Date.now()));
-    socket.on('debugCommand', (payload) => { if (payload && ['deterministicBoard', 'swordMove', 'shieldMove', 'healMove', 'manaMove', 'time35', 'time5', 'win', 'lose'].includes(payload.action)) this.battleFor(session!.playerId)?.debug(session!.playerId, payload.action) });
+    if (this.debugEnabled) socket.on('debugCommand', (payload) => { if (payload && ['deterministicBoard', 'swordMove', 'shieldMove', 'healMove', 'manaMove', 'time35', 'time5', 'win', 'lose'].includes(payload.action)) this.battleFor(session!.playerId)?.debug(session!.playerId, payload.action) });
     socket.on('disconnect', () => this.disconnect(session!.playerId));
   }
 
@@ -93,5 +95,13 @@ export class GameServer {
     const battle = this.battleFor(playerId); if (!battle || !battle.rematch(playerId)) return;
     const humans = battle.players.filter((player) => !player.isBot); for (const player of humans) { const session = this.sessions.get(this.playerTokens.get(player.id)!); if (session) session.battleId = null }
     if (humans.length === 1) this.createBattle(humans[0]!.id); else this.createBattle(humans[0]!.id, humans[1]!.id);
+  }
+
+  shutdown() {
+    if (this.shuttingDown) return;
+    this.shuttingDown = true;
+    for (const entry of this.queue.splice(0)) clearTimeout(entry.botTimer);
+    for (const session of this.sessions.values()) if (session.disconnectTimer) clearTimeout(session.disconnectTimer);
+    for (const battle of this.battles.values()) if (battle.phase !== 'FINISHED') battle.finish({ winnerId: null, reason: 'SERVER_ABORT', endedAt: Date.now() });
   }
 }

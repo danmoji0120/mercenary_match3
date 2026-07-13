@@ -174,7 +174,7 @@ export class Battle {
   rematch(playerId: string) { if (this.phase !== 'FINISHED') return false; this.rematchReady.add(playerId); this.broadcastSnapshots(); return this.other(playerId).isBot || this.rematchReady.size === 2 }
 
   debug(playerId: string, action: 'deterministicBoard' | 'swordMove' | 'shieldMove' | 'healMove' | 'manaMove' | 'time35' | 'time5' | 'win' | 'lose') {
-    if (process.env.ENABLE_TEST_API !== 'true' && process.env.NODE_ENV !== 'development') return;
+    if (process.env.NODE_ENV === 'production' || (process.env.ENABLE_TEST_API !== 'true' && process.env.NODE_ENV !== 'development')) return;
     const player = this.player(playerId); if (!player) return;
     if (action === 'deterministicBoard') { player.board.tiles = generateBoard(new SeededRandom(42)); player.board.version++; this.broadcastSnapshots() }
     else if (['swordMove', 'shieldMove', 'healMove', 'manaMove'].includes(action)) {
