@@ -6,6 +6,7 @@ import type { AccountServices, AuthIdentity } from './account.js';
 import { accountState, type StoredAccount } from './account.js';
 import { DEFAULT_LOADOUT } from './character-registry.js';
 import { DEVELOPMENT_CHARACTER_GROUPS, resolveDevelopmentCharacterGroup, type DevelopmentCharacterGroup } from './development-character-grants.js';
+import { DEVELOPMENT_CURRENCY_PRESETS, resolveDevelopmentCurrencyPreset, type DevelopmentCurrencyPreset } from './development-currency-presets.js';
 
 declare global {
   // Express exposes request augmentation through its namespace.
@@ -14,6 +15,7 @@ declare global {
 }
 const loadoutSchema = z.object({ combatantCharacterId: z.string().regex(/^[a-z0-9_]{3,64}$/), supportCharacterId1: z.string().regex(/^[a-z0-9_]{3,64}$/), supportCharacterId2: z.string().regex(/^[a-z0-9_]{3,64}$/), expectedVersion: z.number().int().positive().optional() }).strict();
 const developmentGrantSchema = z.object({ group: z.enum(Object.keys(DEVELOPMENT_CHARACTER_GROUPS) as [DevelopmentCharacterGroup]) }).strict();
+const developmentCurrencySchema = z.object({ preset: z.enum(Object.keys(DEVELOPMENT_CURRENCY_PRESETS) as [DevelopmentCurrencyPreset]), requestKey: z.string().regex(/^[a-zA-Z0-9:_-]{1,120}$/) }).strict();
 const displayPrefixes = ['\uD3D0\uAE09\uC6A9\uBCD1', '\uC2E0\uC785\uB2E8\uC6D0', '\uC784\uC2DC\uACE0\uC6A9'];
 export const makeDisplayName = () => `${displayPrefixes[randomInt(displayPrefixes.length)]} ${randomInt(1000, 10000)}`;
 
@@ -51,6 +53,17 @@ export function installDevelopmentAccountApi(router: Router, services: AccountSe
       const account = await services.accounts.get(request.authIdentity!.userId); if (!account) throw new Error('ACCOUNT_NOT_FOUND');
       response.json({ grant, account: accountState(account, services.registry.enabled) });
     } catch { response.status(503).json({ error: 'Development character grant failed' }) }
+  });
+  router.post('/api/dev/account/currency-preset', auth, async (request, response) => {
+    const parsed = developmentCurrencySchema.safeParse(request.body); if (!parsed.success) { response.status(400).json({ error: 'Invalid currency preset' }); return }
+    try {
+      const current = await ensureAccount(services, request.authIdentity!.userId);
+      const result = await services.accounts.applyCurrencyTransaction({ userId: request.authIdentity!.userId, requestKey: parsed.data.requestKey, reason: `development:${parsed.data.preset}`, changes: resolveDevelopmentCurrencyPreset(parsed.data.preset, current.currencies) });
+      const account = await services.accounts.get(request.authIdentity!.userId); if (!account) throw new Error('ACCOUNT_NOT_FOUND');
+      response.json({ transaction: result, account: accountState(account, services.registry.enabled) });
+    } catch (error) {
+      response.status(error instanceof Error && error.message === 'CURRENCY_REQUEST_CONFLICT' ? 409 : 503).json({ error: 'Development currency preset failed' });
+    }
   });
 }
 function accountLoadout(value: UpdateLoadoutRequest) { return { ...value, loadoutVersion: value.expectedVersion ?? 1 } }

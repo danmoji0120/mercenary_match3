@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import type { Server, Socket } from 'socket.io';
 import { z } from 'zod';
-import type { ClientToServerEvents, ServerToClientEvents, SwapRequest } from '@mercenary/shared';
+import { DEFAULT_CURRENCY_BALANCES, type ClientToServerEvents, type ServerToClientEvents, type SwapRequest } from '@mercenary/shared';
 import { Battle, createParticipant } from './battle.js';
 import type { StoredAccount } from './account.js';
 import { BOT_LOADOUT, CharacterRegistry, DEFAULT_LOADOUT, loadCharacterRegistry } from './character-registry.js';
@@ -37,7 +37,7 @@ export class GameServer {
       const token = randomUUID(), playerId = randomUUID();
       const fallbackName = `${names[Math.floor(Math.random() * names.length)]} ${Math.floor(100 + Math.random() * 900)}`;
       const now = new Date().toISOString();
-      const account = authenticatedAccount ?? { profile: { displayName: fallbackName, createdAt: now, updatedAt: now, lastSeenAt: now }, ownedCharacterIds: this.registry.starters.map((item) => item.id), loadout: { ...DEFAULT_LOADOUT } };
+      const account = authenticatedAccount ?? { profile: { displayName: fallbackName, createdAt: now, updatedAt: now, lastSeenAt: now }, ownedCharacterIds: this.registry.starters.map((item) => item.id), loadout: { ...DEFAULT_LOADOUT }, currencies: { ...DEFAULT_CURRENCY_BALANCES } };
       session = { token, playerId, userId: authenticatedUserId, name: account.profile.displayName, account, socketId: socket.id, battleId: null };
       this.sessions.set(token, session); this.playerTokens.set(playerId, token);
     } else {

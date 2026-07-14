@@ -8,6 +8,7 @@ export const generatedCharacterDefinitions = [
     "name": "산성투창 나시카",
     "shortName": "나시카",
     "rarity": "SR",
+    "role": "ATTACK",
     "race": "LIZARD_BEASTKIN",
     "tags": [
       "LIZARD_BEASTKIN",
@@ -46,6 +47,7 @@ export const generatedCharacterDefinitions = [
     "name": "사과문 접수원 넬",
     "shortName": "접수 넬",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "HUMAN",
     "tags": [
       "HUMAN",
@@ -86,6 +88,7 @@ export const generatedCharacterDefinitions = [
     "name": "약제조수 브릭사",
     "shortName": "브릭사",
     "rarity": "R",
+    "role": "HEAL",
     "race": "DWARF",
     "tags": [
       "DWARF",
@@ -124,6 +127,7 @@ export const generatedCharacterDefinitions = [
     "name": "견습방패병 리엘",
     "shortName": "견습 리엘",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "ANGEL",
     "tags": [
       "ANGEL",
@@ -162,6 +166,7 @@ export const generatedCharacterDefinitions = [
     "name": "방어구 수선공 틸다",
     "shortName": "틸다",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "DWARF",
     "tags": [
       "DWARF",
@@ -202,6 +207,7 @@ export const generatedCharacterDefinitions = [
     "name": "돌격병 브라카",
     "shortName": "브라카",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "ORC",
     "tags": [
       "ORC",
@@ -242,6 +248,7 @@ export const generatedCharacterDefinitions = [
     "name": "도끼병 카르나",
     "shortName": "도끼 카르나",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "DEMONKIN",
     "tags": [
       "DEMONKIN",
@@ -280,6 +287,7 @@ export const generatedCharacterDefinitions = [
     "name": "붕대 검수원 미카엘라",
     "shortName": "미카엘라",
     "rarity": "R",
+    "role": "HEAL",
     "race": "HUMAN",
     "tags": [
       "HUMAN",
@@ -319,6 +327,7 @@ export const generatedCharacterDefinitions = [
     "name": "검은장부 계산원 그리젤다",
     "shortName": "그리젤다",
     "rarity": "R",
+    "role": "SUPPORT",
     "race": "DWARF",
     "tags": [
       "DWARF",
@@ -360,6 +369,7 @@ export const generatedCharacterDefinitions = [
     "name": "결박방패 미레나",
     "shortName": "미레나",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "LAMIA",
     "tags": [
       "LAMIA",
@@ -400,6 +410,7 @@ export const generatedCharacterDefinitions = [
     "name": "빗자루폭격수 엘마",
     "shortName": "엘마",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "WITCH",
     "tags": [
       "WITCH",
@@ -439,6 +450,7 @@ export const generatedCharacterDefinitions = [
     "name": "중갑 방패기사 클라리스",
     "shortName": "클라리스",
     "rarity": "SR",
+    "role": "ATTACK",
     "race": "HUMAN",
     "tags": [
       "HUMAN",
@@ -479,6 +491,7 @@ export const generatedCharacterDefinitions = [
     "name": "호송대장 그라카",
     "shortName": "그라카",
     "rarity": "SR",
+    "role": "DEFENSE",
     "race": "ORC",
     "tags": [
       "ORC",
@@ -517,6 +530,7 @@ export const generatedCharacterDefinitions = [
     "name": "단검꾼 미냐",
     "shortName": "미냐",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "CAT_BEASTKIN",
     "tags": [
       "CAT_BEASTKIN",
@@ -555,6 +569,7 @@ export const generatedCharacterDefinitions = [
     "name": "방어모듈 에이라",
     "shortName": "에이라",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "ARTIFICIAL_HUMAN",
     "tags": [
       "ARTIFICIAL_HUMAN",
@@ -595,6 +610,7 @@ export const generatedCharacterDefinitions = [
     "name": "철거반장 도일",
     "shortName": "도일",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "HUMAN",
     "tags": [
       "HUMAN",
@@ -635,6 +651,7 @@ export const generatedCharacterDefinitions = [
     "name": "결투사 카밀레",
     "shortName": "카밀레",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "VAMPIRE",
     "tags": [
       "VAMPIRE",
@@ -676,6 +693,7 @@ export const generatedCharacterDefinitions = [
     "name": "던전 측량사 맵포",
     "shortName": "맵포",
     "rarity": "R",
+    "role": "SUPPORT",
     "race": "KOBOLD",
     "tags": [
       "KOBOLD",
@@ -717,6 +735,7 @@ export const generatedCharacterDefinitions = [
     "name": "저주 감정사 에다",
     "shortName": "에다",
     "rarity": "SR",
+    "role": "SUPPORT",
     "race": "HUMAN",
     "tags": [
       "HUMAN",
@@ -757,6 +776,7 @@ export const generatedCharacterDefinitions = [
     "name": "응급전령 로피",
     "shortName": "로피",
     "rarity": "R",
+    "role": "HEAL",
     "race": "RABBIT_BEASTKIN",
     "tags": [
       "RABBIT_BEASTKIN",
@@ -796,6 +816,7 @@ export const generatedCharacterDefinitions = [
     "name": "외상 봉합사 이브린",
     "shortName": "이브린",
     "rarity": "SR",
+    "role": "SUPPORT",
     "race": "HUMAN",
     "tags": [
       "HUMAN",
@@ -836,6 +857,7 @@ export const generatedCharacterDefinitions = [
     "name": "증거품 감시자 베르노",
     "shortName": "베르노",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "UNDEAD",
     "tags": [
       "UNDEAD",
@@ -876,6 +898,7 @@ export const generatedCharacterDefinitions = [
     "name": "실패작 성녀 노아엘",
     "shortName": "노아엘",
     "rarity": "SSR",
+    "role": "HEAL",
     "race": "ARTIFICIAL_ANGEL",
     "tags": [
       "ARTIFICIAL_ANGEL",
@@ -914,6 +937,7 @@ export const generatedCharacterDefinitions = [
     "name": "몰락 군단장 모르베인",
     "shortName": "모르베인",
     "rarity": "SSR",
+    "role": "ATTACK",
     "race": "DEMONKIN",
     "tags": [
       "DEMONKIN",
@@ -952,6 +976,7 @@ export const generatedCharacterDefinitions = [
     "name": "깃털저격수 에리카",
     "shortName": "에리카",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "HARPY",
     "tags": [
       "HARPY",
@@ -991,6 +1016,7 @@ export const generatedCharacterDefinitions = [
     "name": "숲방패 라니아",
     "shortName": "라니아",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "DEER_BEASTKIN",
     "tags": [
       "DEER_BEASTKIN",
@@ -1030,6 +1056,7 @@ export const generatedCharacterDefinitions = [
     "name": "요새파괴 포격장교 카밀라",
     "shortName": "카밀라",
     "rarity": "SSR",
+    "role": "ATTACK",
     "race": "DWARF",
     "tags": [
       "DWARF",
@@ -1068,6 +1095,7 @@ export const generatedCharacterDefinitions = [
     "name": "파편병 7호",
     "shortName": "파편 7호",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "GOLEM",
     "tags": [
       "GOLEM",
@@ -1108,6 +1136,7 @@ export const generatedCharacterDefinitions = [
     "name": "문지기 브롬",
     "shortName": "브롬",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "BEAR_BEASTKIN",
     "tags": [
       "BEAR_BEASTKIN",
@@ -1148,6 +1177,7 @@ export const generatedCharacterDefinitions = [
     "name": "운반반장 젤리코",
     "shortName": "젤리코",
     "rarity": "R",
+    "role": "SUPPORT",
     "race": "SLIME",
     "tags": [
       "SLIME",
@@ -1188,6 +1218,7 @@ export const generatedCharacterDefinitions = [
     "name": "중갑총수 그레타",
     "shortName": "그레타",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "DWARF",
     "tags": [
       "DWARF",
@@ -1228,6 +1259,7 @@ export const generatedCharacterDefinitions = [
     "name": "약초감별사 세리나",
     "shortName": "세리나",
     "rarity": "R",
+    "role": "HEAL",
     "race": "ELF",
     "tags": [
       "ELF",
@@ -1268,6 +1300,7 @@ export const generatedCharacterDefinitions = [
     "name": "얼음창병 유키라",
     "shortName": "유키라",
     "rarity": "R",
+    "role": "DISRUPT",
     "race": "SNOW_WOMAN",
     "tags": [
       "SNOW_WOMAN",
@@ -1309,6 +1342,7 @@ export const generatedCharacterDefinitions = [
     "name": "환영검사 코하네",
     "shortName": "코하네",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "FOX_BEASTKIN",
     "tags": [
       "FOX_BEASTKIN",
@@ -1349,6 +1383,7 @@ export const generatedCharacterDefinitions = [
     "name": "의무실 조장 몰리",
     "shortName": "몰리",
     "rarity": "R",
+    "role": "HEAL",
     "race": "UNDEAD",
     "tags": [
       "UNDEAD",
@@ -1389,6 +1424,7 @@ export const generatedCharacterDefinitions = [
     "name": "젤리 방패병 멜티",
     "shortName": "멜티",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "SLIME",
     "tags": [
       "SLIME",
@@ -1428,6 +1464,7 @@ export const generatedCharacterDefinitions = [
     "name": "창병 라비아",
     "shortName": "라비아",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "DRAGONBLOOD",
     "tags": [
       "DRAGONBLOOD",
@@ -1468,6 +1505,7 @@ export const generatedCharacterDefinitions = [
     "name": "정비반장 브론",
     "shortName": "브론",
     "rarity": "R",
+    "role": "SUPPORT",
     "race": "DWARF",
     "tags": [
       "DWARF",
@@ -1509,6 +1547,7 @@ export const generatedCharacterDefinitions = [
     "name": "방패 경비반장 마르타",
     "shortName": "마르타",
     "rarity": "SR",
+    "role": "SUPPORT",
     "race": "HUMAN",
     "tags": [
       "HUMAN",
@@ -1550,6 +1589,7 @@ export const generatedCharacterDefinitions = [
     "name": "산악포수 베르카",
     "shortName": "베르카",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "BEAR_BEASTKIN",
     "tags": [
       "BEAR_BEASTKIN",
@@ -1588,6 +1628,7 @@ export const generatedCharacterDefinitions = [
     "name": "활기병 세이라",
     "shortName": "세이라",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "CENTAUR",
     "tags": [
       "CENTAUR",
@@ -1628,6 +1669,7 @@ export const generatedCharacterDefinitions = [
     "name": "야근 회계원 비비안",
     "shortName": "비비안",
     "rarity": "R",
+    "role": "SUPPORT",
     "race": "VAMPIRE",
     "tags": [
       "VAMPIRE",
@@ -1669,6 +1711,7 @@ export const generatedCharacterDefinitions = [
     "name": "잡역공대장 그리빗",
     "shortName": "그리빗",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "GOBLIN",
     "tags": [
       "GOBLIN",
@@ -1710,6 +1753,7 @@ export const generatedCharacterDefinitions = [
     "name": "야근 접수원 이네스",
     "shortName": "이네스",
     "rarity": "R",
+    "role": "SUPPORT",
     "race": "HUMAN",
     "tags": [
       "HUMAN",
@@ -1752,6 +1796,7 @@ export const generatedCharacterDefinitions = [
     "name": "독물처치사 셰즈",
     "shortName": "셰즈",
     "rarity": "R",
+    "role": "HEAL",
     "race": "LIZARD_BEASTKIN",
     "tags": [
       "LIZARD_BEASTKIN",
@@ -1792,6 +1837,7 @@ export const generatedCharacterDefinitions = [
     "name": "추격자 레나",
     "shortName": "레나",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "WOLF_BEASTKIN",
     "tags": [
       "WOLF_BEASTKIN",
@@ -1832,6 +1878,7 @@ export const generatedCharacterDefinitions = [
     "name": "현실누수 처리기사 모르간",
     "shortName": "모르간",
     "rarity": "SR",
+    "role": "ATTACK",
     "race": "UNDEAD",
     "tags": [
       "UNDEAD",
@@ -1870,6 +1917,7 @@ export const generatedCharacterDefinitions = [
     "name": "접수원 마렌",
     "shortName": "마렌",
     "rarity": "R",
+    "role": "SUPPORT",
     "race": "HUMAN",
     "tags": [
       "HUMAN",
@@ -1911,6 +1959,7 @@ export const generatedCharacterDefinitions = [
     "name": "회수반 파코",
     "shortName": "파코",
     "rarity": "R",
+    "role": "SUPPORT",
     "race": "RACCOON_BEASTKIN",
     "tags": [
       "RACCOON_BEASTKIN",
@@ -1952,6 +2001,7 @@ export const generatedCharacterDefinitions = [
     "name": "수리핵 12호",
     "shortName": "12호",
     "rarity": "R",
+    "role": "HEAL",
     "race": "GOLEM",
     "tags": [
       "GOLEM",
@@ -1991,6 +2041,7 @@ export const generatedCharacterDefinitions = [
     "name": "균열방패 보이드린",
     "shortName": "보이드린",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "VOIDKIN",
     "tags": [
       "VOIDKIN",
@@ -2031,6 +2082,7 @@ export const generatedCharacterDefinitions = [
     "name": "불량 돌격병 아카네",
     "shortName": "아카네",
     "rarity": "SR",
+    "role": "ATTACK",
     "race": "ONI",
     "tags": [
       "ONI",
@@ -2069,6 +2121,7 @@ export const generatedCharacterDefinitions = [
     "name": "지붕길 정찰꾼 네리아",
     "shortName": "지붕 네리아",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "CAT_BEASTKIN",
     "tags": [
       "CAT_BEASTKIN",
@@ -2109,6 +2162,7 @@ export const generatedCharacterDefinitions = [
     "name": "영업 브로커 오스카",
     "shortName": "오스카",
     "rarity": "R",
+    "role": "SUPPORT",
     "race": "HUMAN",
     "tags": [
       "HUMAN",
@@ -2149,6 +2203,7 @@ export const generatedCharacterDefinitions = [
     "name": "비늘방패 자라",
     "shortName": "자라",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "LIZARD_BEASTKIN",
     "tags": [
       "LIZARD_BEASTKIN",
@@ -2189,6 +2244,7 @@ export const generatedCharacterDefinitions = [
     "name": "정찰조장 라카",
     "shortName": "라카",
     "rarity": "R",
+    "role": "SUPPORT",
     "race": "WOLF_BEASTKIN",
     "tags": [
       "WOLF_BEASTKIN",
@@ -2230,6 +2286,7 @@ export const generatedCharacterDefinitions = [
     "name": "봉인끈 운반자 다르멜",
     "shortName": "다르멜",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "HUMAN",
     "tags": [
       "HUMAN",
@@ -2271,6 +2328,7 @@ export const generatedCharacterDefinitions = [
     "name": "방패보조 유니엘",
     "shortName": "유니엘",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "ARTIFICIAL_ANGEL",
     "tags": [
       "ARTIFICIAL_ANGEL",
@@ -2311,6 +2369,7 @@ export const generatedCharacterDefinitions = [
     "name": "방패주먹 린카",
     "shortName": "린카",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "ONI",
     "tags": [
       "ONI",
@@ -2352,6 +2411,7 @@ export const generatedCharacterDefinitions = [
     "name": "방패소녀 타우라",
     "shortName": "타우라",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "MINOTAUR",
     "tags": [
       "MINOTAUR",
@@ -2391,6 +2451,7 @@ export const generatedCharacterDefinitions = [
     "name": "방패목동 메이라",
     "shortName": "메이라",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "SHEEP_BEASTKIN",
     "tags": [
       "SHEEP_BEASTKIN",
@@ -2431,6 +2492,7 @@ export const generatedCharacterDefinitions = [
     "name": "방패병 마틸다",
     "shortName": "마틸다",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "UNDEAD",
     "tags": [
       "UNDEAD",
@@ -2471,6 +2533,7 @@ export const generatedCharacterDefinitions = [
     "name": "방패병 나디아",
     "shortName": "나디아",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "LION_BEASTKIN",
     "tags": [
       "LION_BEASTKIN",
@@ -2510,6 +2573,7 @@ export const generatedCharacterDefinitions = [
     "name": "공성취사장 보르가",
     "shortName": "보르가",
     "rarity": "SR",
+    "role": "HEAL",
     "race": "ORC",
     "tags": [
       "ORC",
@@ -2548,6 +2612,7 @@ export const generatedCharacterDefinitions = [
     "name": "점액 청소반 루미아",
     "shortName": "루미아",
     "rarity": "R",
+    "role": "HEAL",
     "race": "SLIME",
     "tags": [
       "SLIME",
@@ -2587,6 +2652,7 @@ export const generatedCharacterDefinitions = [
     "name": "연막도둑 타미",
     "shortName": "타미",
     "rarity": "R",
+    "role": "DISRUPT",
     "race": "RACCOON_BEASTKIN",
     "tags": [
       "RACCOON_BEASTKIN",
@@ -2627,6 +2693,7 @@ export const generatedCharacterDefinitions = [
     "name": "저격수 이실라",
     "shortName": "이실라",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "ELF",
     "tags": [
       "ELF",
@@ -2666,6 +2733,7 @@ export const generatedCharacterDefinitions = [
     "name": "창돌격병 피오나",
     "shortName": "피오나",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "RABBIT_BEASTKIN",
     "tags": [
       "RABBIT_BEASTKIN",
@@ -2706,6 +2774,7 @@ export const generatedCharacterDefinitions = [
     "name": "창기수 키리에",
     "shortName": "키리에",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "HARPY",
     "tags": [
       "HARPY",
@@ -2746,6 +2815,7 @@ export const generatedCharacterDefinitions = [
     "name": "창방패병 리나",
     "shortName": "리나",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "HUMAN",
     "tags": [
       "HUMAN",
@@ -2787,6 +2857,7 @@ export const generatedCharacterDefinitions = [
     "name": "첩보원 냐라",
     "shortName": "냐라",
     "rarity": "R",
+    "role": "DISRUPT",
     "race": "CAT_BEASTKIN",
     "tags": [
       "CAT_BEASTKIN",
@@ -2826,6 +2897,7 @@ export const generatedCharacterDefinitions = [
     "name": "가로등 문지기 오르칸",
     "shortName": "오르칸",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "ORC",
     "tags": [
       "ORC",
@@ -2866,6 +2938,7 @@ export const generatedCharacterDefinitions = [
     "name": "전술연산병 코르타",
     "shortName": "코르타",
     "rarity": "R",
+    "role": "SUPPORT",
     "race": "ARTIFICIAL_HUMAN",
     "tags": [
       "ARTIFICIAL_HUMAN",
@@ -2906,6 +2979,7 @@ export const generatedCharacterDefinitions = [
     "name": "꼬리창병 세르나",
     "shortName": "세르나",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "DRACONIC",
     "tags": [
       "DRACONIC",
@@ -2946,6 +3020,7 @@ export const generatedCharacterDefinitions = [
     "name": "실방패 네리아",
     "shortName": "실방패 네리아",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "SPIDER_BEASTKIN",
     "tags": [
       "SPIDER_BEASTKIN",
@@ -2986,6 +3061,7 @@ export const generatedCharacterDefinitions = [
     "name": "함정투척병 포포",
     "shortName": "포포",
     "rarity": "R",
+    "role": "ATTACK",
     "race": "KOBOLD",
     "tags": [
       "KOBOLD",
@@ -3026,6 +3102,7 @@ export const generatedCharacterDefinitions = [
     "name": "청소반장 녹스",
     "shortName": "녹스",
     "rarity": "SSR",
+    "role": "DISRUPT",
     "race": "VOIDKIN",
     "tags": [
       "VOIDKIN",
@@ -3064,6 +3141,7 @@ export const generatedCharacterDefinitions = [
     "name": "수레길 호송꾼 콜린",
     "shortName": "콜린",
     "rarity": "R",
+    "role": "DEFENSE",
     "race": "CENTAUR",
     "tags": [
       "CENTAUR",
@@ -3105,6 +3183,7 @@ export const generatedCharacterDefinitions = [
     "name": "반격검사 유리아",
     "shortName": "유리아",
     "rarity": "SR",
+    "role": "ATTACK",
     "race": "HUMAN",
     "tags": [
       "HUMAN",

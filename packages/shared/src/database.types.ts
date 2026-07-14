@@ -89,6 +89,18 @@ export type Database = {
         }
         Relationships: []
       }
+      match3_user_currencies: {
+        Row: { balance: number; currency_id: string; updated_at: string; user_id: string }
+        Insert: { balance?: number; currency_id: string; updated_at?: string; user_id: string }
+        Update: { balance?: number; currency_id?: string; updated_at?: string; user_id?: string }
+        Relationships: []
+      }
+      match3_currency_transactions: {
+        Row: { created_at: string; reason: string; request_changes: Json; request_key: string; result_balances: Json; user_id: string }
+        Insert: { created_at?: string; reason: string; request_changes: Json; request_key: string; result_balances: Json; user_id: string }
+        Update: { created_at?: string; reason?: string; request_changes?: Json; request_key?: string; result_balances?: Json; user_id?: string }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -103,6 +115,10 @@ export type Database = {
           p_support_character_id_2: string
           p_user_id: string
         }
+        Returns: Json
+      }
+      match3_apply_currency_transaction: {
+        Args: { p_changes: Json; p_reason: string; p_request_key: string; p_user_id: string }
         Returns: Json
       }
     }

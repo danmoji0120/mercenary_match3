@@ -76,7 +76,7 @@ Future combatants and two support mercenaries attach at `LoadoutDefinition` and 
 
 ## Mobile App Shell and navigation
 
-Outside battle, the client uses a single mobile game App Shell with a fixed header, one scrollable content area, and a safe-area-aware five-tab bottom navigation. The order is Gacha, Mercenaries, Lobby, Inventory, and Forge. Lobby is the default and visually emphasized center tab. Desktop browsers keep the same navigation inside the centered portrait frame.
+Outside battle, the client uses a single mobile game App Shell with a fixed resource bar, one scrollable content area, and safe-area-aware bottom navigation. Only implemented destinations are exposed: Lobby, Mercenaries, and Loadout. Recruitment, inventory, forge, and shop placeholders are deliberately absent. Desktop browsers keep the same navigation inside the centered portrait frame.
 
 The normal-screen routes are `/gacha`, `/mercenaries`, `/lobby`, `/inventory`, and `/forge`. Mercenary detail and editing add `/mercenaries/:characterId` and `/mercenaries/loadout`. `/` and unknown routes safely normalize to `/lobby`; invalid character detail routes return to `/mercenaries`. Browser back/forward and refresh restore the current normal view without rerunning the account bootstrap or recreating the Socket.IO client. The account, owned-character list, saved loadout, and authenticated socket remain owned by the top-level application for the lifetime of the page.
 
@@ -230,3 +230,15 @@ Official active/support pairs remain Yuria (Counter Break / Revenge Edge), Clari
 ### Result exit
 
 Return to lobby is an explicit, idempotent server request. It cancels rematch readiness, detaches the participant from the finished battle, rotates the battle reconnection token, notifies the opponent, keeps Socket.IO and the Supabase/account session alive, preserves ownership and the saved loadout, and allows a fresh queue entry. Scheduled combat work is cleared when the battle finishes or is abandoned.
+
+## Account currency foundation
+
+`UserAccountState.currencies` contains the six server-authoritative balances `gold`, `recruit_token`, `rarity_shard_r`, `rarity_shard_sr`, `rarity_shard_ssr`, and `rarity_shard_ex`. New and existing accounts receive an explicit zero row for every missing currency; bootstrap never resets an existing balance. Display names, icon keys, and order come from the shared `CURRENCY_METADATA` definition.
+
+The server-only `AccountRepository.applyCurrencyTransaction` contract applies one or more integer deltas atomically. A transaction rejects the complete change set if any balance would become negative or unsafe, and a user-scoped `requestKey` makes retries idempotent. Reusing the key with a different reason or change set is a conflict. Clients do not receive a general-purpose balance mutation API.
+
+Migration `20260714120000_account_currency_foundation_0_6_0.sql` adds `match3_user_currencies`, the request ledger `match3_currency_transactions`, and the service-role-only `match3_apply_currency_transaction` RPC. The RPC uses a transaction advisory lock plus row locks, records the reason and normalized changes, and returns all resulting balances. Apply the migration with the normal Supabase dry-run and push workflow before deploying this version.
+
+Development builds place account test actions in the top resource bar's DEV tools sheet. `ui-preview`, `recruitment-test`, and `reset-currencies` are server-defined presets; the browser cannot submit arbitrary amounts. The same sheet contains the existing idempotent all-enabled character grant. Neither development route is installed in production and the DEV sheet is removed from the production client bundle.
+
+The common mobile shell uses `TopResourceBar`, safe-area-aware scrolling, and one centralized bottom-navigation definition. The resource bar shows compact contract-stone and gold balances; selecting either opens a sheet with full localized balances for all six currencies. The collection supports owned-only search, rarity and canonical role filtering, recent/name/rarity sorting, three-column mobile cards, and route-backed character detail. Character detail shows package stats and registered active/support summaries; no level, power, equipment, shop, recruitment, or shard-use placeholder is exposed.

@@ -5,4 +5,5 @@ export * from './match3.js';
 export * from './combat.js';
 export * from './character-stats.js';
 export * from './battle-loadout.js';
+export * from './currency.js';
 export type { Database } from './database.types.js';

@@ -63,6 +63,24 @@ describe('production HTTP and Socket.IO server', () => {
     const response = await fetch(`${url}/api/dev/account/grant-characters`, { method: 'POST', headers: { authorization: `Bearer ${auth.token}`, 'content-type': 'application/json' }, body: JSON.stringify({ group: 'representative-0.4' }) });
     expect(response.status).toBe(404);
   });
+  it('applies only server-defined development currency presets for the authenticated account', async () => {
+    const auth = accountServices(); const service = createMercenaryServer({ environment: 'development', accountServices: auth.services }); services.push(service); const url = await listen(service);
+    const headers = { authorization: `Bearer ${auth.token}`, 'content-type': 'application/json' };
+    const before = await (await fetch(`${url}/api/account/bootstrap`, { method: 'POST', headers })).json();
+    expect(before.currencies).toEqual({ gold: 0, recruit_token: 0, rarity_shard_r: 0, rarity_shard_sr: 0, rarity_shard_ssr: 0, rarity_shard_ex: 0 });
+    expect((await fetch(`${url}/api/dev/account/currency-preset`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ preset: 'ui-preview', requestKey: 'unauthenticated' }) })).status).toBe(401);
+    const first = await (await fetch(`${url}/api/dev/account/currency-preset`, { method: 'POST', headers, body: JSON.stringify({ preset: 'ui-preview', requestKey: 'preset:1' }) })).json();
+    expect(first.transaction.applied).toBe(true); expect(first.account.currencies).toMatchObject({ gold: 10_000, recruit_token: 100, rarity_shard_ex: 100 });
+    const repeated = await (await fetch(`${url}/api/dev/account/currency-preset`, { method: 'POST', headers, body: JSON.stringify({ preset: 'ui-preview', requestKey: 'preset:1' }) })).json();
+    expect(repeated.transaction.applied).toBe(false); expect(repeated.account.currencies.gold).toBe(10_000);
+    const reset = await (await fetch(`${url}/api/dev/account/currency-preset`, { method: 'POST', headers, body: JSON.stringify({ preset: 'reset-currencies', requestKey: 'preset:reset' }) })).json();
+    expect(Object.values(reset.account.currencies)).toEqual([0, 0, 0, 0, 0, 0]);
+  });
+  it('does not install the development currency endpoint in production', async () => {
+    const auth = accountServices(); const service = createMercenaryServer({ environment: 'production', clientDistPath: clientBuild(), accountServices: auth.services }); services.push(service); const url = await listen(service);
+    const response = await fetch(`${url}/api/dev/account/currency-preset`, { method: 'POST', headers: { authorization: `Bearer ${auth.token}`, 'content-type': 'application/json' }, body: JSON.stringify({ preset: 'ui-preview', requestKey: 'nope' }) });
+    expect(response.status).toBe(404);
+  });
   it('rejects Socket.IO connections without a valid access token', async () => {
     const auth = accountServices(); const service = createMercenaryServer({ accountServices: auth.services }); services.push(service); const url = await listen(service);
     const socket = connect(url, { auth: { accessToken: 'forged' }, reconnection: false }); const error = await new Promise<Error>((resolve) => socket.once('connect_error', resolve)); expect(error.message).toMatch(/authentication/i); expect(socket.connected).toBe(false); socket.close();

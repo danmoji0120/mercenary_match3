@@ -70,6 +70,7 @@
         "race": "LIZARD_BEASTKIN",
         "rarity": "SR",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "나시카",
         "starter": false,
         "stats": {
@@ -193,6 +194,7 @@
         "race": "HUMAN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "접수 넬",
         "starter": false,
         "stats": {
@@ -323,6 +325,7 @@
         "race": "DWARF",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "HEAL",
         "shortName": "브릭사",
         "starter": false,
         "stats": {
@@ -441,6 +444,7 @@
         "race": "ANGEL",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "견습 리엘",
         "starter": false,
         "stats": {
@@ -547,6 +551,7 @@
         "race": "DWARF",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "틸다",
         "starter": false,
         "stats": {
@@ -668,6 +673,7 @@
         "race": "ORC",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "브라카",
         "starter": false,
         "stats": {
@@ -793,6 +799,7 @@
         "race": "DEMONKIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "도끼 카르나",
         "starter": false,
         "stats": {
@@ -911,6 +918,7 @@
         "race": "HUMAN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "HEAL",
         "shortName": "미카엘라",
         "starter": false,
         "stats": {
@@ -1038,6 +1046,7 @@
         "race": "DWARF",
         "rarity": "R",
         "recommendedRole": "support",
+        "role": "SUPPORT",
         "shortName": "그리젤다",
         "starter": false,
         "stats": {
@@ -1148,6 +1157,7 @@
         "race": "LAMIA",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "미레나",
         "starter": false,
         "stats": {
@@ -1273,6 +1283,7 @@
         "race": "WITCH",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "엘마",
         "starter": false,
         "stats": {
@@ -1409,6 +1420,7 @@
         "race": "HUMAN",
         "rarity": "SR",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "클라리스",
         "starter": true,
         "stats": {
@@ -1566,6 +1578,7 @@
         "race": "ORC",
         "rarity": "SR",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "그라카",
         "starter": false,
         "stats": {
@@ -1669,6 +1682,7 @@
         "race": "CAT_BEASTKIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "미냐",
         "starter": false,
         "stats": {
@@ -1793,6 +1807,7 @@
         "race": "ARTIFICIAL_HUMAN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "에이라",
         "starter": false,
         "stats": {
@@ -1913,6 +1928,7 @@
         "race": "HUMAN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "도일",
         "starter": false,
         "stats": {
@@ -2018,6 +2034,7 @@
         "race": "VAMPIRE",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "카밀레",
         "starter": false,
         "stats": {
@@ -2144,6 +2161,7 @@
         "race": "KOBOLD",
         "rarity": "R",
         "recommendedRole": "support",
+        "role": "SUPPORT",
         "shortName": "맵포",
         "starter": false,
         "stats": {
@@ -2286,6 +2304,7 @@
         "race": "HUMAN",
         "rarity": "SR",
         "recommendedRole": "support",
+        "role": "SUPPORT",
         "shortName": "에다",
         "starter": true,
         "stats": {
@@ -2404,6 +2423,7 @@
         "race": "RABBIT_BEASTKIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "HEAL",
         "shortName": "로피",
         "starter": false,
         "stats": {
@@ -2547,6 +2567,7 @@
         "race": "HUMAN",
         "rarity": "SR",
         "recommendedRole": "support",
+        "role": "SUPPORT",
         "shortName": "이브린",
         "starter": true,
         "stats": {
@@ -2673,6 +2694,7 @@
         "race": "UNDEAD",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "베르노",
         "starter": false,
         "stats": {
@@ -2803,6 +2825,7 @@
         "race": "ARTIFICIAL_ANGEL",
         "rarity": "SSR",
         "recommendedRole": "combatant",
+        "role": "HEAL",
         "shortName": "노아엘",
         "starter": false,
         "stats": {
@@ -2944,6 +2967,7 @@
         "race": "DEMONKIN",
         "rarity": "SSR",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "모르베인",
         "starter": false,
         "stats": {
@@ -3053,6 +3077,7 @@
         "race": "HARPY",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "에리카",
         "starter": false,
         "stats": {
@@ -3179,6 +3204,7 @@
         "race": "DEER_BEASTKIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "라니아",
         "starter": false,
         "stats": {
@@ -3312,6 +3338,7 @@
         "race": "DWARF",
         "rarity": "SSR",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "카밀라",
         "starter": false,
         "stats": {
@@ -3436,6 +3463,7 @@
         "race": "GOLEM",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "파편 7호",
         "starter": false,
         "stats": {
@@ -3545,6 +3573,7 @@
         "race": "BEAR_BEASTKIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "브롬",
         "starter": false,
         "stats": {
@@ -3653,6 +3682,7 @@
         "race": "SLIME",
         "rarity": "R",
         "recommendedRole": "support",
+        "role": "SUPPORT",
         "shortName": "젤리코",
         "starter": false,
         "stats": {
@@ -3757,6 +3787,7 @@
         "race": "DWARF",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "그레타",
         "starter": false,
         "stats": {
@@ -3870,6 +3901,7 @@
         "race": "ELF",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "HEAL",
         "shortName": "세리나",
         "starter": false,
         "stats": {
@@ -3997,6 +4029,7 @@
         "race": "SNOW_WOMAN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DISRUPT",
         "shortName": "유키라",
         "starter": false,
         "stats": {
@@ -4120,6 +4153,7 @@
         "race": "FOX_BEASTKIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "코하네",
         "starter": false,
         "stats": {
@@ -4245,6 +4279,7 @@
         "race": "UNDEAD",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "HEAL",
         "shortName": "몰리",
         "starter": false,
         "stats": {
@@ -4368,6 +4403,7 @@
         "race": "SLIME",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "멜티",
         "starter": false,
         "stats": {
@@ -4471,6 +4507,7 @@
         "race": "DRAGONBLOOD",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "라비아",
         "starter": false,
         "stats": {
@@ -4579,6 +4616,7 @@
         "race": "DWARF",
         "rarity": "R",
         "recommendedRole": "support",
+        "role": "SUPPORT",
         "shortName": "브론",
         "starter": false,
         "stats": {
@@ -4694,6 +4732,7 @@
         "race": "HUMAN",
         "rarity": "SR",
         "recommendedRole": "support",
+        "role": "SUPPORT",
         "shortName": "마르타",
         "starter": true,
         "stats": {
@@ -4825,6 +4864,7 @@
         "race": "BEAR_BEASTKIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "베르카",
         "starter": false,
         "stats": {
@@ -4951,6 +4991,7 @@
         "race": "CENTAUR",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "세이라",
         "starter": false,
         "stats": {
@@ -5076,6 +5117,7 @@
         "race": "VAMPIRE",
         "rarity": "R",
         "recommendedRole": "support",
+        "role": "SUPPORT",
         "shortName": "비비안",
         "starter": false,
         "stats": {
@@ -5186,6 +5228,7 @@
         "race": "GOBLIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "그리빗",
         "starter": false,
         "stats": {
@@ -5295,6 +5338,7 @@
         "race": "HUMAN",
         "rarity": "R",
         "recommendedRole": "support",
+        "role": "SUPPORT",
         "shortName": "이네스",
         "starter": false,
         "stats": {
@@ -5427,6 +5471,7 @@
         "race": "LIZARD_BEASTKIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "HEAL",
         "shortName": "셰즈",
         "starter": false,
         "stats": {
@@ -5552,6 +5597,7 @@
         "race": "WOLF_BEASTKIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "레나",
         "starter": false,
         "stats": {
@@ -5683,6 +5729,7 @@
         "race": "UNDEAD",
         "rarity": "SR",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "모르간",
         "starter": false,
         "stats": {
@@ -5789,6 +5836,7 @@
         "race": "HUMAN",
         "rarity": "R",
         "recommendedRole": "support",
+        "role": "SUPPORT",
         "shortName": "마렌",
         "starter": false,
         "stats": {
@@ -5916,6 +5964,7 @@
         "race": "RACCOON_BEASTKIN",
         "rarity": "R",
         "recommendedRole": "support",
+        "role": "SUPPORT",
         "shortName": "파코",
         "starter": false,
         "stats": {
@@ -6042,6 +6091,7 @@
         "race": "GOLEM",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "HEAL",
         "shortName": "12호",
         "starter": false,
         "stats": {
@@ -6163,6 +6213,7 @@
         "race": "VOIDKIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "보이드린",
         "starter": false,
         "stats": {
@@ -6276,6 +6327,7 @@
         "race": "ONI",
         "rarity": "SR",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "아카네",
         "starter": false,
         "stats": {
@@ -6396,6 +6448,7 @@
         "race": "CAT_BEASTKIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "지붕 네리아",
         "starter": false,
         "stats": {
@@ -6528,6 +6581,7 @@
         "race": "HUMAN",
         "rarity": "R",
         "recommendedRole": "support",
+        "role": "SUPPORT",
         "shortName": "오스카",
         "starter": false,
         "stats": {
@@ -6637,6 +6691,7 @@
         "race": "LIZARD_BEASTKIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "자라",
         "starter": false,
         "stats": {
@@ -6745,6 +6800,7 @@
         "race": "WOLF_BEASTKIN",
         "rarity": "R",
         "recommendedRole": "support",
+        "role": "SUPPORT",
         "shortName": "라카",
         "starter": false,
         "stats": {
@@ -6872,6 +6928,7 @@
         "race": "HUMAN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "다르멜",
         "starter": false,
         "stats": {
@@ -6999,6 +7056,7 @@
         "race": "ARTIFICIAL_ANGEL",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "유니엘",
         "starter": false,
         "stats": {
@@ -7107,6 +7165,7 @@
         "race": "ONI",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "린카",
         "starter": false,
         "stats": {
@@ -7228,6 +7287,7 @@
         "race": "MINOTAUR",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "타우라",
         "starter": false,
         "stats": {
@@ -7336,6 +7396,7 @@
         "race": "SHEEP_BEASTKIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "메이라",
         "starter": false,
         "stats": {
@@ -7462,6 +7523,7 @@
         "race": "UNDEAD",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "마틸다",
         "starter": false,
         "stats": {
@@ -7565,6 +7627,7 @@
         "race": "LION_BEASTKIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "나디아",
         "starter": false,
         "stats": {
@@ -7689,6 +7752,7 @@
         "race": "ORC",
         "rarity": "SR",
         "recommendedRole": "combatant",
+        "role": "HEAL",
         "shortName": "보르가",
         "starter": false,
         "stats": {
@@ -7812,6 +7876,7 @@
         "race": "SLIME",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "HEAL",
         "shortName": "루미아",
         "starter": false,
         "stats": {
@@ -7934,6 +7999,7 @@
         "race": "RACCOON_BEASTKIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DISRUPT",
         "shortName": "타미",
         "starter": false,
         "stats": {
@@ -8055,6 +8121,7 @@
         "race": "ELF",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "이실라",
         "starter": false,
         "stats": {
@@ -8182,6 +8249,7 @@
         "race": "RABBIT_BEASTKIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "피오나",
         "starter": false,
         "stats": {
@@ -8303,6 +8371,7 @@
         "race": "HARPY",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "키리에",
         "starter": false,
         "stats": {
@@ -8428,6 +8497,7 @@
         "race": "HUMAN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "리나",
         "starter": false,
         "stats": {
@@ -8555,6 +8625,7 @@
         "race": "CAT_BEASTKIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DISRUPT",
         "shortName": "냐라",
         "starter": false,
         "stats": {
@@ -8674,6 +8745,7 @@
         "race": "ORC",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "오르칸",
         "starter": false,
         "stats": {
@@ -8782,6 +8854,7 @@
         "race": "ARTIFICIAL_HUMAN",
         "rarity": "R",
         "recommendedRole": "support",
+        "role": "SUPPORT",
         "shortName": "코르타",
         "starter": false,
         "stats": {
@@ -8891,6 +8964,7 @@
         "race": "DRACONIC",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "세르나",
         "starter": false,
         "stats": {
@@ -9017,6 +9091,7 @@
         "race": "SPIDER_BEASTKIN",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "실방패 네리아",
         "starter": false,
         "stats": {
@@ -9138,6 +9213,7 @@
         "race": "KOBOLD",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "포포",
         "starter": false,
         "stats": {
@@ -9310,6 +9386,7 @@
         "race": "VOIDKIN",
         "rarity": "SSR",
         "recommendedRole": "combatant",
+        "role": "DISRUPT",
         "shortName": "녹스",
         "starter": false,
         "stats": {
@@ -9417,6 +9494,7 @@
         "race": "CENTAUR",
         "rarity": "R",
         "recommendedRole": "combatant",
+        "role": "DEFENSE",
         "shortName": "콜린",
         "starter": false,
         "stats": {
@@ -9581,6 +9659,7 @@
         "race": "HUMAN",
         "rarity": "SR",
         "recommendedRole": "combatant",
+        "role": "ATTACK",
         "shortName": "유리아",
         "starter": true,
         "stats": {

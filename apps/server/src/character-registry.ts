@@ -10,7 +10,7 @@ function customHandlerIds(effects: EffectDefinition[]): string[] { const result:
 
 const schema = z.object({
   id: z.string().regex(/^[a-z0-9_]{3,64}$/), name: z.string().min(1).max(80), shortName: z.string().min(1).max(30),
-  rarity: z.enum(['R', 'SR', 'SSR', 'EX']), race: z.string().min(1).max(30), tags: z.array(z.string().min(1)).min(1),
+  rarity: z.enum(['R', 'SR', 'SSR', 'EX']), role: z.enum(['ATTACK', 'DEFENSE', 'HEAL', 'DISRUPT', 'SUPPORT']).default('ATTACK'), race: z.string().min(1).max(30), tags: z.array(z.string().min(1)).min(1),
   description: z.string().min(1).max(240), enabled: z.boolean(), starter: z.boolean(), contentVersion: z.number().int().positive(),
   allowedSlots: z.array(z.enum(['combatant', 'support'])).min(1), recommendedRole: z.enum(['combatant', 'support']), portraitAsset: z.union([z.literal(''), z.string().startsWith('/generated/characters/')]), assets: z.object({ portraitUrl: z.string().startsWith('/generated/characters/').optional(), portraitHash: z.string().regex(/^[a-f0-9]{12}$/).optional() }).strict().optional(),
   stats: z.object({ maxHp: z.number().int().positive(), swordEffectPct: z.number().int().nonnegative(), shieldEffectPct: z.number().int().nonnegative(), healEffectPct: z.number().int().nonnegative(), manaGainPct: z.number().int().nonnegative() }).strict(),

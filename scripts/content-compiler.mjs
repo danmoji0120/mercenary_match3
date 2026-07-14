@@ -165,7 +165,7 @@ function normalizeAbility(value) {
 
 function normalizeCharacter(value, asset) {
   const assets = asset ? { portraitUrl: asset.portraitUrl, portraitHash: asset.portraitHash } : {};
-  return { id: value.id, name: value.displayName, shortName: value.shortName, rarity: value.rarity, race: value.race, tags: value.tags, description: value.description.summary, enabled: value.enabled ?? true, starter: value.starter ?? false, contentVersion: value.contentVersion ?? 1, allowedSlots: value.allowedSlots, recommendedRole: value.recommendedRole, portraitAsset: asset?.portraitUrl ?? '', assets, stats: value.stats, ...(value.defaultSlots ? { defaultSlots: value.defaultSlots } : {}), combatant: { skillId: value.activeAbilityId }, support: { effectId: value.supportAbilityId } };
+  return { id: value.id, name: value.displayName, shortName: value.shortName, rarity: value.rarity, role: value.role, race: value.race, tags: value.tags, description: value.description.summary, enabled: value.enabled ?? true, starter: value.starter ?? false, contentVersion: value.contentVersion ?? 1, allowedSlots: value.allowedSlots, recommendedRole: value.recommendedRole, portraitAsset: asset?.portraitUrl ?? '', assets, stats: value.stats, ...(value.defaultSlots ? { defaultSlots: value.defaultSlots } : {}), combatant: { skillId: value.activeAbilityId }, support: { effectId: value.supportAbilityId } };
 }
 
 function validateAbility(value, expectedKind, packageId, file, report, customHandlers) {

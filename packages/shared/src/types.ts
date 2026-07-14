@@ -1,16 +1,19 @@
 import type { ResolvedCombatantStats } from './character-stats.js';
+import type { CurrencyBalances } from './currency.js';
 
 export const TILE_TYPES = ['SWORD', 'SHIELD', 'HEAL', 'MANA'] as const;
 export type TileType = (typeof TILE_TYPES)[number];
 
 export type CharacterId = string;
 export type CharacterRarity = 'R' | 'SR' | 'SSR' | 'EX';
+export type CharacterRole = 'ATTACK' | 'DEFENSE' | 'HEAL' | 'DISRUPT' | 'SUPPORT';
 export type CharacterSlot = 'combatant' | 'support';
 export interface CharacterDefinition {
   id: CharacterId;
   name: string;
   shortName: string;
   rarity: CharacterRarity;
+  role: CharacterRole;
   race: string;
   tags: string[];
   description: string;
@@ -51,6 +54,7 @@ export interface UserAccountState {
   profile: UserProfile;
   ownedCharacterIds: CharacterId[];
   loadout: UserLoadout;
+  currencies: CurrencyBalances;
   characters: CharacterDefinition[];
   accountReady: boolean;
 }

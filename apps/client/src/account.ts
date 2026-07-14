@@ -27,3 +27,7 @@ export interface DevelopmentCharacterGrantResponse {
 export function grantDevelopmentCharacters(token: string, group = 'all-enabled') {
   return api<DevelopmentCharacterGrantResponse>('/api/dev/account/grant-characters', token, { method: 'POST', body: JSON.stringify({ group }) });
 }
+export type DevelopmentCurrencyPreset = 'ui-preview' | 'recruitment-test' | 'reset-currencies';
+export function applyDevelopmentCurrencyPreset(token: string, preset: DevelopmentCurrencyPreset, requestKey = crypto.randomUUID()) {
+  return api<{ account: UserAccountState; transaction: { requestKey: string; applied: boolean } }>('/api/dev/account/currency-preset', token, { method: 'POST', body: JSON.stringify({ preset, requestKey }) });
+}

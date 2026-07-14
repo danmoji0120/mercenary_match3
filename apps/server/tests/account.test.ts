@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { InMemoryAccountRepository, InMemoryAuthVerifier } from '../src/account';
 import { CharacterRegistry, DEFAULT_LOADOUT, loadCharacterRegistry } from '../src/character-registry';
 import { R_BATCH_0_5_1_CHARACTER_IDS, R_BATCH_0_5_2_CHARACTER_IDS, REPRESENTATIVE_0_4_CHARACTER_IDS, resolveDevelopmentCharacterGroup } from '../src/development-character-grants';
+import { DEFAULT_CURRENCY_BALANCES } from '@mercenary/shared';
 
 describe('character registry and account foundation', () => {
   it('loads five immutable starter characters and both loadouts', () => {
@@ -17,6 +18,34 @@ describe('character registry and account foundation', () => {
     const repository = new InMemoryAccountRepository(), starters = loadCharacterRegistry().starters.map((item) => item.id);
     const first = await repository.bootstrap('user-a', 'First', starters, DEFAULT_LOADOUT); first.ownedCharacterIds.pop(); repository.accounts.set('user-a', first);
     const second = await repository.bootstrap('user-a', 'Changed', starters, DEFAULT_LOADOUT); expect(second.profile.displayName).toBe('First'); expect(second.ownedCharacterIds).toHaveLength(5); expect(second.loadout).toEqual(DEFAULT_LOADOUT);
+    expect(second.currencies).toEqual(DEFAULT_CURRENCY_BALANCES);
+  });
+  it('applies atomic, idempotent currency transactions without touching loadout or ownership', async () => {
+    const repository = new InMemoryAccountRepository(), registry = loadCharacterRegistry(), starters = registry.starters.map((item) => item.id);
+    const before = await repository.bootstrap('currency-user', 'Currency', starters, DEFAULT_LOADOUT);
+    const granted = await repository.applyCurrencyTransaction({ userId: 'currency-user', requestKey: 'grant:1', reason: 'test:grant', changes: [{ currencyId: 'gold', delta: 100 }, { currencyId: 'recruit_token', delta: 10 }] });
+    expect(granted).toMatchObject({ applied: true, balances: { gold: 100, recruit_token: 10 } });
+    const repeated = await repository.applyCurrencyTransaction({ userId: 'currency-user', requestKey: 'grant:1', reason: 'test:grant', changes: [{ currencyId: 'gold', delta: 100 }, { currencyId: 'recruit_token', delta: 10 }] });
+    expect(repeated).toMatchObject({ applied: false, balances: { gold: 100, recruit_token: 10 } });
+    const spent = await repository.applyCurrencyTransaction({ userId: 'currency-user', requestKey: 'spend:1', reason: 'test:spend', changes: [{ currencyId: 'gold', delta: -40 }, { currencyId: 'recruit_token', delta: -3 }] });
+    expect(spent.balances).toMatchObject({ gold: 60, recruit_token: 7 });
+    await expect(repository.applyCurrencyTransaction({ userId: 'currency-user', requestKey: 'spend:rollback', reason: 'test:rollback', changes: [{ currencyId: 'gold', delta: 10 }, { currencyId: 'recruit_token', delta: -100 }] })).rejects.toThrow('INSUFFICIENT_CURRENCY');
+    const after = await repository.get('currency-user');
+    expect(after?.currencies).toMatchObject({ gold: 60, recruit_token: 7 });
+    expect(after?.loadout).toEqual(before.loadout); expect(after?.ownedCharacterIds).toEqual(before.ownedCharacterIds);
+  });
+  it('rejects invalid currency requests and prevents concurrent overdrafts', async () => {
+    const repository = new InMemoryAccountRepository(), starters = loadCharacterRegistry().starters.map((item) => item.id);
+    await repository.bootstrap('currency-user', 'Currency', starters, DEFAULT_LOADOUT);
+    await repository.applyCurrencyTransaction({ userId: 'currency-user', requestKey: 'seed', reason: 'test:seed', changes: [{ currencyId: 'gold', delta: 10 }] });
+    await expect(repository.applyCurrencyTransaction({ userId: 'currency-user', requestKey: 'seed', reason: 'changed', changes: [{ currencyId: 'gold', delta: 10 }] })).rejects.toThrow('CURRENCY_REQUEST_CONFLICT');
+    await expect(repository.applyCurrencyTransaction({ userId: 'currency-user', requestKey: 'fraction', reason: 'test', changes: [{ currencyId: 'gold', delta: 0.5 }] })).rejects.toThrow('INVALID_CURRENCY_DELTA');
+    const concurrent = await Promise.allSettled([
+      repository.applyCurrencyTransaction({ userId: 'currency-user', requestKey: 'concurrent:1', reason: 'test', changes: [{ currencyId: 'gold', delta: -8 }] }),
+      repository.applyCurrencyTransaction({ userId: 'currency-user', requestKey: 'concurrent:2', reason: 'test', changes: [{ currencyId: 'gold', delta: -8 }] }),
+    ]);
+    expect(concurrent.filter((result) => result.status === 'fulfilled')).toHaveLength(1);
+    expect((await repository.get('currency-user'))?.currencies.gold).toBe(2);
   });
   it('supports deterministic fake auth and rejects forged tokens', async () => {
     const verifier = new InMemoryAuthVerifier(), token = verifier.issue('user-a', 'valid'); expect(await verifier.verify(token)).toMatchObject({ userId: 'user-a' }); await expect(verifier.verify('forged')).rejects.toThrow('INVALID_TOKEN');

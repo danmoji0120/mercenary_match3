@@ -5,5 +5,6 @@ import './styles.css';
 import './mercenary-overrides.css';
 import './auth.css';
 import './frenzy-stats.css';
+import './game-ui.css';
 
 createRoot(document.getElementById('root')!).render(<StrictMode><App /></StrictMode>);
