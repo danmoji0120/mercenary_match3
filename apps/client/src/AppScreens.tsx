@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import type { UserAccountState } from '@mercenary/shared';
 import { LobbyLoadout, accountLoadoutSnapshot } from './LobbyUi';
 import { CharacterPortrait } from './CharacterPortrait';
-import { GamePanel, ScreenHeader } from './GameUi';
+import { GameIcon, GamePanel, ScreenHeader } from './GameUi';
 
 function QueueTimer({ since }: { since: number }) {
   const [seconds, setSeconds] = useState(0);
@@ -19,13 +19,23 @@ function QueueTimer({ since }: { since: number }) {
   );
 }
 
-function LobbyCharacterDisplay({ account }: { account: UserAccountState }) {
+export function LobbyHeroVisual({ account }: { account: UserAccountState }) {
   const loadout = accountLoadoutSnapshot(account);
+  const leadDefinition = account.characters.find((item) => item.id === loadout.combatant.characterId);
   return (
     <section className="lobby-character-display lobby-visual-slot" aria-label="현재 출전 용병">
       <div className="lobby-glow" aria-hidden="true" />
       <figure className="lobby-lead">
-        <CharacterPortrait src={loadout.combatant.portraitAsset} alt="" />
+        <CharacterPortrait
+          src={loadout.combatant.portraitAsset}
+          alt={`${loadout.combatant.name} 로비 비주얼`}
+          eager
+          variant="lobby"
+          characterId={loadout.combatant.characterId}
+          shortName={loadout.combatant.name}
+          rarity={loadout.combatant.rarity}
+          role={leadDefinition?.role}
+        />
         <figcaption>
           <small>전투원</small>
           <strong>{loadout.combatant.name}</strong>
@@ -34,7 +44,20 @@ function LobbyCharacterDisplay({ account }: { account: UserAccountState }) {
       </figure>
       {loadout.supports.map((support, index) => (
         <figure className={`lobby-support support-${index + 1}`} key={support.characterId}>
-          <CharacterPortrait src={support.portraitAsset} alt="" />
+          {(() => {
+            const definition = account.characters.find((item) => item.id === support.characterId);
+            return (
+          <CharacterPortrait
+            src={support.portraitAsset}
+            alt=""
+            variant="support"
+            characterId={support.characterId}
+            shortName={support.name}
+            rarity={support.rarity}
+            role={definition?.role}
+          />
+            );
+          })()}
           <figcaption>
             <small>지원 {index + 1}</small>
             <strong>{support.name}</strong>
@@ -77,7 +100,7 @@ export function LobbyScreen({
         description="현재 편성을 확인하고 전장에 진입하세요."
       />
       {account ? (
-        <LobbyCharacterDisplay account={account} />
+        <LobbyHeroVisual account={account} />
       ) : (
         <div className="lobby-character-placeholder" aria-hidden="true">
           용병단 집결 중…
@@ -98,7 +121,7 @@ export function LobbyScreen({
                 title={disabledReason}
                 onClick={() => onQueue(false)}
               >
-                일반전<small>실시간 대전</small>
+                <GameIcon name="battle" /><span>일반전<small>실시간 대전</small></span>
               </button>
               <button
                 className="secondary"
@@ -108,7 +131,7 @@ export function LobbyScreen({
                 title={disabledReason}
                 onClick={() => onQueue(true)}
               >
-                봇 대전<small>즉시 연습</small>
+                <GameIcon name="bot" /><span>봇 대전<small>즉시 연습</small></span>
               </button>
             </>
           )}
@@ -120,14 +143,14 @@ export function LobbyScreen({
             disabled={!account || Boolean(queuedAt)}
             onClick={onEdit}
           >
-            출전 편성 변경
+            <GameIcon name="formation" /> 출전 편성 변경
           </button>
           <button
             className="quiet-button"
             onClick={onToggleMute}
             aria-label={`효과음 ${muted ? '켜기' : '끄기'}`}
           >
-            효과음 {muted ? 'OFF' : 'ON'}
+            <GameIcon name={muted ? 'volume-off' : 'volume'} /> 효과음 {muted ? 'OFF' : 'ON'}
           </button>
         </div>
       </GamePanel>

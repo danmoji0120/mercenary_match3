@@ -51,7 +51,7 @@ function CharacterFighter({ participant, side, event, activeAbilityId }: { parti
   const active = participant.effectRuntime?.abilities.some((ability) => ability.abilityId === activeAbilityId);
   return <figure key={`${side}:${event?.id ?? 'idle'}:${activeAbilityId}`} className={`stage-fighter ${side} ${reactionClass(event?.category)} ${active ? 'is-casting' : ''}`}>
     <div className="fighter-aura" aria-hidden="true"/>
-    <CharacterPortrait src={main.portraitAsset} alt={`${main.name} 전투 캐릭터`} eager/>
+    <CharacterPortrait src={main.portraitAsset} alt={`${main.name} 전투 캐릭터`} eager variant="combat" characterId={main.characterId} shortName={main.name} rarity={main.rarity}/>
     <figcaption><strong>{main.name}</strong><span>{participant.hp <= 250 ? '위기' : participant.shield > 0 ? `보호막 ${participant.shield}` : '전투 중'}</span></figcaption>
   </figure>;
 }

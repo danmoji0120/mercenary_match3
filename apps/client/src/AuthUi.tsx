@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import type { AccountAuthState } from './auth-state';
 import { maskEmail } from './auth-state';
+import { GameIcon } from './GameUi';
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -24,7 +25,7 @@ function DialogFrame({ titleId, children, onClose, danger = false }: { titleId: 
     };
     addEventListener('keydown', keydown); return () => removeEventListener('keydown', keydown);
   }, [danger, onClose]);
-  return <div className="auth-dialog-backdrop"><section ref={dialog} className={`auth-dialog ${danger ? 'danger' : ''}`} role={danger ? 'alertdialog' : 'dialog'} aria-modal="true" aria-labelledby={titleId}><button ref={first} type="button" className="auth-dialog-close" aria-label="닫기" onClick={onClose}>×</button>{children}</section></div>;
+  return <div className="auth-dialog-backdrop"><section ref={dialog} className={`auth-dialog ${danger ? 'danger' : ''}`} role={danger ? 'alertdialog' : 'dialog'} aria-modal="true" aria-labelledby={titleId}><button ref={first} type="button" className="auth-dialog-close" aria-label="닫기" onClick={onClose}><GameIcon name="close" /></button>{children}</section></div>;
 }
 
 function EmailForm({ title, titleId, description, submitLabel, pending, error, onBack, onSubmit }: { title: string; titleId?: string; description: string; submitLabel: string; pending: boolean; error: string; onBack(): void; onSubmit(email: string): Promise<void> }) {
@@ -42,7 +43,7 @@ export function AuthEntryScreen({ auth, onGuest, onEmail }: { auth: AccountAuthS
     <div className="auth-entry-crest" aria-hidden="true">7×7</div>
     {view === 'entry' && <section className="auth-entry-card"><small>MERCENARY ACCOUNT</small><h1>폐급 용병단</h1><p>계정을 연결하면 다른 기기에서도<br/>용병과 편성을 이어서 이용할 수 있습니다.</p><div><button data-testid="start-guest" disabled={pending} onClick={guest}>게스트로 시작</button><button className="secondary" disabled={pending} onClick={() => { setView('email'); setError('') }}>이메일로 로그인</button></div>{(error || auth.error) && <p className="auth-form-error" role="alert">{error || auth.error}</p>}<small className="guest-note">게스트 계정은 브라우저 데이터가 삭제되면 복구할 수 없습니다.</small></section>}
     {view === 'email' && <EmailForm title="이메일 로그인" description="계정에 연결한 이메일을 입력하세요. 비밀번호 없이 로그인 링크를 보내드립니다." submitLabel="로그인 링크 보내기" pending={pending} error={error} onBack={() => { setView('entry'); setError('') }} onSubmit={send}/>} 
-    {view === 'sent' && <section className="auth-mail-sent"><span aria-hidden="true">✉</span><h2>로그인 메일을 확인해 주세요.</h2><p>계정이 등록된 이메일이라면<br/>로그인 링크가 전송됩니다.</p><b>{maskEmail(lastEmail)}</b><button disabled={pending || cooldown.remaining > 0} onClick={() => void send(lastEmail)}>{cooldown.remaining > 0 ? `메일 다시 보내기 (${cooldown.remaining}초)` : '메일 다시 보내기'}</button><button className="secondary" onClick={() => { setView('email'); setError('') }}>다른 이메일 입력</button>{error && <p className="auth-form-error" role="alert">{error}</p>}</section>}
+    {view === 'sent' && <section className="auth-mail-sent"><span aria-hidden="true"><GameIcon name="contract" /></span><h2>로그인 메일을 확인해 주세요.</h2><p>계정이 등록된 이메일이라면<br/>로그인 링크가 전송됩니다.</p><b>{maskEmail(lastEmail)}</b><button disabled={pending || cooldown.remaining > 0} onClick={() => void send(lastEmail)}>{cooldown.remaining > 0 ? `메일 다시 보내기 (${cooldown.remaining}초)` : '메일 다시 보내기'}</button><button className="secondary" onClick={() => { setView('email'); setError('') }}>다른 이메일 입력</button>{error && <p className="auth-form-error" role="alert">{error}</p>}</section>}
   </main>;
 }
 
@@ -58,9 +59,9 @@ export function AccountScreen({ auth, displayName, blocked, onBack, onLink, onCh
   const link = async (email: string) => { setPending(true); setError(''); try { await onLink(email); cooldown.start(); setDialog(null) } catch (value) { setError(value instanceof Error ? value.message : '이메일을 연결하지 못했습니다.') } finally { setPending(false) } };
   const check = async () => { if (pending) return; setPending(true); setError(''); try { await onCheck() } catch (value) { setError(value instanceof Error ? value.message : '계정 상태를 확인하지 못했습니다.') } finally { setPending(false) } };
   const logout = async () => { setPending(true); await onSignOut(); setPending(false) };
-  return <section className="app-screen account-screen" aria-labelledby="account-title"><header className="account-heading"><button className="secondary" aria-label="계정 화면 닫기" onClick={onBack}>←</button><div><small>ACCOUNT</small><h2 id="account-title">계정 관리</h2></div></header>
+  return <section className="app-screen account-screen" aria-labelledby="account-title"><header className="account-heading"><button className="secondary" aria-label="계정 화면 닫기" onClick={onBack}><GameIcon name="back" /></button><div><small>ACCOUNT</small><h2 id="account-title">계정 관리</h2></div></header>
     {linkCompleted && <p className="account-blocked" role="status">계정 연결 완료 — 현재 용병과 편성이 이메일 계정에 안전하게 연결되었습니다.</p>}
-    <section className={`account-status-card ${auth.status}`}><span aria-hidden="true">{auth.status === 'permanent' ? '✓' : '!'}</span><small>계정 상태</small><h3>{auth.status === 'permanent' ? '이메일 계정' : auth.status === 'link_pending' ? '이메일 확인 대기' : '게스트 계정'}</h3><b>{displayName}</b>{auth.status === 'permanent' ? <><em>{maskEmail(session?.email)}</em><p>다른 브라우저와 기기에서도 같은 이메일로 로그인할 수 있습니다.</p></> : auth.status === 'link_pending' ? <><em>{maskEmail(session?.pendingEmail)}</em><p>메일의 계정 연결 버튼을 눌러 주세요. 확인 전에도 현재 게임을 계속 이용할 수 있습니다.</p></> : <p>현재 기기에서는 계속 이용할 수 있지만 브라우저 데이터가 삭제되거나 다른 기기를 사용하면 복구할 수 없습니다.</p>}</section>
+    <section className={`account-status-card ${auth.status}`}><span aria-hidden="true"><GameIcon name={auth.status === 'permanent' ? 'check' : 'warning'} /></span><small>계정 상태</small><h3>{auth.status === 'permanent' ? '이메일 계정' : auth.status === 'link_pending' ? '이메일 확인 대기' : '게스트 계정'}</h3><b>{displayName}</b>{auth.status === 'permanent' ? <><em>{maskEmail(session?.email)}</em><p>다른 브라우저와 기기에서도 같은 이메일로 로그인할 수 있습니다.</p></> : auth.status === 'link_pending' ? <><em>{maskEmail(session?.pendingEmail)}</em><p>메일의 계정 연결 버튼을 눌러 주세요. 확인 전에도 현재 게임을 계속 이용할 수 있습니다.</p></> : <p>현재 기기에서는 계속 이용할 수 있지만 브라우저 데이터가 삭제되거나 다른 기기를 사용하면 복구할 수 없습니다.</p>}</section>
     {blocked && <p className="account-blocked" role="status">매칭 대기 중에는 계정 연결이나 로그아웃을 진행할 수 없습니다.</p>}
     <div className="account-actions">{auth.status === 'guest' && <><button disabled={blocked} onClick={() => { setDialog('link'); setError('') }}>이메일 계정 연결</button><button className="danger-button" disabled={blocked} onClick={() => setDialog('abandon')}>다른 계정으로 전환</button></>}{auth.status === 'link_pending' && <><button disabled={blocked || cooldown.remaining > 0 || pending} onClick={() => session?.pendingEmail && void link(session.pendingEmail)}>{cooldown.remaining > 0 ? `메일 다시 보내기 (${cooldown.remaining}초)` : '메일 다시 보내기'}</button><button className="secondary" disabled={pending} onClick={() => void check()}>완료 여부 확인</button></>}{auth.status === 'permanent' && <button className="secondary" disabled={blocked} onClick={() => setDialog('logout')}>로그아웃</button>}</div>
     {error && <p className="auth-form-error" role="alert">{error}</p>}

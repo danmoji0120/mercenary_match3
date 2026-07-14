@@ -6,7 +6,7 @@ import type {
 } from '@mercenary/shared';
 import { saveLoadout } from './account';
 import { CharacterPortrait } from './CharacterPortrait';
-import { EmptyState, RarityBadge, RoleBadge } from './GameUi';
+import { EmptyState, GameIcon, RarityBadge, RoleBadge, TileTypeIcon } from './GameUi';
 import {
   filterMercenaries,
   isLoadoutDirty,
@@ -128,10 +128,19 @@ function MercenaryDetailDialog({
       >
         <div className="sheet-handle" aria-hidden="true" />
         <button ref={close} className="detail-close" aria-label="용병 상세 닫기" onClick={onClose}>
-          ×
+          <GameIcon name="close" />
         </button>
         <div className="detail-hero">
-          <CharacterPortrait src={character.portraitAsset} alt={`${character.shortName} 초상화`} />
+          <CharacterPortrait
+            src={character.portraitAsset}
+            alt={`${character.shortName} 초상화`}
+            eager
+            variant="detail"
+            characterId={character.id}
+            shortName={character.shortName}
+            rarity={character.rarity}
+            role={character.role}
+          />
           <div>
             <RarityBadge rarity={character.rarity} />
             <RoleBadge role={character.role} />
@@ -145,13 +154,13 @@ function MercenaryDetailDialog({
         </div>
         <div className="detail-tabs" role="tablist" aria-label="용병 정보">
           <button role="tab" aria-selected={tab === 'info'} onClick={() => setTab('info')}>
-            정보
+            <GameIcon name="info" /> 정보
           </button>
           <button role="tab" aria-selected={tab === 'active'} onClick={() => setTab('active')}>
-            액티브
+            <GameIcon name="active" /> 액티브
           </button>
           <button role="tab" aria-selected={tab === 'support'} onClick={() => setTab('support')}>
-            지원
+            <GameIcon name="support" /> 지원
           </button>
         </div>
         <div className="detail-scroll">
@@ -160,23 +169,23 @@ function MercenaryDetailDialog({
               <p className="mercenary-lore">{character.description}</p>
               <dl className="character-stat-grid">
                 <div>
-                  <dt>최대 HP</dt>
+                  <dt><GameIcon name="hp" />최대 HP</dt>
                   <dd>{stats.maxHp.toLocaleString('ko-KR')}</dd>
                 </div>
                 <div>
-                  <dt>검 효과</dt>
+                  <dt><TileTypeIcon type="SWORD" />검 효과</dt>
                   <dd>{stats.swordEffectPct}%</dd>
                 </div>
                 <div>
-                  <dt>방패 효과</dt>
+                  <dt><TileTypeIcon type="SHIELD" />방패 효과</dt>
                   <dd>{stats.shieldEffectPct}%</dd>
                 </div>
                 <div>
-                  <dt>회복 효과</dt>
+                  <dt><TileTypeIcon type="HEAL" />회복 효과</dt>
                   <dd>{stats.healEffectPct}%</dd>
                 </div>
                 <div>
-                  <dt>마력 획득</dt>
+                  <dt><TileTypeIcon type="MANA" />마력 획득</dt>
                   <dd>{stats.manaGainPct}%</dd>
                 </div>
               </dl>
@@ -267,6 +276,7 @@ export function MercenaryCollectionScreen({
       <div className="collection-controls">
         <label className="mercenary-search">
           <span className="sr-only">용병 검색</span>
+          <GameIcon name="search" />
           <input
             value={query}
             type="search"
@@ -320,7 +330,7 @@ export function MercenaryCollectionScreen({
         <div className="collection-result-row">
           <span>결과 {filtered.length}명</span>
           <button type="button" className="text-button" onClick={reset}>
-            필터 초기화
+            <GameIcon name="reset" /> 필터 초기화
           </button>
         </div>
       </div>
@@ -345,7 +355,15 @@ export function MercenaryCollectionScreen({
                 }}
               >
                 <span className="collection-portrait">
-                  <CharacterPortrait src={character.portraitAsset} alt="" />
+                  <CharacterPortrait
+                    src={character.portraitAsset}
+                    alt=""
+                    variant="card"
+                    characterId={character.id}
+                    shortName={character.shortName}
+                    rarity={character.rarity}
+                    role={character.role}
+                  />
                   {currentPlacement && <em>{currentPlacement}</em>}
                 </span>
                 <span className="collection-card-copy">
@@ -416,17 +434,17 @@ function LoadoutSlotCard({
       type="button"
       role="tab"
       aria-selected={selected}
-      className={`loadout-slot-card ${selected ? 'selected' : ''}`}
+      className={`loadout-slot-card loadout-slot-${slot.role} ${selected ? 'selected' : ''}`}
       onClick={onSelect}
     >
       <span className="slot-check" aria-hidden="true">
-        {selected ? '✓' : ''}
+        {selected ? <GameIcon name="check" /> : null}
       </span>
       <small>
         {slot.label}
         {changed && <em>변경</em>}
       </small>
-      <CharacterPortrait src={character.portraitAsset} alt="" />
+      <CharacterPortrait src={character.portraitAsset} alt="" variant={slot.role === 'combatant' ? 'combat' : 'support'} characterId={character.id} shortName={character.shortName} rarity={character.rarity} role={character.role} />
       <strong>{character.shortName}</strong>
       <b>{ability?.name ?? '능력 정보 없음'}</b>
     </button>
@@ -463,7 +481,7 @@ function CandidateCard({
       title={reason}
       onClick={onSelect}
     >
-      <CharacterPortrait src={character.portraitAsset} alt="" />
+      <CharacterPortrait src={character.portraitAsset} alt="" variant="card" characterId={character.id} shortName={character.shortName} rarity={character.rarity} role={character.role} />
       <span>
         <strong>
           {character.shortName}
@@ -496,7 +514,7 @@ function UnsavedChangesDialog({
         aria-modal="true"
         aria-labelledby="unsaved-title"
       >
-        <span aria-hidden="true">!</span>
+        <GameIcon name="warning" />
         <h2 id="unsaved-title">편성 변경을 저장하지 않고 나가시겠습니까?</h2>
         <p>변경한 출전 슬롯은 저장되지 않습니다.</p>
         <div>
@@ -619,7 +637,7 @@ export function LoadoutEditorScreen({
     >
       <header className="loadout-screen-header">
         <button className="loadout-back" aria-label="출전 편성 닫기" onClick={requestExit}>
-          ←
+          <GameIcon name="back" />
         </button>
         <div>
           <small>DEPLOYMENT</small>

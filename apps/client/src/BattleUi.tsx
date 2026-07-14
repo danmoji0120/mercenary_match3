@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { AbilityRuntimeSnapshot, BattleLoadoutSnapshot, BattleResult, BattleSnapshot, BattleStats, EffectRuntimeSnapshot, PublicParticipant, StatusSnapshot } from '@mercenary/shared';
 import type { BattlePresentationEvent, FeedbackOwner } from './battle-presentation';
 import { CharacterPortrait } from './CharacterPortrait';
+import { GameIcon, TileTypeIcon, type GameIconName } from './GameUi';
 
 export function ResourceBar({ value, max, kind, label }: { value: number; max: number; kind: 'hp' | 'shield' | 'mana'; label: string }) {
   const percent = Math.max(0, Math.min(100, value / max * 100));
@@ -19,7 +20,7 @@ export function SupportAbilityIcon({ portrait, name, runtime, cooldownMs, active
   const completed = Boolean(runtime?.usedThisBattle && cooldownMs === 0);
   const [open, setOpen] = useState(false);
   useEffect(() => { if (!open) return; const close = (event: KeyboardEvent) => { if (event.key === 'Escape') setOpen(false) }; addEventListener('keydown', close); return () => removeEventListener('keydown', close) }, [open]);
-  return <span className="support-anchor"><button type="button" className={`support-icon ${active ? 'triggered' : ''} ${completed ? 'completed' : ''}`} aria-label={`${name}${remaining ? `, ${remaining}초 쿨다운` : completed ? ', 사용 완료' : ''}`} aria-expanded={open} onClick={() => setOpen((value) => !value)}><CharacterPortrait src={portrait} alt="" eager/>{remaining > 0 && <b>{remaining}</b>}{completed && <b aria-hidden="true">✓</b>}</button>{open && <span className="icon-popover" role="tooltip"><strong>{name}</strong>{remaining > 0 ? `${remaining}초 후 준비` : completed ? '이 전투에서 사용 완료' : '발동 준비'}</span>}</span>;
+  return <span className="support-anchor"><button type="button" className={`support-icon ${active ? 'triggered' : ''} ${completed ? 'completed' : ''}`} aria-label={`${name}${remaining ? `, ${remaining}초 쿨다운` : completed ? ', 사용 완료' : ''}`} aria-expanded={open} onClick={() => setOpen((value) => !value)}><CharacterPortrait src={portrait} alt="" eager variant="support" shortName={name}/>{remaining > 0 && <b>{remaining}</b>}{completed && <b aria-hidden="true"><GameIcon name="check" /></b>}</button>{open && <span className="icon-popover" role="tooltip"><strong>{name}</strong>{remaining > 0 ? `${remaining}초 후 준비` : completed ? '이 전투에서 사용 완료' : '발동 준비'}</span>}</span>;
 }
 
 function StatusIcon({ status, selfId }: { status: StatusSnapshot; selfId: string }) {
@@ -27,7 +28,7 @@ function StatusIcon({ status, selfId }: { status: StatusSnapshot; selfId: string
   const positive = status.sourceParticipantId === status.targetParticipantId, [open, setOpen] = useState(false);
   useEffect(() => { if (!open) return; const close = (event: KeyboardEvent) => { if (event.key === 'Escape') setOpen(false) }; addEventListener('keydown', close); return () => removeEventListener('keydown', close) }, [open]);
   const owner = status.targetParticipantId === selfId ? '나' : '상대';
-  return <span className="status-anchor"><button className={`status-icon ${positive ? 'positive' : 'negative'}`} aria-label={`${owner} ${status.name}, ${positive ? '이로운' : '해로운'} 상태, ${seconds}초`} aria-expanded={open} onClick={() => setOpen((value) => !value)}><span aria-hidden="true">{positive ? '▲' : '▼'}</span><b>{seconds}</b>{status.stackCount > 1 && <em>×{status.stackCount}</em>}</button>{open && <span className="icon-popover" role="tooltip"><strong>{status.name}</strong>{seconds}초 남음{status.stackCount > 1 ? ` · ${status.stackCount}중첩` : ''}</span>}</span>;
+  return <span className="status-anchor"><button className={`status-icon ${positive ? 'positive' : 'negative'}`} aria-label={`${owner} ${status.name}, ${positive ? '이로운' : '해로운'} 상태, ${seconds}초`} aria-expanded={open} onClick={() => setOpen((value) => !value)}><span aria-hidden="true"><GameIcon name={positive ? 'check' : 'warning'} /></span><b>{seconds}</b>{status.stackCount > 1 && <em>×{status.stackCount}</em>}</button>{open && <span className="icon-popover" role="tooltip"><strong>{status.name}</strong>{seconds}초 남음{status.stackCount > 1 ? ` · ${status.stackCount}중첩` : ''}</span>}</span>;
 }
 
 export function StatusIconList({ runtime, selfId }: { runtime?: EffectRuntimeSnapshot; selfId: string }) {
@@ -50,7 +51,8 @@ export function BattleTimer({ snapshot, clockOffset }: { snapshot: BattleSnapsho
 }
 
 export function CombatFeedbackLayer({ events }: { events: BattlePresentationEvent[] }) {
-  const render = (owner: FeedbackOwner) => <div className={`feedback-stack ${owner}`} data-testid={`feedback-${owner}`} aria-live="polite">{events.filter((event) => event.owner === owner).map((event) => <output key={event.id} className={`feedback ${event.category}`}><span aria-hidden="true">{event.icon}</span><b>{event.label}</b>{typeof event.amount === 'number' && <strong>{event.amount > 0 ? '+' : ''}{event.amount}</strong>}</output>)}</div>;
+  const iconFor = (category: BattlePresentationEvent['category']): GameIconName => category === 'mana_gain' ? 'mana' : category === 'heal' ? 'heal' : category === 'shield_gain' || category === 'shield_damage' || category === 'shield_broken' ? 'shield' : category === 'status_applied' || category === 'status_expired' ? 'info' : 'sword';
+  const render = (owner: FeedbackOwner) => <div className={`feedback-stack ${owner}`} data-testid={`feedback-${owner}`} aria-live="polite">{events.filter((event) => event.owner === owner).map((event) => <output key={event.id} className={`feedback ${event.category}`}><span aria-hidden="true"><GameIcon name={iconFor(event.category)} /></span><b>{event.label}</b>{typeof event.amount === 'number' && <strong>{event.amount > 0 ? '+' : ''}{event.amount}</strong>}</output>)}</div>;
   return <div className="feedback-layer">{render('opponent')}{render('common')}{render('self')}</div>;
 }
 
@@ -60,7 +62,7 @@ export function ActiveSkillControl({ snapshot, connected, pending, onUse }: { sn
   const disabled = !connected || snapshot.phase !== 'PLAYING' || pending || snapshot.self.gauge < cost;
   const [open, setOpen] = useState(false);
   useEffect(() => { if (!open) return; const close = (event: KeyboardEvent) => { if (event.key === 'Escape') setOpen(false) }; addEventListener('keydown', close); return () => removeEventListener('keydown', close) }, [open]);
-  return <section className="skill-control"><div className="mana-readout"><span>◆ 마력</span><b>{snapshot.self.gauge} / 100</b><ResourceBar value={snapshot.self.gauge} max={100} kind="mana" label="내 마력"/></div><button data-testid="skill" className={disabled ? '' : 'ready'} disabled={disabled} aria-label={`${ability?.name ?? '액티브 스킬'}, ${reason}`} onClick={onUse}><strong>{pending ? '요청 중...' : ability?.name ?? '액티브 스킬'}</strong><span>{reason}</span></button><button className="skill-info" aria-label="스킬 정보" aria-expanded={open} onClick={() => setOpen((value) => !value)}>i</button>{open && <div className="skill-popover" role="dialog" aria-label="스킬 정보"><strong>{ability?.name}</strong><p>{ability?.shortDescription}</p><small>마력 {cost}</small></div>}</section>;
+  return <section className="skill-control"><div className="mana-readout"><span><TileTypeIcon type="MANA" /> 마력</span><b>{snapshot.self.gauge} / 100</b><ResourceBar value={snapshot.self.gauge} max={100} kind="mana" label="내 마력"/></div><button data-testid="skill" className={disabled ? '' : 'ready'} disabled={disabled} aria-label={`${ability?.name ?? '액티브 스킬'}, ${reason}`} onClick={onUse}><strong>{pending ? '요청 중...' : ability?.name ?? '액티브 스킬'}</strong><span>{reason}</span></button><button className="skill-info" aria-label="스킬 정보" aria-expanded={open} onClick={() => setOpen((value) => !value)}><GameIcon name="info" /></button>{open && <div className="skill-popover" role="dialog" aria-label="스킬 정보"><strong>{ability?.name}</strong><p>{ability?.shortDescription}</p><small>마력 {cost}</small></div>}</section>;
 }
 
 type NumericBattleStatKey = { [Key in keyof BattleStats]: BattleStats[Key] extends number ? Key : never }[keyof BattleStats];

@@ -20,60 +20,56 @@ import {
 } from './account';
 
 const currencyById = new Map(CURRENCY_METADATA.map((currency) => [currency.id, currency]));
+const currencyIconName = (iconKey: string): GameIconName => iconKey === 'contract' ? 'contract' : 'coin';
 export function formatCompactBalance(value: number) {
   if (value < 1_000) return String(value);
   if (value < 1_000_000) return `${Number((value / 1_000).toFixed(1))}K`;
   return `${Number((value / 1_000_000).toFixed(1))}M`;
 }
 
-export function GameIcon({ name }: { name: string }) {
-  if (name === 'coin')
-    return (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="12" r="8" />
-        <path d="M9 9h6M9 15h6M12 7v10" />
-      </svg>
-    );
-  if (name === 'contract')
-    return (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M7 3h10l3 4-8 14L4 7l3-4Z" />
-        <path d="m7 3 5 5 5-5M4 7h16" />
-      </svg>
-    );
-  if (name === 'roster' || name === 'profile')
-    return (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="8" r="4" />
-        <path d="M5 21c0-4 3-7 7-7s7 3 7 7" />
-      </svg>
-    );
-  if (name === 'formation')
-    return (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="6" r="3" />
-        <circle cx="6" cy="17" r="3" />
-        <circle cx="18" cy="17" r="3" />
-        <path d="m10 9-3 5m7-5 3 5" />
-      </svg>
-    );
-  if (name === 'home')
-    return (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="m3 11 9-8 9 8v10h-6v-7H9v7H3V11Z" />
-      </svg>
-    );
-  if (name === 'tools')
-    return (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="m14 6 4-4 4 4-4 4M2 22l9-9M4 4l16 16" />
-      </svg>
-    );
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M12 3 4 8v8l8 5 8-5V8l-8-5Z" />
-    </svg>
-  );
+export type GameIconName =
+  | 'active' | 'back' | 'battle' | 'bot' | 'check' | 'close' | 'coin' | 'contract'
+  | 'filter' | 'formation' | 'heal' | 'home' | 'hp' | 'info' | 'mana' | 'profile'
+  | 'reset' | 'roster' | 'search' | 'shield' | 'sort' | 'support' | 'sword'
+  | 'tools' | 'volume' | 'volume-off' | 'warning';
+
+const iconPaths: Record<GameIconName, ReactNode> = {
+  coin: <><circle cx="12" cy="12" r="8" /><path d="M9 9h6M9 15h6M12 7v10" /></>,
+  contract: <><path d="M7 3h10l3 4-8 14L4 7l3-4Z" /><path d="m7 3 5 5 5-5M4 7h16" /></>,
+  profile: <><circle cx="12" cy="8" r="4" /><path d="M5 21c0-4 3-7 7-7s7 3 7 7" /></>,
+  roster: <><circle cx="9" cy="8" r="3" /><circle cx="17" cy="9" r="2" /><path d="M3 20c0-4 2.5-7 6-7s6 3 6 7M14 14c3 0 5 2 5 5" /></>,
+  formation: <><circle cx="12" cy="6" r="3" /><circle cx="6" cy="17" r="3" /><circle cx="18" cy="17" r="3" /><path d="m10 9-3 5m7-5 3 5" /></>,
+  home: <path d="m3 11 9-8 9 8v10h-6v-7H9v7H3V11Z" />,
+  tools: <><path d="m14 6 4-4 4 4-4 4M2 22l9-9M4 4l16 16" /></>,
+  close: <path d="M5 5 19 19M19 5 5 19" />,
+  back: <path d="m15 5-7 7 7 7M8 12h12" />,
+  search: <><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></>,
+  filter: <path d="M4 5h16l-6 7v6l-4 2v-8L4 5Z" />,
+  sort: <path d="M8 5h11M8 12h8M8 19h5M4 4v16m0 0-2-2m2 2 2-2" />,
+  reset: <path d="M4 7v5h5M5.5 17A8 8 0 1 0 5 7.5L4 12" />,
+  check: <path d="m4 12 5 5L20 6" />,
+  warning: <><path d="M12 3 2.5 20h19L12 3Z" /><path d="M12 9v5m0 3v.1" /></>,
+  info: <><circle cx="12" cy="12" r="9" /><path d="M12 11v6m0-10v.1" /></>,
+  active: <path d="m13 2-8 12h6l-1 8 9-13h-6V2Z" />,
+  support: <><circle cx="8" cy="9" r="3" /><circle cx="16" cy="9" r="3" /><path d="M3 20c0-4 2-6 5-6s5 2 5 6M11 20c0-4 2-6 5-6s5 2 5 6" /></>,
+  battle: <path d="m5 4 14 16M19 4 5 20M5 4l4 1-3 3m13-4-4 1 3 3" />,
+  bot: <><rect x="4" y="6" width="16" height="13" rx="3" /><path d="M12 3v3M8 12h.1M16 12h.1M9 16h6" /></>,
+  hp: <path d="M12 21S4 16.5 4 10a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6.5-8 11-8 11Z" />,
+  sword: <path d="m14 4 6-2-2 6L9 17l-2-2 7-11ZM5 14l5 5M4 20l3-3" />,
+  shield: <path d="M12 3 19 6v5c0 4.7-2.8 8-7 10-4.2-2-7-5.3-7-10V6l7-3Z" />,
+  heal: <path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6V3Z" />,
+  mana: <path d="M12 2 5 12l7 10 7-10-7-10Zm0 4v12" />,
+  volume: <><path d="M4 10h4l5-4v12l-5-4H4v-4Z" /><path d="M16 9c1.5 1.5 1.5 4.5 0 6m3-9c3 3 3 9 0 12" /></>,
+  'volume-off': <><path d="M4 10h4l5-4v12l-5-4H4v-4ZM17 10l5 5m0-5-5 5" /></>,
+};
+
+export function GameIcon({ name, className = '' }: { name: GameIconName; className?: string }) {
+  return <svg className={className} viewBox="0 0 24 24" aria-hidden="true">{iconPaths[name]}</svg>;
+}
+
+export function TileTypeIcon({ type }: { type: 'SWORD' | 'SHIELD' | 'HEAL' | 'MANA' }) {
+  const icon = type.toLowerCase() as 'sword' | 'shield' | 'heal' | 'mana';
+  return <span className={`tile-type-icon tile-${icon}`} aria-hidden="true"><GameIcon name={icon} /></span>;
 }
 
 export function CurrencyChip({
@@ -95,7 +91,7 @@ export function CurrencyChip({
       title={`${metadata.displayName} ${full}`}
       onClick={onClick}
     >
-      <GameIcon name={metadata.iconKey} />
+      <GameIcon name={currencyIconName(metadata.iconKey)} />
       <b>{formatCompactBalance(value)}</b>
     </button>
   );
@@ -156,7 +152,7 @@ function FocusedSheet({
         <header>
           <h2 id="sheet-title">{title}</h2>
           <button ref={close} className="icon-button" aria-label="닫기" onClick={onClose}>
-            ×
+            <GameIcon name="close" />
           </button>
         </header>
         {children}
@@ -178,7 +174,7 @@ export function CurrencySheet({
         {CURRENCY_METADATA.map((metadata) => (
           <div key={metadata.id}>
             <span className={`currency-icon ${metadata.iconKey}`}>
-              <GameIcon name={metadata.iconKey} />
+              <GameIcon name={currencyIconName(metadata.iconKey)} />
             </span>
             <span>
               <b>{metadata.displayName}</b>
@@ -206,7 +202,8 @@ const DevelopmentToolsSheet = import.meta.env.DEV
       onClose(): void;
     }) {
       const [busy, setBusy] = useState(false),
-        [message, setMessage] = useState('');
+        [message, setMessage] = useState(''),
+        [confirmReset, setConfirmReset] = useState(false);
       const applyPreset = async (preset: DevelopmentCurrencyPreset) => {
         if (busy) return;
         setBusy(true);
@@ -266,11 +263,22 @@ const DevelopmentToolsSheet = import.meta.env.DEV
             <button
               className="danger-button"
               disabled={busy}
-              onClick={() => void applyPreset('reset-currencies')}
+              onClick={() => setConfirmReset(true)}
             >
               재화 초기화
             </button>
           </div>
+          {confirmReset && (
+            <div className="dev-reset-confirm" role="alertdialog" aria-labelledby="dev-reset-title">
+              <GameIcon name="warning" />
+              <div>
+                <b id="dev-reset-title">모든 재화를 0으로 초기화할까요?</b>
+                <p>캐릭터와 편성은 변경되지 않습니다.</p>
+              </div>
+              <button className="secondary-button" disabled={busy} onClick={() => setConfirmReset(false)}>취소</button>
+              <button className="danger-button" disabled={busy} onClick={() => { setConfirmReset(false); void applyPreset('reset-currencies'); }}>초기화</button>
+            </div>
+          )}
           {message && <output role="status">{message}</output>}
         </FocusedSheet>
       );
