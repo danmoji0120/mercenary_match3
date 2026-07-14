@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react';
 import type { BattleSnapshot, PendingAttack, PublicParticipant } from '@mercenary/shared';
 import { BattleTimer, CombatFeedbackLayer, ResourceBar, StatusIconList, SupportAbilityIcon } from './BattleUi';
 import type { BattlePresentationEvent, FeedbackCategory, FeedbackOwner } from './battle-presentation';
+import { CharacterPortrait } from './CharacterPortrait';
 
 type Side = 'self' | 'opponent';
 
@@ -50,7 +51,7 @@ function CharacterFighter({ participant, side, event, activeAbilityId }: { parti
   const active = participant.effectRuntime?.abilities.some((ability) => ability.abilityId === activeAbilityId);
   return <figure key={`${side}:${event?.id ?? 'idle'}:${activeAbilityId}`} className={`stage-fighter ${side} ${reactionClass(event?.category)} ${active ? 'is-casting' : ''}`}>
     <div className="fighter-aura" aria-hidden="true"/>
-    <img src={main.portraitAsset} alt={`${main.name} 전투 캐릭터`}/>
+    <CharacterPortrait src={main.portraitAsset} alt={`${main.name} 전투 캐릭터`} eager/>
     <figcaption><strong>{main.name}</strong><span>{participant.hp <= 250 ? '위기' : participant.shield > 0 ? `보호막 ${participant.shield}` : '전투 중'}</span></figcaption>
   </figure>;
 }

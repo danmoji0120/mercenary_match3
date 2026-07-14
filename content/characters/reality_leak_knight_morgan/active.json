@@ -1,0 +1,37 @@
+{
+  "id": "reality_leak_knight_morgan_active",
+  "kind": "ACTIVE",
+  "displayName": "균열 봉합 실패",
+  "shortDescription": "적에게 185 피해를 주고 2초 뒤 현실 균열이 65 피해를 추가로 준다.",
+  "fullDescription": "적에게 185 피해를 주고 2초 뒤 현실 균열이 65 피해를 추가로 준다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "DAMAGE",
+      "target": "ENEMY",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 185
+      }
+    },
+    {
+      "type": "SCHEDULE",
+      "delayMs": 2000,
+      "effects": [
+        {
+          "type": "DAMAGE",
+          "target": "ENEMY",
+          "amount": {
+            "type": "CONSTANT",
+            "value": 65
+          }
+        }
+      ]
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

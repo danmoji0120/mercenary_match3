@@ -16,7 +16,7 @@ const sorted = (values) => [...new Set(values)].sort();
 function quotedValues(source, pattern) { return sorted([...source.matchAll(pattern)].map((match) => match[1])); }
 function runtimeEvidence() {
   const registrySource = read('apps/server/src/content-registry.ts'), engineSource = read('apps/server/src/effect-engine.ts');
-  const battleSource = read('apps/server/src/battle.ts'), typeSource = read('apps/server/src/effect-types.ts'), builderSource = read('apps/server/src/custom-ability.ts');
+  const battleSource = read('apps/server/src/battle.ts'), typeSource = read('apps/server/src/effect-types.ts'), builderSource = read('apps/server/src/custom-ability.ts'), emitterSource = read('apps/server/src/trigger-emitters.ts');
   const registryEffectsBlock = registrySource.match(/const EFFECT_TYPES = new Set\(\[([\s\S]*?)\]\)/)?.[1] ?? '';
   const registryConditionsBlock = registrySource.match(/const CONDITION_TYPES = new Set\(\[([\s\S]*?)\]\)/)?.[1] ?? '';
   const triggerBlock = typeSource.match(/TRIGGER_TYPES = \[([\s\S]*?)\] as const/)?.[1] ?? '';
@@ -26,16 +26,20 @@ function runtimeEvidence() {
   const fixture = JSON.parse(read('apps/server/tests/fixtures/generated/normalized-content.generated.json'));
   const used = new Set(); const collect = (effects) => { for (const effect of effects ?? []) { used.add(effect.type); collect(effect.effects); collect(effect.elseEffects) } };
   for (const document of [production, fixture]) for (const item of document.packages ?? []) { collect(item.active.effects); collect(item.support.effects) }
-  const testEvidence = recursiveText(path.resolve('apps/server/tests'));
+  const testEvidence = recursiveText(path.resolve('apps/server/tests')), coverageBlock = testEvidence.match(/RUNTIME_EFFECT_FIXTURE_TYPES\s*=\s*\[([\s\S]*?)\]\s*as const/)?.[1] ?? '';
+  const publicEmitterCall = /(?:emitPublic|emitOpponentPublic|emitPublicForBoth)\('([^']+)'/g;
+  const emittedEvents = sorted([...battleSource.matchAll(publicEmitterCall), ...engineSource.matchAll(publicEmitterCall)].map((match) => match[1]));
   return {
     allowedRuntimeEffects: quotedValues(registryEffectsBlock, /'([^']+)'/g),
     allowedRuntimeConditions: quotedValues(registryConditionsBlock, /'([^']+)'/g),
     executorEffects: quotedValues(engineSource, /effect\.type === '([^']+)'/g),
     triggerTypes: quotedValues(triggerBlock, /'([^']+)'/g),
-    emittedTriggers: sorted([...battleSource.matchAll(/effects\.dispatch\('([^']+)'/g), ...engineSource.matchAll(/this\.dispatch\('([^']+)'/g)].map((match) => match[1])),
+    emittedEvents,
+    emittedTriggers: sorted(emittedEvents.map((event) => schema.TRIGGER_MAP[event]).filter(Boolean)),
+    canonicalEmitterEvents: sorted([...emitterSource.matchAll(/^\s{2}([A-Z][A-Z0-9_]+):/gm)].map((match) => match[1])),
     originTypes: quotedValues(originBlock, /'([^']+)'/g),
     customCommands: sorted([...builderBlock.matchAll(/^\s{2}([a-zA-Z][a-zA-Z0-9]*)\(/gm)].map((match) => match[1])),
-    verifiedRuntimeEffects: sorted([...used, ...quotedValues(testEvidence, /"type"\s*:\s*"([a-z_]+)"/g)]),
+    verifiedRuntimeEffects: sorted([...used, ...quotedValues(coverageBlock, /'([a-z_]+)'/g)]),
   };
 }
 
@@ -55,9 +59,9 @@ const examples = Object.freeze({
   customHandler: { kind: 'ACTIVE', custom: true, ability: { manaCost: 100, effects: [{ type: 'CUSTOM', handlerId: 'example_character.handler', parameters: { shield: 10 } }] } },
   manaModification: { kind: 'ACTIVE', ability: { manaCost: 0, effects: [{ type: 'MODIFY_MANA', target: 'SELF', amount: constant(10), resultKey: 'manaGain' }] } },
   statusApplyAndRemove: { kind: 'ACTIVE', ability: { manaCost: 100, effects: [{ type: 'APPLY_STATUS', target: 'SELF', statusId: 'damage_reduction', durationMs: 1000, resultKey: 'applied' }, { type: 'REMOVE_STATUS', target: 'SELF', statusId: 'damage_reduction' }] } },
-  runtimeFlags: { kind: 'ACTIVE', ability: { manaCost: 100, effects: [{ type: 'SET_RUNTIME_FLAG', flag: 'example.flag', value: true }, { type: 'CLEAR_RUNTIME_FLAG', flag: 'example.flag' }] } },
-  storedValue: { kind: 'ACTIVE', ability: { manaCost: 100, effects: [{ type: 'STORE_VALUE', value: constant(42), resultKey: 'stored' }, { type: 'ADD_SHIELD', target: 'SELF', amount: { type: 'RESULT_VALUE', resultKey: 'stored', path: 'finalAmount' } }] } },
-  eventModification: { kind: 'SUPPORT', ability: { trigger: { event: 'BEFORE_ATTACK_IMPACT' }, cooldownMs: 0, battleLimit: null, chainLimit: null, effects: [{ type: 'MODIFY_EVENT', ratio: 0.8, amount: constant(0), resultKey: 'modified' }] } },
+  runtimeFlags: { kind: 'ACTIVE', ability: { manaCost: 100, effects: [{ type: 'SET_RUNTIME_FLAG', flag: 'example.flag', value: true, resultKey: 'setFlag' }, { type: 'CLEAR_RUNTIME_FLAG', flag: 'example.flag', resultKey: 'clearedFlag' }] } },
+  storedValue: { kind: 'ACTIVE', ability: { manaCost: 100, effects: [{ type: 'STORE_VALUE', scope: 'BATTLE', key: 'example.stored', operation: 'SET', value: constant(42), resultKey: 'stored' }, { type: 'ADD_SHIELD', target: 'SELF', amount: { type: 'RUNTIME_VALUE', scope: 'BATTLE', target: 'SELF', key: 'example.stored', defaultValue: constant(0) } }] } },
+  eventModification: { kind: 'SUPPORT', ability: { trigger: { event: 'BEFORE_ATTACK_IMPACT' }, cooldownMs: 0, battleLimit: null, chainLimit: null, effects: [{ type: 'MODIFY_EVENT', path: 'damage.currentAmount', operation: 'MULTIPLY', value: constant(0.8), resultKey: 'modified' }] } },
   overhealConversion: { kind: 'ACTIVE', ability: { manaCost: 100, effects: [{ type: 'HEAL', target: 'SELF', amount: constant(100), resultKey: 'heal' }, { type: 'CONVERT_OVERHEAL_TO_SHIELD', target: 'SELF', condition: { type: 'RESULT_COMPARE', resultKey: 'heal', path: 'overhealing', operator: 'GT', value: 0 }, ratio: 0.5, maximum: 50 }] } },
 });
 
@@ -76,7 +80,7 @@ function validateExamples() {
       const active = example.kind === 'ACTIVE' ? completeAbility('ACTIVE', `${packageId}_active`, exampleAbility) : completeAbility('ACTIVE', `${packageId}_active`, { manaCost: 100, effects: [{ type: 'DAMAGE', target: 'ENEMY', amount: constant(1) }] });
       const support = example.kind === 'SUPPORT' ? completeAbility('SUPPORT', `${packageId}_support`, exampleAbility) : completeAbility('SUPPORT', `${packageId}_support`, { trigger: { event: 'BATTLE_STARTED' }, cooldownMs: 0, battleLimit: null, chainLimit: null, effects: [{ type: 'ADD_SHIELD', target: 'SELF', amount: constant(1) }] });
       const manifest = { id: packageId, schemaVersion: 1, engineApiVersion: 1, characterFile: './character.json', activeFile: './active.json', supportFile: './support.json', ...(example.custom ? { serverModule: './server.ts' } : {}) };
-      const character = { id: packageId, displayName: name, shortName: name, rarity: 'R', race: 'TEST', role: 'SUPPORT', combatStyle: 'TEST', stats: { maxHp: 1000, swordEffectPct: 100, shieldEffectPct: 100, healEffectPct: 100, manaGainPct: 100 }, activeAbilityId: active.id, supportAbilityId: support.id, tags: ['TEST'], description: { summary: name, details: name }, enabled: true, starter: false, contentVersion: 1, allowedSlots: ['combatant', 'support'], recommendedRole: 'support', portraitAsset: '/characters/test.svg' };
+      const character = { id: packageId, displayName: name, shortName: name, rarity: 'R', race: 'TEST', role: 'SUPPORT', combatStyle: 'TEST', stats: { maxHp: 1000, swordEffectPct: 100, shieldEffectPct: 100, healEffectPct: 100, manaGainPct: 100 }, activeAbilityId: active.id, supportAbilityId: support.id, tags: ['TEST'], description: { summary: name, details: name }, enabled: true, starter: false, contentVersion: 1, allowedSlots: ['combatant', 'support'], recommendedRole: 'support', assets: {} };
       for (const [file, value] of [['manifest.json', manifest], ['character.json', character], ['active.json', active], ['support.json', support]]) writeFileSync(path.join(packageDir, file), json(value), 'utf8');
       if (example.custom) writeFileSync(path.join(packageDir, 'server.ts'), `export const characterServerModule = { characterId: '${packageId}', handlers: [{ id: '${packageId}.handler', execute() { return { commands: [] }; } }] };\n`, 'utf8');
       compileContent({ root: temporary, write: false });
@@ -98,6 +102,7 @@ function valueExample(type) {
   if (type === 'RESOURCE') return { type, target: 'SELF', resource: 'HP_RATIO' };
   if (type === 'EVENT_VALUE') return { type, path: 'match.count' };
   if (type === 'RESULT_VALUE') return { type, resultKey: 'previous', path: 'finalAmount' };
+  if (type === 'RUNTIME_VALUE') return { type, scope: 'BATTLE', target: 'SELF', key: 'example.counter', defaultValue: constant(0) };
   if (['ADD', 'SUBTRACT', 'MULTIPLY', 'DIVIDE', 'MIN', 'MAX'].includes(type)) return values;
   if (type === 'CLAMP') return { type, value: constant(5), min: constant(0), max: constant(10) };
   return unary;
@@ -120,12 +125,15 @@ function triggerExample(event) {
 }
 
 const triggerDescriptions = Object.freeze({
+  ACTIVE_USED: { timing: 'after an active ability is accepted', actor: 'active ability owner', target: 'opponent', payload: ['skillId', 'serverTime'] },
   AFTER_DAMAGE: { timing: 'after', actor: 'attacker', target: 'damaged participant', payload: ['shieldBefore', 'shieldAfter', 'hpBefore', 'hpAfter', 'shieldBroken'] },
   BATTLE_STARTED: { timing: 'after countdown', actor: 'each participant', target: 'opponent', payload: ['serverTime'] },
   BEFORE_ATTACK_IMPACT: { timing: 'before impact (within 150ms)', actor: 'defender/support owner', target: 'attacker', payload: ['attackId', 'currentAmount', 'sourceType', 'sourceTags'] },
   DEFEATED: { timing: 'after result decided', actor: 'each participant', target: 'opponent', payload: ['serverTime'] },
   HP_THRESHOLD_CROSSED: { timing: 'after damage', actor: 'damaged participant', target: 'attacker', payload: ['hpThresholdCrossed'] },
+  SHIELD_GAINED: { timing: 'after enemy actual shield gain is known', actor: 'opposing support owner', target: 'shield recipient', payload: ['shieldRequestedAmount', 'shieldActualAmount', 'shieldOvercapAmount', 'shieldBefore', 'shieldAfter'] },
   SHIELD_BROKEN: { timing: 'after damage', actor: 'damaged participant', target: 'attacker', payload: ['shieldBroken', 'shieldBefore', 'shieldAfter'] },
+  STATUS_REMOVED: { timing: 'after removal and before status runtime-value cleanup', actor: 'both support owners', target: 'status owner or counterpart', payload: ['statusId', 'statusPreviousStacks', 'statusRemovalReason', 'statusWasExpired'] },
   TILE_MATCH_RESOLVED: { timing: 'after base tile effects are applied', actor: 'board owner', target: 'opponent', payload: ['tileType', 'matchedTileCount', 'chainLevel', 'scopeKey'] },
 });
 
@@ -140,7 +148,7 @@ function buildManifest() {
   const evidence = runtimeEvidence(), emitted = new Set(evidence.emittedTriggers), executors = new Set(evidence.executorEffects), allowedRuntime = new Set(evidence.allowedRuntimeEffects);
   const verified = new Set(evidence.verifiedRuntimeEffects);
   const effects = Object.fromEntries(schema.EFFECT_TYPES.map((type) => { const runtimeType = schema.EFFECT_RUNTIME_MAP[type], fields = schema.EFFECT_FIELDS[type], executable = runtimeType && allowedRuntime.has(runtimeType) && executors.has(runtimeType); return [type, { supportStatus: executable && verified.has(runtimeType) ? 'SUPPORTED' : executable ? 'RUNTIME_PATH_PRESENT_UNVERIFIED' : runtimeType && allowedRuntime.has(runtimeType) ? 'VALIDATION_ONLY_UNSUPPORTED_RUNTIME' : 'UNSUPPORTED', runtimeType, requiredFields: fields.required, optionalFields: fields.optional, targetValues: [...fields.required, ...fields.optional].includes('target') ? schema.TARGETS : [], amountType: fields.required.includes('amount') || fields.optional.includes('amount') ? 'ValueExpression' : null, conditionSupported: [...fields.required, ...fields.optional].includes('condition'), resultKeySupported: fields.optional.includes('resultKey'), resultSchema: fields.returns ? schema.RESULT_SCHEMAS[fields.returns] ?? [] : [], exampleValidatorStatus: 'PASSED', example: exampleForEffect(type), note: fields.note ?? null }] }));
-  const triggers = Object.fromEntries(Object.entries(schema.TRIGGER_MAP).sort(([a], [b]) => a.localeCompare(b)).map(([event, runtimeType]) => [event, { runtimeType, supportStatus: emitted.has(runtimeType) ? 'EMITTED_AND_SUPPORTED' : evidence.triggerTypes.includes(runtimeType) ? 'TYPE_DEFINED_NOT_EMITTED' : 'UNSUPPORTED', eventPaths: Object.entries(schema.EVENT_PATH_CAPABILITIES).filter(([, detail]) => detail.availableEvents.includes(event)).map(([pathName]) => pathName).sort(), ...(triggerDescriptions[event] ?? { timing: 'not emitted', actor: 'undefined for content', target: 'undefined for content', payload: [] }), originType: 'Inherited from the triggering effect when present', exampleValidatorStatus: 'PASSED', example: triggerExample(event) }]));
+  const triggers = Object.fromEntries(Object.entries(schema.TRIGGER_MAP).sort(([a], [b]) => a.localeCompare(b)).map(([event, runtimeType]) => [event, { runtimeType, supportStatus: emitted.has(runtimeType) && evidence.canonicalEmitterEvents.includes(event) ? 'EMITTED_AND_SUPPORTED' : evidence.triggerTypes.includes(runtimeType) ? 'TYPE_DEFINED_NOT_EMITTED' : 'UNSUPPORTED', eventPaths: Object.entries(schema.EVENT_PATH_CAPABILITIES).filter(([, detail]) => detail.availableEvents.includes(event)).map(([pathName]) => pathName).sort(), ...(triggerDescriptions[event] ?? { timing: 'See canonical trigger emitter registry.', actor: 'support owner', target: 'event counterpart', payload: [] }), originType: 'Inherited from the triggering effect when present', exampleValidatorStatus: 'PASSED', example: triggerExample(event) }]));
   const resources = Object.fromEntries(schema.RESOURCES.map((resource) => [resource, { readable: true, modifiable: resource !== 'HP_RATIO', consumable: schema.CONSUMABLE_RESOURCES.includes(resource) }]));
   const runtimeInternalEffects = evidence.allowedRuntimeEffects.filter((type) => !Object.values(schema.EFFECT_RUNTIME_MAP).includes(type)).map((type) => ({ type, supportStatus: executors.has(type) ? 'RUNTIME_INTERNAL_ONLY' : 'VALIDATION_ONLY_UNSUPPORTED_RUNTIME' }));
   return stable({
@@ -148,9 +156,10 @@ function buildManifest() {
     generatedWarning: 'AUTO-GENERATED FILE. DO NOT EDIT.',
     sources: ['scripts/content-schema-metadata.mjs', 'scripts/content-compiler.mjs', 'apps/server/src/content-registry.ts', 'apps/server/src/effect-engine.ts', 'apps/server/src/effect-types.ts', 'apps/server/src/custom-ability.ts'],
     idRules: { packageIdPattern: schema.PACKAGE_ID.source, characterId: 'must equal package and folder ID', abilityIdPattern: schema.ABILITY_ID.source, customHandlerNamespaceRequired: true, requiredFiles: ['manifest.json', 'character.json', 'active.json', 'support.json'], optionalFiles: ['presentation.json', 'server.ts'], pathTraversalForbidden: true, globalDuplicatesRejected: ['characterId', 'abilityId', 'customHandlerId'] },
-    character: { fields: schema.CHARACTER_FIELDS, statsPolicy: { boardOwner: 'combatant slot only', neutralPercentage: 100, rounding: 'Math.round after match-size, chain, and frenzy calculation', appliesTo: ['base SWORD tile damage', 'base SHIELD tile shield', 'base HEAL tile healing', 'base MANA tile gain'], doesNotApplyTo: ['active effects', 'support effects', 'status effects', 'scheduled effects', 'custom commands'] } },
+    character: { fields: schema.CHARACTER_FIELDS, portraitPolicy: { optional: true, acceptedFormats: ['PNG', 'JPEG', 'WebP'], maximumBytes: 8388608, source: 'package-local path only', output: '/generated/characters/<characterId>/portrait.<sha256-12>.<ext>', fallback: 'shared CSS portrait fallback when omitted or load fails', svgPackageAssets: 'unsupported' }, statsPolicy: { boardOwner: 'combatant slot only', neutralPercentage: 100, rounding: 'Math.round after match-size, chain, and frenzy calculation', appliesTo: ['base SWORD tile damage', 'base SHIELD tile shield', 'base HEAL tile healing', 'base MANA tile gain'], doesNotApplyTo: ['active effects', 'support effects', 'status effects', 'scheduled effects', 'custom commands'] } },
     abilities: { fields: schema.ABILITY_FIELDS, cooldownUnit: 'milliseconds', battleLimit: 'null or positive integer', chainLimit: 'null or {maxTriggers: positive integer}; enforced per runtimeKey and scopeKey' },
     targets: schema.TARGETS, tileTypes: parseSharedTileTypes(), resources, stats: schema.STATS, roles: schema.ROLES, rarities: schema.RARITIES,
+    runtimeValues: { keyPattern: schema.RUNTIME_VALUE_KEY.source, scopes: schema.RUNTIME_VALUE_SCOPES, operations: schema.RUNTIME_VALUE_OPERATIONS, explicitDefaultRequired: true, valueType: 'finite number', lifecycle: { BATTLE: 'cleared when battle runtime finishes', ABILITY: 'namespaced by the executing ability and cleared with battle runtime', STATUS: 'readable during STATUS_REMOVED dispatch, then cleared with the status', CHAIN: 'cleared when the current chain completes' }, snapshot: 'deterministically sorted and restored; missing legacy field becomes an empty store' },
     operators: { comparison: schema.OPERATORS }, valueExpressions: Object.fromEntries(schema.VALUE_TYPES.map((type) => [type, { ...schema.VALUE_FIELDS[type], example: valueExample(type) }])), conditions: Object.fromEntries(schema.CONDITION_TYPES.map((type) => [type, { ...schema.CONDITION_FIELDS[type], example: conditionExample(type) }])),
     effects, runtimeInternalEffects, triggers, eventPaths: schema.EVENT_PATH_CAPABILITIES, resultSchemas: schema.RESULT_SCHEMAS, resultPathAllowlist: schema.RESULT_PATHS,
     statuses: { idPattern: '^[a-z0-9_]+$', durationUnit: 'milliseconds', refreshPolicies: ['extend', 'ignore', 'refresh', 'replace', 'stack'], definitions: statusCapabilities(), snapshot: 'StatusSnapshot stores id, source/target, stackCount, expiresAt and visibility.' },
@@ -158,7 +167,7 @@ function buildManifest() {
     policies: { copy: schema.COPY_POLICIES, copyPolicyRuntimeUse: 'validated then dropped by the normalizer; no copy primitive currently exists', recursion: schema.RECURSION_POLICIES, recursionPolicyRuntimeUse: 'validated then dropped; hard engine safety rules apply', originTypes: evidence.originTypes, maximumGenerationDepth: 8, copiedEffectsCanBeCopiedAgain: false, convertedEffectsCanBeConvertedAgain: false, sameSupportSelfRetriggerBlocked: true, scheduledRootEventPreserved: true, customRootEventPreserved: true, copyAndConversionPrimitives: 'metadata only; no package Effect primitive' },
     examples: Object.fromEntries(Object.entries(examples).map(([name, value]) => [name, { kind: value.kind, ability: value.ability, validatorStatus: 'PASSED' }])),
     unsupportedFeatures: schema.UNSUPPORTED_FEATURES,
-    evidence: { runtimeTriggerTypes: evidence.triggerTypes, emittedRuntimeTriggers: evidence.emittedTriggers, runtimeAllowedEffects: evidence.allowedRuntimeEffects, runtimeExecutorEffects: evidence.executorEffects, runtimeVerifiedEffects: evidence.verifiedRuntimeEffects, runtimeConditions: evidence.allowedRuntimeConditions },
+    evidence: { runtimeTriggerTypes: evidence.triggerTypes, canonicalEmitterEvents: evidence.canonicalEmitterEvents, emittedPublicEvents: evidence.emittedEvents, emittedRuntimeTriggers: evidence.emittedTriggers, runtimeAllowedEffects: evidence.allowedRuntimeEffects, runtimeExecutorEffects: evidence.executorEffects, runtimeVerifiedEffects: evidence.verifiedRuntimeEffects, runtimeConditions: evidence.allowedRuntimeConditions },
   });
 }
 
@@ -204,6 +213,8 @@ ${table(['Field', 'Type', 'Required', 'Default/note'], Object.entries(manifest.a
 
 ${table(['Name', 'Required fields', 'Returns', 'Runtime errors'], valueRows)}
 Division by zero throws \`VALUE_DIVIDE_BY_ZERO\`. Non-finite results throw. RESULT_VALUE keys must be declared earlier in the current effect scope. EVENT_VALUE availability is event-specific.
+
+Runtime value keys match \`${manifest.runtimeValues.keyPattern}\`. Scopes: ${list(manifest.runtimeValues.scopes)}. Operations: ${list(manifest.runtimeValues.operations)}. Missing reads require an explicit default expression. Battle/ability values live for the battle, status values are cleared after removal dispatch, and chain values are cleared when the chain completes. The store is part of the deterministic effect snapshot.
 
 ${valueExamples}
 

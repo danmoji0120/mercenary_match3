@@ -1,0 +1,59 @@
+{
+  "id": "acid_javelin_nasika_support",
+  "kind": "SUPPORT",
+  "displayName": "후속 투창",
+  "shortDescription": "검을 5개 이상 맞추면 적에게 추가로 48 피해를 준다.",
+  "fullDescription": "검을 5개 이상 맞추면 적에게 추가로 48 피해를 준다.",
+  "trigger": {
+    "event": "TILE_MATCH_RESOLVED",
+    "filter": {
+      "type": "AND",
+      "conditions": [
+        {
+          "type": "COMPARE",
+          "left": {
+            "type": "EVENT_VALUE",
+            "path": "match.tileType"
+          },
+          "operator": "EQ",
+          "right": {
+            "type": "CONSTANT",
+            "value": "SWORD"
+          }
+        },
+        {
+          "type": "COMPARE",
+          "left": {
+            "type": "EVENT_VALUE",
+            "path": "match.count"
+          },
+          "operator": "GTE",
+          "right": {
+            "type": "CONSTANT",
+            "value": 5
+          }
+        }
+      ]
+    }
+  },
+  "cooldownMs": 8000,
+  "battleLimit": null,
+  "chainLimit": {
+    "maxTriggers": 1
+  },
+  "effects": [
+    {
+      "type": "DAMAGE",
+      "target": "ENEMY",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 48
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

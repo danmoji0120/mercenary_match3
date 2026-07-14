@@ -1,0 +1,44 @@
+{
+  "id": "fortress_breaker_camilla_support",
+  "kind": "SUPPORT",
+  "displayName": "신축 요새 재철거",
+  "shortDescription": "적이 한 번에 보호막을 80 이상 얻으면 그 보호막에 55 피해를 준다.",
+  "fullDescription": "적이 한 번에 보호막을 80 이상 얻으면 그 보호막에 55 피해를 준다.",
+  "trigger": {
+    "event": "SHIELD_GAINED",
+    "filter": {
+      "type": "COMPARE",
+      "left": {
+        "type": "EVENT_VALUE",
+        "path": "shield.actualAmount"
+      },
+      "operator": "GTE",
+      "right": {
+        "type": "CONSTANT",
+        "value": 80
+      }
+    }
+  },
+  "cooldownMs": 8000,
+  "battleLimit": null,
+  "chainLimit": null,
+  "effects": [
+    {
+      "type": "CONSUME_RESOURCE",
+      "target": "ENEMY",
+      "resource": "SHIELD",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 55
+      },
+      "allowPartial": true,
+      "canReduceHpBelowOne": false,
+      "resultKey": "supportShieldDamage"
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

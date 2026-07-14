@@ -1,0 +1,9 @@
+{
+  "id": "fallen_legion_commander_morvain",
+  "schemaVersion": 1,
+  "engineApiVersion": 1,
+  "characterFile": "./character.json",
+  "activeFile": "./active.json",
+  "supportFile": "./support.json"
+}
+

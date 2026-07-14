@@ -33,7 +33,7 @@ export class CustomCommandBuilder {
   schedule(delayMs: number, effects: BattleCommand[]): BattleCommand { return { type: 'schedule_effects', delayMs, effects } }
   setRuntimeFlag(flag: string, value: number | boolean | string): BattleCommand { return { type: 'set_runtime_flag', flag, value } }
   clearRuntimeFlag(flag: string): BattleCommand { return { type: 'consume_runtime_flag', flag } }
-  storeValue(key: string, value: number): BattleCommand { return { type: 'store_value', key, amount: value } }
+  storeValue(key: string, value: number): BattleCommand { return { type: 'store_value', scope: 'ABILITY', runtimeKey: key, operation: 'SET', value } }
 }
 
 function deepFreeze<T>(value: T): T { if (value && typeof value === 'object') { Object.freeze(value); for (const item of Object.values(value)) deepFreeze(item) } return value }

@@ -1,0 +1,38 @@
+{
+  "id": "apothecary_assistant_brixa",
+  "displayName": "약제조수 브릭사",
+  "shortName": "브릭사",
+  "rarity": "R",
+  "race": "DWARF",
+  "role": "HEAL",
+  "combatStyle": "SUPPORT_HEAL",
+  "stats": {
+    "maxHp": 980,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 95,
+    "healEffectPct": 120,
+    "manaGainPct": 105
+  },
+  "activeAbilityId": "apothecary_assistant_brixa_active",
+  "supportAbilityId": "apothecary_assistant_brixa_support",
+  "tags": [
+    "DWARF",
+    "HEAL",
+    "CLEANSE",
+    "HEAL_MATCH"
+  ],
+  "description": {
+    "summary": "약 냄새로 사람 상태를 구분한다고 우기는 드워프 약제 담당",
+    "details": "드워프 출신으로 회복을 담당하는 용병이다. 약 냄새로 사람 상태를 구분한다고 우기는 드워프 약제 담당. 전투에서는 ‘응급 해독제’를 사용하고, 지원 시 ‘약향 감별’로 힘을 보탠다. 회복과 위기 대응을 맡는 회복형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

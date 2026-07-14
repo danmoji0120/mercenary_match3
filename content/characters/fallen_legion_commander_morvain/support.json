@@ -1,0 +1,34 @@
+{
+  "id": "fallen_legion_commander_morvain_support",
+  "kind": "SUPPORT",
+  "displayName": "후속대 투입",
+  "shortDescription": "액티브 스킬을 사용한 뒤 1초 후 적에게 48 피해를 준다.",
+  "fullDescription": "액티브 스킬을 사용한 뒤 1초 후 적에게 48 피해를 준다.",
+  "trigger": {
+    "event": "ACTIVE_USED"
+  },
+  "cooldownMs": 8000,
+  "battleLimit": null,
+  "chainLimit": null,
+  "effects": [
+    {
+      "type": "SCHEDULE",
+      "delayMs": 1000,
+      "effects": [
+        {
+          "type": "DAMAGE",
+          "target": "ENEMY",
+          "amount": {
+            "type": "CONSTANT",
+            "value": 48
+          }
+        }
+      ]
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

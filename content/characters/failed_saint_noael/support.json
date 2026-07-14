@@ -1,0 +1,46 @@
+{
+  "id": "failed_saint_noael_support",
+  "kind": "SUPPORT",
+  "displayName": "부작용은 나중에",
+  "shortDescription": "HP가 처음으로 25% 이하가 되면 HP를 175 회복하지만 5초 동안 받는 회복량이 20% 감소한다.",
+  "fullDescription": "HP가 처음으로 25% 이하가 되면 HP를 175 회복하지만 5초 동안 받는 회복량이 20% 감소한다.",
+  "trigger": {
+    "event": "HP_THRESHOLD_CROSSED",
+    "filter": {
+      "type": "COMPARE",
+      "left": {
+        "type": "EVENT_VALUE",
+        "path": "hp.threshold"
+      },
+      "operator": "EQ",
+      "right": {
+        "type": "CONSTANT",
+        "value": 25
+      }
+    }
+  },
+  "cooldownMs": 0,
+  "battleLimit": 1,
+  "chainLimit": null,
+  "effects": [
+    {
+      "type": "HEAL",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 175
+      }
+    },
+    {
+      "type": "APPLY_STATUS",
+      "target": "SELF",
+      "statusId": "noael_aftereffect",
+      "durationMs": 5000
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

@@ -1,0 +1,36 @@
+{
+  "id": "rogue_assault_akane_active",
+  "kind": "ACTIVE",
+  "displayName": "곤봉으로 해결",
+  "shortDescription": "자신의 HP 50을 소모하고 적에게 238 피해를 준다.",
+  "fullDescription": "자신의 HP 50을 소모하고 적에게 238 피해를 준다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "CONSUME_RESOURCE",
+      "target": "SELF",
+      "resource": "HP",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 50
+      },
+      "allowPartial": false,
+      "canReduceHpBelowOne": false,
+      "resultKey": "hpCost"
+    },
+    {
+      "type": "DAMAGE",
+      "target": "ENEMY",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 238
+      },
+      "travelMs": 500
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

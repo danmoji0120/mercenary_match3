@@ -1,0 +1,38 @@
+{
+  "id": "fallen_legion_commander_morvain",
+  "displayName": "몰락 군단장 모르베인",
+  "shortName": "모르베인",
+  "rarity": "SSR",
+  "race": "DEMONKIN",
+  "role": "ATTACK",
+  "combatStyle": "LEGION_SUMMON",
+  "stats": {
+    "maxHp": 1120,
+    "swordEffectPct": 118,
+    "shieldEffectPct": 118,
+    "healEffectPct": 108,
+    "manaGainPct": 108
+  },
+  "activeAbilityId": "fallen_legion_commander_morvain_active",
+  "supportAbilityId": "fallen_legion_commander_morvain_support",
+  "tags": [
+    "DEMONKIN",
+    "ATTACK",
+    "MULTI_HIT",
+    "SCHEDULED"
+  ],
+  "description": {
+    "summary": "군단을 잃고 사무소 공대를 얻음",
+    "details": "마족 출신으로 전면 공격을 담당하는 SSR 용병이다. 군단을 잃고 사무소 공대를 얻음. 전투에서는 ‘잔존 군단 총공세’를 사용하고, 지원 시 ‘후속대 투입’으로 힘을 보탠다. 높은 고점과 공격 연계로 상대의 대응을 압박하는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

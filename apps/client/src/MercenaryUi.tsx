@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { CharacterDefinition, UpdateLoadoutRequest, UserAccountState } from '@mercenary/shared';
 import { saveLoadout } from './account';
 import { filterMercenaries, isLoadoutDirty, LOADOUT_SLOTS, loadoutDraft, ownedMercenaries, placementFor, recommendedRoleLabel, type CollectionRole, type CollectionSort, type LoadoutSlotKey } from './mercenary-model';
+import { CharacterPortrait } from './CharacterPortrait';
 
 type NavigateBlocker = (targetPath: string) => boolean;
 const raceLabels: Record<string, string> = { human: '인간' };
@@ -12,7 +13,7 @@ function EmptyCollection({ filtered, onReset, onRetry }: { filtered: boolean; on
 
 function MercenaryCard({ character, placement, onOpen, buttonRef }: { character: CharacterDefinition; placement?: string; onOpen(): void; buttonRef(node: HTMLButtonElement | null): void }) {
   return <button ref={buttonRef} type="button" className="collection-card" data-testid="mercenary-card" aria-label={`${character.shortName}, ${character.rarity}, ${recommendedRoleLabel(character)}${placement ? `, 현재 ${placement}` : ', 미편성'}`} onClick={onOpen}>
-    <span className="collection-portrait"><img src={character.portraitAsset} alt=""/>{placement && <em>{placement}</em>}</span>
+    <span className="collection-portrait"><CharacterPortrait src={character.portraitAsset} alt={character.name}/>{placement && <em>{placement}</em>}</span>
     <span className="collection-card-copy"><strong>{character.shortName}</strong><small>{character.rarity}</small><b>{recommendedRoleLabel(character)}</b><i>{placement ?? '미편성'}</i></span>
   </button>;
 }
@@ -41,7 +42,7 @@ function MercenaryDetailDialog({ character, placement, onClose, onOpenLoadout }:
   return <div className="mercenary-detail-backdrop" onPointerDown={(event) => { if (event.currentTarget === event.target) onClose() }}>
     <section ref={dialog} className="mercenary-detail-dialog" role="dialog" aria-modal="true" aria-labelledby="mercenary-detail-title" data-testid="mercenary-detail">
       <div className="sheet-handle" aria-hidden="true"/><button ref={close} className="detail-close" aria-label="용병 상세 닫기" onClick={onClose}>×</button>
-      <div className="detail-hero"><div className="detail-aura" aria-hidden="true"/><img src={character.portraitAsset} alt={`${character.shortName} 초상화`}/><div><span>{character.rarity}</span><small>{raceLabels[character.race] ?? character.race}</small><h2 id="mercenary-detail-title">{character.name}</h2><b>{character.shortName} · {recommendedRoleLabel(character)}</b>{placement && <em>현재 {placement}</em>}</div></div>
+      <div className="detail-hero"><div className="detail-aura" aria-hidden="true"/><CharacterPortrait src={character.portraitAsset} alt={`${character.shortName} 초상화`}/><div><span>{character.rarity}</span><small>{raceLabels[character.race] ?? character.race}</small><h2 id="mercenary-detail-title">{character.name}</h2><b>{character.shortName} · {recommendedRoleLabel(character)}</b>{placement && <em>현재 {placement}</em>}</div></div>
       <div className="detail-scroll"><p className="mercenary-lore">{character.description}</p><AbilityPanel type="active" ability={character.combatant.ability}/><AbilityPanel type="support" ability={character.support.ability}/></div>
       <footer><button className="secondary" onClick={onClose}>닫기</button><button onClick={onOpenLoadout}>편성에서 보기</button></footer>
     </section>
@@ -71,12 +72,12 @@ export function MercenaryCollectionScreen({ account, detailId, onOpenDetail, onC
 
 function LoadoutSlotCard({ character, slot, selected, changed, onSelect }: { character: CharacterDefinition; slot: (typeof LOADOUT_SLOTS)[number]; selected: boolean; changed: boolean; onSelect(): void }) {
   const ability = slot.role === 'combatant' ? character.combatant.ability : character.support.ability;
-  return <button type="button" role="tab" aria-selected={selected} className={`loadout-slot-card ${selected ? 'selected' : ''}`} onClick={onSelect}><span className="slot-check" aria-hidden="true">{selected ? '✓' : ''}</span><small>{slot.label}{changed && <em>변경</em>}</small><img src={character.portraitAsset} alt=""/><strong>{character.shortName}</strong><b>{ability?.name ?? '능력 정보 없음'}</b></button>;
+  return <button type="button" role="tab" aria-selected={selected} className={`loadout-slot-card ${selected ? 'selected' : ''}`} onClick={onSelect}><span className="slot-check" aria-hidden="true">{selected ? '✓' : ''}</span><small>{slot.label}{changed && <em>변경</em>}</small><CharacterPortrait src={character.portraitAsset} alt=""/><strong>{character.shortName}</strong><b>{ability?.name ?? '능력 정보 없음'}</b></button>;
 }
 
 function CandidateCard({ character, slot, placement, selected, focused, disabled, reason, onSelect }: { character: CharacterDefinition; slot: (typeof LOADOUT_SLOTS)[number]; placement?: string; selected: boolean; focused: boolean; disabled: boolean; reason?: string; onSelect(): void }) {
   const ability = slot.role === 'combatant' ? character.combatant.ability : character.support.ability;
-  return <button type="button" className={`loadout-candidate ${selected ? 'selected' : ''} ${focused && !selected ? 'detail-focused' : ''}`} aria-pressed={selected} disabled={disabled} title={reason} aria-label={`${character.shortName}, ${character.rarity}, ${ability?.name ?? '능력 없음'}${focused ? ', 상세에서 선택한 용병' : ''}${reason ? `, ${reason}` : ''}`} onClick={onSelect}><img src={character.portraitAsset} alt=""/><span><strong>{character.shortName}<small>{character.rarity}</small></strong><b>{ability?.name ?? '능력 정보 없음'}</b><em>{reason ?? ability?.shortDescription ?? ''}</em></span>{placement && <i>{placement}</i>}</button>;
+  return <button type="button" className={`loadout-candidate ${selected ? 'selected' : ''} ${focused && !selected ? 'detail-focused' : ''}`} aria-pressed={selected} disabled={disabled} title={reason} aria-label={`${character.shortName}, ${character.rarity}, ${ability?.name ?? '능력 없음'}${focused ? ', 상세에서 선택한 용병' : ''}${reason ? `, ${reason}` : ''}`} onClick={onSelect}><CharacterPortrait src={character.portraitAsset} alt=""/><span><strong>{character.shortName}<small>{character.rarity}</small></strong><b>{ability?.name ?? '능력 정보 없음'}</b><em>{reason ?? ability?.shortDescription ?? ''}</em></span>{placement && <i>{placement}</i>}</button>;
 }
 
 function UnsavedChangesDialog({ onContinue, onDiscard }: { onContinue(): void; onDiscard(): void }) {

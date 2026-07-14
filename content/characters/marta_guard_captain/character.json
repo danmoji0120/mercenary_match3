@@ -33,7 +33,6 @@
     "support"
   ],
   "recommendedRole": "support",
-  "portraitAsset": "/characters/marta_guard_captain.svg",
   "defaultSlots": [
     "account_support_1",
     "bot_support_1"

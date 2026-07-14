@@ -20,6 +20,7 @@ export interface CharacterDefinition {
   allowedSlots: CharacterSlot[];
   recommendedRole: CharacterSlot;
   portraitAsset: string;
+  assets?: { portraitUrl?: string; portraitHash?: string };
   stats: ResolvedCombatantStats;
   defaultSlots?: Array<'account_combatant' | 'account_support_1' | 'account_support_2' | 'bot_combatant' | 'bot_support_1' | 'bot_support_2'>;
   combatant: { skillId: string; ability?: AbilitySummary };
@@ -34,7 +35,10 @@ export type EffectOriginType = 'TILE_MATCH' | 'ACTIVE_ABILITY' | 'SUPPORT_ABILIT
 export interface EffectOriginSnapshot { eventId: string; rootEventId: string; parentEventId?: string; sourceCharacterId: string; sourceAbilityId: string; originType: EffectOriginType; generationDepth: number; canTriggerSupport: boolean; canBeCopied: boolean; canBeConverted: boolean }
 export interface ScheduledEffectSnapshot { id: string; executeAt: number; sourceParticipantId: string; targetParticipantId: string; sourceAbilityId: string; sourceAttackId?: string; sequence: number; origin?: EffectOriginSnapshot }
 export type RuntimeJsonValue = null | boolean | number | string | RuntimeJsonValue[] | { [key: string]: RuntimeJsonValue };
-export interface EffectRuntimeSnapshot { activeAbility: AbilitySummary; supportAbilities: [AbilitySummary, AbilitySummary]; statuses: StatusSnapshot[]; abilities: AbilityRuntimeSnapshot[]; scheduledEffects: ScheduledEffectSnapshot[]; runtimeFlags: Record<string, number | boolean | string>; customState: Record<string, RuntimeJsonValue>; messages: string[] }
+export type RuntimeValueScope = 'BATTLE' | 'ABILITY' | 'STATUS' | 'CHAIN';
+export type RuntimeValueOperation = 'SET' | 'ADD' | 'SUBTRACT' | 'MIN' | 'MAX' | 'CLAMP' | 'CLEAR';
+export interface RuntimeValueSnapshot { battle: Record<string, number>; abilities: Record<string, Record<string, number>>; statuses: Record<string, Record<string, number>>; chains: Record<string, Record<string, number>> }
+export interface EffectRuntimeSnapshot { activeAbility: AbilitySummary; supportAbilities: [AbilitySummary, AbilitySummary]; statuses: StatusSnapshot[]; abilities: AbilityRuntimeSnapshot[]; scheduledEffects: ScheduledEffectSnapshot[]; runtimeFlags: Record<string, number | boolean | string>; runtimeValues: RuntimeValueSnapshot; customState: Record<string, RuntimeJsonValue>; messages: string[] }
 export interface OwnedCharacter { characterId: CharacterId; acquiredAt: string; acquisitionSource: string }
 export interface UserProfile { displayName: string; createdAt: string; updatedAt: string; lastSeenAt: string }
 export interface UserLoadout {

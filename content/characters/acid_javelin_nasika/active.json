@@ -1,0 +1,50 @@
+{
+  "id": "acid_javelin_nasika_active",
+  "kind": "ACTIVE",
+  "displayName": "용해 투창",
+  "shortDescription": "적에게 200 피해를 주며 보호막의 22%를 무시한다. 보호막을 파괴하면 자신은 보호막 65를 얻는다.",
+  "fullDescription": "적에게 200 피해를 주며 보호막의 22%를 무시한다. 보호막을 파괴하면 자신은 보호막 65를 얻는다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "DAMAGE",
+      "target": "ENEMY",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 200
+      },
+      "resultKey": "primaryAttack",
+      "shieldBypassPct": {
+        "type": "CONSTANT",
+        "value": 22
+      },
+      "travelMs": 500
+    },
+    {
+      "type": "IF",
+      "condition": {
+        "type": "RESULT_COMPARE",
+        "resultKey": "primaryAttack",
+        "path": "shieldBroken",
+        "operator": "EQ",
+        "value": true
+      },
+      "then": [
+        {
+          "type": "ADD_SHIELD",
+          "target": "SELF",
+          "amount": {
+            "type": "CONSTANT",
+            "value": 65
+          }
+        }
+      ],
+      "else": []
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

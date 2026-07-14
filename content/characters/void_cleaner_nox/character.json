@@ -1,0 +1,38 @@
+{
+  "id": "void_cleaner_nox",
+  "displayName": "청소반장 녹스",
+  "shortName": "녹스",
+  "rarity": "SSR",
+  "race": "VOIDKIN",
+  "role": "DISRUPT",
+  "combatStyle": "STATUS_PURGE",
+  "stats": {
+    "maxHp": 1010,
+    "swordEffectPct": 118,
+    "shieldEffectPct": 96,
+    "healEffectPct": 100,
+    "manaGainPct": 122
+  },
+  "activeAbilityId": "void_cleaner_nox_active",
+  "supportAbilityId": "void_cleaner_nox_support",
+  "tags": [
+    "VOIDKIN",
+    "DISRUPT",
+    "STATUS_PURGE",
+    "DISPEL"
+  ],
+  "description": {
+    "summary": "쓰레기와 차원을 함께 빨아들임",
+    "details": "공허족 출신으로 전투 방해를 담당하는 SSR 용병이다. 쓰레기와 차원을 함께 빨아들임. 전투에서는 ‘전면 차원청소’를 사용하고, 지원 시 ‘잔여물 압축’으로 힘을 보탠다. 계약·저주·상태 제어로 상대의 핵심 행동을 봉쇄하는 방해형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

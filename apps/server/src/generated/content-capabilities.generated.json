@@ -162,6 +162,13 @@
         "type": "array<combatant|support>",
         "validation": "all entries must be combatant or support"
       },
+      "$.assets.portrait": {
+        "example": "./assets/portrait.webp",
+        "required": false,
+        "runtime": "compiled to hashed portrait URL only",
+        "type": "relative PNG/JPEG/WebP path",
+        "validation": "package-local, <= 8 MiB, signature checked"
+      },
       "$.combatStyle": {
         "example": "SWORD",
         "required": true,
@@ -289,6 +296,19 @@
         "type": "string[]",
         "validation": "normalization-required; runtime registry requires a non-empty array"
       }
+    },
+    "portraitPolicy": {
+      "acceptedFormats": [
+        "PNG",
+        "JPEG",
+        "WebP"
+      ],
+      "fallback": "shared CSS portrait fallback when omitted or load fails",
+      "maximumBytes": 8388608,
+      "optional": true,
+      "output": "/generated/characters/<characterId>/portrait.<sha256-12>.<ext>",
+      "source": "package-local path only",
+      "svgPackageAssets": "unsupported"
     },
     "statsPolicy": {
       "appliesTo": [
@@ -526,7 +546,10 @@
       "resultSchema": [
         "actualShieldGain",
         "finalAmount",
-        "requestedAmount"
+        "overcapAmount",
+        "requestedAmount",
+        "shieldAfter",
+        "shieldBefore"
       ],
       "runtimeType": "gain_shield",
       "supportStatus": "SUPPORTED",
@@ -558,7 +581,11 @@
       ],
       "resultKeySupported": true,
       "resultSchema": [
-        "statusApplied"
+        "currentStacks",
+        "previousStacks",
+        "statusApplied",
+        "statusId",
+        "statusRefreshed"
       ],
       "runtimeType": "apply_status",
       "supportStatus": "SUPPORTED",
@@ -572,20 +599,27 @@
       "conditionSupported": true,
       "example": {
         "flag": "example.flag",
+        "resultKey": "clearedFlag",
         "type": "CLEAR_RUNTIME_FLAG"
       },
       "exampleValidatorStatus": "PASSED",
       "note": null,
       "optionalFields": [
-        "condition"
+        "condition",
+        "resultKey"
       ],
       "requiredFields": [
         "flag"
       ],
-      "resultKeySupported": false,
-      "resultSchema": [],
+      "resultKeySupported": true,
+      "resultSchema": [
+        "changed",
+        "existed",
+        "key",
+        "previousValue"
+      ],
       "runtimeType": "consume_runtime_flag",
-      "supportStatus": "RUNTIME_PATH_PRESENT_UNVERIFIED",
+      "supportStatus": "SUPPORTED",
       "targetValues": []
     },
     "CONSUME_RESOURCE": {
@@ -620,10 +654,13 @@
       "resultSchema": [
         "consumedAmount",
         "finalAmount",
-        "requestedAmount"
+        "remainingAmount",
+        "requestedAmount",
+        "resource",
+        "wasPartial"
       ],
       "runtimeType": "consume_resource",
-      "supportStatus": "RUNTIME_PATH_PRESENT_UNVERIFIED",
+      "supportStatus": "SUPPORTED",
       "targetValues": [
         "ENEMY",
         "SELF"
@@ -759,6 +796,8 @@
       "resultSchema": [
         "actualHealing",
         "finalAmount",
+        "hpAfter",
+        "hpBefore",
         "overhealing",
         "requestedAmount"
       ],
@@ -815,33 +854,36 @@
       "targetValues": []
     },
     "MODIFY_EVENT": {
-      "amountType": "ValueExpression",
+      "amountType": null,
       "conditionSupported": true,
       "example": {
-        "amount": {
-          "type": "CONSTANT",
-          "value": 0
-        },
-        "ratio": 0.8,
+        "operation": "MULTIPLY",
+        "path": "damage.currentAmount",
         "resultKey": "modified",
-        "type": "MODIFY_EVENT"
+        "type": "MODIFY_EVENT",
+        "value": {
+          "type": "CONSTANT",
+          "value": 0.8
+        }
       },
       "exampleValidatorStatus": "PASSED",
       "note": null,
       "optionalFields": [
-        "amount",
         "condition",
-        "ratio",
         "resultKey"
       ],
-      "requiredFields": [],
+      "requiredFields": [
+        "operation",
+        "path",
+        "value"
+      ],
       "resultKeySupported": true,
       "resultSchema": [
         "finalAmount",
         "requestedAmount"
       ],
       "runtimeType": "modify_event_amount",
-      "supportStatus": "RUNTIME_PATH_PRESENT_UNVERIFIED",
+      "supportStatus": "SUPPORTED",
       "targetValues": []
     },
     "MODIFY_MANA": {
@@ -869,6 +911,9 @@
       "resultKeySupported": true,
       "resultSchema": [
         "finalAmount",
+        "manaAfter",
+        "manaBefore",
+        "overflowAmount",
         "requestedAmount"
       ],
       "runtimeType": "gain_mana",
@@ -890,15 +935,22 @@
       "note": null,
       "optionalFields": [
         "condition",
+        "maxCount",
+        "resultKey",
+        "selection",
         "target"
       ],
       "requiredFields": [
-        "statusId"
+        "statusId or filter"
       ],
-      "resultKeySupported": false,
-      "resultSchema": [],
+      "resultKeySupported": true,
+      "resultSchema": [
+        "removedCount",
+        "removedStatusIds",
+        "removalReason"
+      ],
       "runtimeType": "remove_status",
-      "supportStatus": "RUNTIME_PATH_PRESENT_UNVERIFIED",
+      "supportStatus": "SUPPORTED",
       "targetValues": [
         "ENEMY",
         "SELF"
@@ -945,29 +997,40 @@
       "conditionSupported": true,
       "example": {
         "flag": "example.flag",
+        "resultKey": "setFlag",
         "type": "SET_RUNTIME_FLAG",
         "value": true
       },
       "exampleValidatorStatus": "PASSED",
       "note": null,
       "optionalFields": [
-        "condition"
+        "condition",
+        "resultKey"
       ],
       "requiredFields": [
         "flag",
         "value"
       ],
-      "resultKeySupported": false,
-      "resultSchema": [],
+      "resultKeySupported": true,
+      "resultSchema": [
+        "changed",
+        "currentValue",
+        "existed",
+        "key",
+        "previousValue"
+      ],
       "runtimeType": "set_runtime_flag",
-      "supportStatus": "RUNTIME_PATH_PRESENT_UNVERIFIED",
+      "supportStatus": "SUPPORTED",
       "targetValues": []
     },
     "STORE_VALUE": {
       "amountType": null,
       "conditionSupported": true,
       "example": {
+        "key": "example.stored",
+        "operation": "SET",
         "resultKey": "stored",
+        "scope": "BATTLE",
         "type": "STORE_VALUE",
         "value": {
           "type": "CONSTANT",
@@ -978,27 +1041,106 @@
       "note": null,
       "optionalFields": [
         "condition",
-        "resultKey"
+        "maximum",
+        "minimum",
+        "resultKey",
+        "statusId",
+        "target",
+        "value"
       ],
       "requiredFields": [
-        "value"
+        "key",
+        "operation",
+        "scope"
       ],
       "resultKeySupported": true,
       "resultSchema": [
-        "finalAmount"
+        "cleared",
+        "existed",
+        "finalAmount",
+        "key",
+        "nextValue",
+        "previousValue",
+        "scope"
       ],
       "runtimeType": "store_value",
-      "supportStatus": "RUNTIME_PATH_PRESENT_UNVERIFIED",
-      "targetValues": []
+      "supportStatus": "SUPPORTED",
+      "targetValues": [
+        "ENEMY",
+        "SELF"
+      ]
     }
   },
   "engineApiVersion": 1,
   "eventPaths": {
+    "ability.id": {
+      "availableEvents": [
+        "ACTIVE_USED"
+      ],
+      "example": "sample_active",
+      "type": "string"
+    },
+    "ability.kind": {
+      "availableEvents": [
+        "ACTIVE_USED"
+      ],
+      "example": "active",
+      "type": "AbilityKind"
+    },
+    "ability.manaCost": {
+      "availableEvents": [
+        "ACTIVE_USED"
+      ],
+      "example": 100,
+      "type": "integer"
+    },
+    "ability.manaSpent": {
+      "availableEvents": [
+        "ACTIVE_USED"
+      ],
+      "example": 100,
+      "type": "integer"
+    },
     "chain.depth": {
       "availableEvents": [
         "TILE_MATCH_RESOLVED"
       ],
       "example": 2,
+      "type": "integer"
+    },
+    "chain.id": {
+      "availableEvents": [
+        "CHAIN_STEP_RESOLVED"
+      ],
+      "example": "battle:player:1",
+      "type": "string"
+    },
+    "chain.isFinalStep": {
+      "availableEvents": [
+        "CHAIN_STEP_RESOLVED"
+      ],
+      "example": true,
+      "type": "boolean"
+    },
+    "chain.matchCount": {
+      "availableEvents": [
+        "CHAIN_STEP_RESOLVED"
+      ],
+      "example": 2,
+      "type": "integer"
+    },
+    "chain.stepIndex": {
+      "availableEvents": [
+        "CHAIN_STEP_RESOLVED"
+      ],
+      "example": 0,
+      "type": "integer"
+    },
+    "chain.totalMatchedTiles": {
+      "availableEvents": [
+        "CHAIN_STEP_RESOLVED"
+      ],
+      "example": 7,
       "type": "integer"
     },
     "damage.currentAmount": {
@@ -1022,6 +1164,41 @@
       "example": true,
       "type": "boolean"
     },
+    "heal.actualAmount": {
+      "availableEvents": [
+        "HEALED"
+      ],
+      "example": 60,
+      "type": "number"
+    },
+    "heal.hpAfter": {
+      "availableEvents": [
+        "HEALED"
+      ],
+      "example": 960,
+      "type": "number"
+    },
+    "heal.hpBefore": {
+      "availableEvents": [
+        "HEALED"
+      ],
+      "example": 900,
+      "type": "number"
+    },
+    "heal.overhealAmount": {
+      "availableEvents": [
+        "HEALED"
+      ],
+      "example": 40,
+      "type": "number"
+    },
+    "heal.requestedAmount": {
+      "availableEvents": [
+        "HEALED"
+      ],
+      "example": 100,
+      "type": "number"
+    },
     "hp.threshold": {
       "availableEvents": [
         "HP_THRESHOLD_CROSSED"
@@ -1042,17 +1219,146 @@
       ],
       "example": "SWORD",
       "type": "TileType"
+    },
+    "shield.actualAmount": {
+      "availableEvents": [
+        "SHIELD_GAINED"
+      ],
+      "example": 80,
+      "type": "number"
+    },
+    "shield.after": {
+      "availableEvents": [
+        "SHIELD_GAINED"
+      ],
+      "example": 500,
+      "type": "number"
+    },
+    "shield.before": {
+      "availableEvents": [
+        "SHIELD_GAINED"
+      ],
+      "example": 420,
+      "type": "number"
+    },
+    "shield.overcapAmount": {
+      "availableEvents": [
+        "SHIELD_GAINED"
+      ],
+      "example": 20,
+      "type": "number"
+    },
+    "shield.requestedAmount": {
+      "availableEvents": [
+        "SHIELD_GAINED"
+      ],
+      "example": 100,
+      "type": "number"
+    },
+    "status.applied": {
+      "availableEvents": [
+        "STATUS_APPLIED"
+      ],
+      "example": true,
+      "type": "boolean"
+    },
+    "status.currentStacks": {
+      "availableEvents": [
+        "STATUS_APPLIED"
+      ],
+      "example": 1,
+      "type": "integer"
+    },
+    "status.durationMs": {
+      "availableEvents": [
+        "STATUS_APPLIED"
+      ],
+      "example": 4000,
+      "type": "integer"
+    },
+    "status.id": {
+      "availableEvents": [
+        "STATUS_APPLIED",
+        "STATUS_REMOVED"
+      ],
+      "example": "damage_reduction",
+      "type": "string"
+    },
+    "status.previousStacks": {
+      "availableEvents": [
+        "STATUS_APPLIED",
+        "STATUS_REMOVED"
+      ],
+      "example": 0,
+      "type": "integer"
+    },
+    "status.refreshed": {
+      "availableEvents": [
+        "STATUS_APPLIED"
+      ],
+      "example": false,
+      "type": "boolean"
+    },
+    "status.removalReason": {
+      "availableEvents": [
+        "STATUS_REMOVED"
+      ],
+      "example": "EXPLICIT",
+      "type": "string enum"
+    },
+    "status.wasExpired": {
+      "availableEvents": [
+        "STATUS_REMOVED"
+      ],
+      "example": false,
+      "type": "boolean"
     }
   },
   "evidence": {
+    "canonicalEmitterEvents": [
+      "ACTIVE_USED",
+      "AFTER_DAMAGE",
+      "BATTLE_STARTED",
+      "BEFORE_ATTACK_IMPACT",
+      "CHAIN_STEP_RESOLVED",
+      "DEFEATED",
+      "HEALED",
+      "HP_THRESHOLD_CROSSED",
+      "SHIELD_BROKEN",
+      "SHIELD_GAINED",
+      "STATUS_APPLIED",
+      "STATUS_REMOVED",
+      "TILE_MATCH_RESOLVED"
+    ],
+    "emittedPublicEvents": [
+      "ACTIVE_USED",
+      "AFTER_DAMAGE",
+      "BATTLE_STARTED",
+      "BEFORE_ATTACK_IMPACT",
+      "CHAIN_STEP_RESOLVED",
+      "DEFEATED",
+      "HEALED",
+      "HP_THRESHOLD_CROSSED",
+      "SHIELD_BROKEN",
+      "SHIELD_GAINED",
+      "STATUS_APPLIED",
+      "STATUS_REMOVED",
+      "TILE_MATCH_RESOLVED"
+    ],
     "emittedRuntimeTriggers": [
+      "active_requested",
       "after_damage",
+      "after_heal",
+      "after_shield_gain",
       "battle_finished",
       "battle_started",
       "before_attack_impact",
+      "chain_step_resolved",
       "hp_threshold_crossed",
       "match_group_resolved",
-      "shield_broken"
+      "shield_broken",
+      "status_applied",
+      "status_expired"
     ],
     "runtimeAllowedEffects": [
       "apply_status",
@@ -1146,21 +1452,21 @@
       "status_expired"
     ],
     "runtimeVerifiedEffects": [
-      "active_requested",
-      "all",
       "apply_status",
       "conditional",
+      "consume_resource",
+      "consume_runtime_flag",
       "convert_overheal_to_shield",
       "custom",
       "deal_damage",
       "gain_mana",
       "gain_shield",
       "heal",
-      "match_group_resolved",
-      "matched_tile_count",
-      "not",
+      "modify_event_amount",
+      "remove_status",
       "schedule_effects",
-      "tile_type_is"
+      "set_runtime_flag",
+      "store_value"
     ]
   },
   "examples": {
@@ -1235,13 +1541,14 @@
         "cooldownMs": 0,
         "effects": [
           {
-            "amount": {
-              "type": "CONSTANT",
-              "value": 0
-            },
-            "ratio": 0.8,
+            "operation": "MULTIPLY",
+            "path": "damage.currentAmount",
             "resultKey": "modified",
-            "type": "MODIFY_EVENT"
+            "type": "MODIFY_EVENT",
+            "value": {
+              "type": "CONSTANT",
+              "value": 0.8
+            }
           }
         ],
         "trigger": {
@@ -1366,11 +1673,13 @@
         "effects": [
           {
             "flag": "example.flag",
+            "resultKey": "setFlag",
             "type": "SET_RUNTIME_FLAG",
             "value": true
           },
           {
             "flag": "example.flag",
+            "resultKey": "clearedFlag",
             "type": "CLEAR_RUNTIME_FLAG"
           }
         ],
@@ -1535,7 +1844,10 @@
       "ability": {
         "effects": [
           {
+            "key": "example.stored",
+            "operation": "SET",
             "resultKey": "stored",
+            "scope": "BATTLE",
             "type": "STORE_VALUE",
             "value": {
               "type": "CONSTANT",
@@ -1544,9 +1856,14 @@
           },
           {
             "amount": {
-              "path": "finalAmount",
-              "resultKey": "stored",
-              "type": "RESULT_VALUE"
+              "defaultValue": {
+                "type": "CONSTANT",
+                "value": 0
+              },
+              "key": "example.stored",
+              "scope": "BATTLE",
+              "target": "SELF",
+              "type": "RUNTIME_VALUE"
             },
             "target": "SELF",
             "type": "ADD_SHIELD"
@@ -1703,30 +2020,70 @@
   "resultPathAllowlist": [
     "actualHealing",
     "actualShieldGain",
+    "changed",
     "chargeConsumed",
+    "cleared",
     "consumedAmount",
+    "currentStacks",
+    "currentValue",
+    "existed",
     "finalAmount",
+    "hpAfter",
+    "hpBefore",
     "hpDamage",
+    "manaAfter",
+    "manaBefore",
+    "nextValue",
+    "overcapAmount",
+    "overflowAmount",
     "overhealing",
+    "previousStacks",
+    "previousValue",
+    "remainingAmount",
+    "removedCount",
+    "removalReason",
     "requestedAmount",
+    "resource",
+    "scope",
+    "shieldAfter",
+    "shieldBefore",
     "shieldBroken",
     "shieldDamage",
     "statusApplied",
-    "targetDefeated"
+    "statusId",
+    "statusRefreshed",
+    "targetDefeated",
+    "wasPartial"
   ],
   "resultSchemas": {
     "ADD_SHIELD": [
       "actualShieldGain",
       "finalAmount",
-      "requestedAmount"
+      "overcapAmount",
+      "requestedAmount",
+      "shieldAfter",
+      "shieldBefore"
     ],
     "APPLY_STATUS": [
-      "statusApplied"
+      "currentStacks",
+      "previousStacks",
+      "statusApplied",
+      "statusId",
+      "statusRefreshed"
+    ],
+    "CLEAR_RUNTIME_FLAG": [
+      "changed",
+      "existed",
+      "key",
+      "previousValue"
     ],
     "CONSUME_RESOURCE": [
       "consumedAmount",
       "finalAmount",
-      "requestedAmount"
+      "remainingAmount",
+      "requestedAmount",
+      "resource",
+      "wasPartial"
     ],
     "CONVERT_OVERHEAL_TO_SHIELD": [
       "actualShieldGain",
@@ -1744,6 +2101,8 @@
     "HEAL": [
       "actualHealing",
       "finalAmount",
+      "hpAfter",
+      "hpBefore",
       "overhealing",
       "requestedAmount"
     ],
@@ -1753,10 +2112,31 @@
     ],
     "MODIFY_MANA": [
       "finalAmount",
+      "manaAfter",
+      "manaBefore",
+      "overflowAmount",
       "requestedAmount"
     ],
+    "REMOVE_STATUS": [
+      "removedCount",
+      "removedStatusIds",
+      "removalReason"
+    ],
+    "SET_RUNTIME_FLAG": [
+      "changed",
+      "currentValue",
+      "existed",
+      "key",
+      "previousValue"
+    ],
     "STORE_VALUE": [
-      "finalAmount"
+      "cleared",
+      "existed",
+      "finalAmount",
+      "key",
+      "nextValue",
+      "previousValue",
+      "scope"
     ]
   },
   "roles": [
@@ -1796,6 +2176,33 @@
       "type": "set_shield_bypass_ratio"
     }
   ],
+  "runtimeValues": {
+    "explicitDefaultRequired": true,
+    "keyPattern": "^[a-z][a-zA-Z0-9_.-]{0,63}$",
+    "lifecycle": {
+      "ABILITY": "namespaced by the executing ability and cleared with battle runtime",
+      "BATTLE": "cleared when battle runtime finishes",
+      "CHAIN": "cleared when the current chain completes",
+      "STATUS": "readable during STATUS_REMOVED dispatch, then cleared with the status"
+    },
+    "operations": [
+      "ADD",
+      "CLAMP",
+      "CLEAR",
+      "MAX",
+      "MIN",
+      "SET",
+      "SUBTRACT"
+    ],
+    "scopes": [
+      "ABILITY",
+      "BATTLE",
+      "CHAIN",
+      "STATUS"
+    ],
+    "snapshot": "deterministically sorted and restored; missing legacy field becomes an empty store",
+    "valueType": "finite number"
+  },
   "schemaVersion": 1,
   "sources": [
     "scripts/content-schema-metadata.mjs",
@@ -1879,6 +2286,22 @@
         "snapshot": "statusId, source/target participant, stackCount, expiresAt",
         "stacking": "refresh",
         "triggers": []
+      },
+      "noael_aftereffect": {
+        "consumePolicy": null,
+        "durationMs": 5000,
+        "maxStacks": 1,
+        "modifiers": [
+          {
+            "type": "healing_received_multiplier",
+            "value": 0.8
+          }
+        ],
+        "name": "기적 부작용",
+        "refreshPolicy": "refresh",
+        "snapshot": "statusId, source/target participant, stackCount, expiresAt",
+        "stacking": "refresh",
+        "triggers": []
       }
     },
     "durationUnit": "milliseconds",
@@ -1904,8 +2327,13 @@
   ],
   "triggers": {
     "ACTIVE_USED": {
-      "actor": "undefined for content",
-      "eventPaths": [],
+      "actor": "active ability owner",
+      "eventPaths": [
+        "ability.id",
+        "ability.kind",
+        "ability.manaCost",
+        "ability.manaSpent"
+      ],
       "example": {
         "battleLimit": null,
         "chainLimit": null,
@@ -1938,11 +2366,14 @@
       },
       "exampleValidatorStatus": "PASSED",
       "originType": "Inherited from the triggering effect when present",
-      "payload": [],
+      "payload": [
+        "skillId",
+        "serverTime"
+      ],
       "runtimeType": "active_requested",
-      "supportStatus": "TYPE_DEFINED_NOT_EMITTED",
-      "target": "undefined for content",
-      "timing": "not emitted"
+      "supportStatus": "EMITTED_AND_SUPPORTED",
+      "target": "opponent",
+      "timing": "after an active ability is accepted"
     },
     "AFTER_DAMAGE": {
       "actor": "attacker",
@@ -1994,7 +2425,7 @@
       "timing": "after"
     },
     "ATTACK_CREATED": {
-      "actor": "undefined for content",
+      "actor": "support owner",
       "eventPaths": [],
       "example": {
         "battleLimit": null,
@@ -2031,8 +2462,8 @@
       "payload": [],
       "runtimeType": "attack_created",
       "supportStatus": "TYPE_DEFINED_NOT_EMITTED",
-      "target": "undefined for content",
-      "timing": "not emitted"
+      "target": "event counterpart",
+      "timing": "See canonical trigger emitter registry."
     },
     "BATTLE_STARTED": {
       "actor": "each participant",
@@ -2126,7 +2557,7 @@
       "timing": "before impact (within 150ms)"
     },
     "BEFORE_DAMAGE": {
-      "actor": "undefined for content",
+      "actor": "support owner",
       "eventPaths": [],
       "example": {
         "battleLimit": null,
@@ -2163,12 +2594,18 @@
       "payload": [],
       "runtimeType": "before_damage",
       "supportStatus": "TYPE_DEFINED_NOT_EMITTED",
-      "target": "undefined for content",
-      "timing": "not emitted"
+      "target": "event counterpart",
+      "timing": "See canonical trigger emitter registry."
     },
     "CHAIN_STEP_RESOLVED": {
-      "actor": "undefined for content",
-      "eventPaths": [],
+      "actor": "support owner",
+      "eventPaths": [
+        "chain.id",
+        "chain.isFinalStep",
+        "chain.matchCount",
+        "chain.stepIndex",
+        "chain.totalMatchedTiles"
+      ],
       "example": {
         "battleLimit": null,
         "chainLimit": null,
@@ -2203,9 +2640,9 @@
       "originType": "Inherited from the triggering effect when present",
       "payload": [],
       "runtimeType": "chain_step_resolved",
-      "supportStatus": "TYPE_DEFINED_NOT_EMITTED",
-      "target": "undefined for content",
-      "timing": "not emitted"
+      "supportStatus": "EMITTED_AND_SUPPORTED",
+      "target": "event counterpart",
+      "timing": "See canonical trigger emitter registry."
     },
     "DEFEATED": {
       "actor": "each participant",
@@ -2251,8 +2688,14 @@
       "timing": "after result decided"
     },
     "HEALED": {
-      "actor": "undefined for content",
-      "eventPaths": [],
+      "actor": "support owner",
+      "eventPaths": [
+        "heal.actualAmount",
+        "heal.hpAfter",
+        "heal.hpBefore",
+        "heal.overhealAmount",
+        "heal.requestedAmount"
+      ],
       "example": {
         "battleLimit": null,
         "chainLimit": null,
@@ -2287,9 +2730,9 @@
       "originType": "Inherited from the triggering effect when present",
       "payload": [],
       "runtimeType": "after_heal",
-      "supportStatus": "TYPE_DEFINED_NOT_EMITTED",
-      "target": "undefined for content",
-      "timing": "not emitted"
+      "supportStatus": "EMITTED_AND_SUPPORTED",
+      "target": "event counterpart",
+      "timing": "See canonical trigger emitter registry."
     },
     "HP_THRESHOLD_CROSSED": {
       "actor": "damaged participant",
@@ -2384,8 +2827,14 @@
       "timing": "after damage"
     },
     "SHIELD_GAINED": {
-      "actor": "undefined for content",
-      "eventPaths": [],
+      "actor": "opposing support owner",
+      "eventPaths": [
+        "shield.actualAmount",
+        "shield.after",
+        "shield.before",
+        "shield.overcapAmount",
+        "shield.requestedAmount"
+      ],
       "example": {
         "battleLimit": null,
         "chainLimit": null,
@@ -2418,15 +2867,28 @@
       },
       "exampleValidatorStatus": "PASSED",
       "originType": "Inherited from the triggering effect when present",
-      "payload": [],
+      "payload": [
+        "shieldRequestedAmount",
+        "shieldActualAmount",
+        "shieldOvercapAmount",
+        "shieldBefore",
+        "shieldAfter"
+      ],
       "runtimeType": "after_shield_gain",
-      "supportStatus": "TYPE_DEFINED_NOT_EMITTED",
-      "target": "undefined for content",
-      "timing": "not emitted"
+      "supportStatus": "EMITTED_AND_SUPPORTED",
+      "target": "shield recipient",
+      "timing": "after enemy actual shield gain is known"
     },
     "STATUS_APPLIED": {
-      "actor": "undefined for content",
-      "eventPaths": [],
+      "actor": "support owner",
+      "eventPaths": [
+        "status.applied",
+        "status.currentStacks",
+        "status.durationMs",
+        "status.id",
+        "status.previousStacks",
+        "status.refreshed"
+      ],
       "example": {
         "battleLimit": null,
         "chainLimit": null,
@@ -2461,13 +2923,18 @@
       "originType": "Inherited from the triggering effect when present",
       "payload": [],
       "runtimeType": "status_applied",
-      "supportStatus": "TYPE_DEFINED_NOT_EMITTED",
-      "target": "undefined for content",
-      "timing": "not emitted"
+      "supportStatus": "EMITTED_AND_SUPPORTED",
+      "target": "event counterpart",
+      "timing": "See canonical trigger emitter registry."
     },
     "STATUS_REMOVED": {
-      "actor": "undefined for content",
-      "eventPaths": [],
+      "actor": "both support owners",
+      "eventPaths": [
+        "status.id",
+        "status.previousStacks",
+        "status.removalReason",
+        "status.wasExpired"
+      ],
       "example": {
         "battleLimit": null,
         "chainLimit": null,
@@ -2500,11 +2967,16 @@
       },
       "exampleValidatorStatus": "PASSED",
       "originType": "Inherited from the triggering effect when present",
-      "payload": [],
+      "payload": [
+        "statusId",
+        "statusPreviousStacks",
+        "statusRemovalReason",
+        "statusWasExpired"
+      ],
       "runtimeType": "status_expired",
-      "supportStatus": "TYPE_DEFINED_NOT_EMITTED",
-      "target": "undefined for content",
-      "timing": "not emitted"
+      "supportStatus": "EMITTED_AND_SUPPORTED",
+      "target": "status owner or counterpart",
+      "timing": "after removal and before status runtime-value cleanup"
     },
     "TILE_MATCH_RESOLVED": {
       "actor": "board owner",
@@ -2820,6 +3292,28 @@
         "value"
       ],
       "returns": "integer"
+    },
+    "RUNTIME_VALUE": {
+      "example": {
+        "defaultValue": {
+          "type": "CONSTANT",
+          "value": 0
+        },
+        "key": "example.counter",
+        "scope": "BATTLE",
+        "target": "SELF",
+        "type": "RUNTIME_VALUE"
+      },
+      "optional": [
+        "statusId"
+      ],
+      "required": [
+        "defaultValue",
+        "key",
+        "scope",
+        "target"
+      ],
+      "returns": "number"
     },
     "STAT": {
       "example": {

@@ -1,0 +1,38 @@
+{
+  "id": "siege_cook_borga",
+  "displayName": "공성취사장 보르가",
+  "shortName": "보르가",
+  "rarity": "SR",
+  "race": "ORC",
+  "role": "HEAL",
+  "combatStyle": "FIELD_SUPPORT",
+  "stats": {
+    "maxHp": 1040,
+    "swordEffectPct": 105,
+    "shieldEffectPct": 105,
+    "healEffectPct": 105,
+    "manaGainPct": 105
+  },
+  "activeAbilityId": "siege_cook_borga_active",
+  "supportAbilityId": "siege_cook_borga_support",
+  "tags": [
+    "ORC",
+    "HEAL",
+    "SHIELD",
+    "HEAL_MATCH"
+  ],
+  "description": {
+    "summary": "국자가 무기고 냄비가 방패",
+    "details": "오크 출신으로 회복 지원을 담당하는 SR 용병이다. 국자가 무기고 냄비가 방패. 전투에서는 ‘전투식 대용량 배식’을 사용하고, 지원 시 ‘냄비뚜껑 엄호’로 힘을 보탠다. 회복과 생존 보조로 전투를 안정시키는 회복형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

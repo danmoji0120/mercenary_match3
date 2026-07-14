@@ -33,7 +33,7 @@ test('collection search, filters, detail route, and focus restoration', async ({
   await expect(detail).toContainText('반격검사 유리아');
   await expect(detail).toContainText('액티브');
   await expect(detail).toContainText('지원 효과');
-  await expect(detail.locator('img')).toBeVisible();
+  await expect(detail.locator('img, .character-portrait-fallback')).toBeVisible();
   await expect(detail).not.toContainText('yuria_counter_sword');
   await page.keyboard.press('Escape');
   await expect(page).toHaveURL(/\/mercenaries$/);

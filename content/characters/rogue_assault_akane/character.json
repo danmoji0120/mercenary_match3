@@ -1,0 +1,38 @@
+{
+  "id": "rogue_assault_akane",
+  "displayName": "불량 돌격병 아카네",
+  "shortName": "아카네",
+  "rarity": "SR",
+  "race": "ONI",
+  "role": "ATTACK",
+  "combatStyle": "ASSAULT",
+  "stats": {
+    "maxHp": 850,
+    "swordEffectPct": 135,
+    "shieldEffectPct": 80,
+    "healEffectPct": 85,
+    "manaGainPct": 115
+  },
+  "activeAbilityId": "rogue_assault_akane_active",
+  "supportAbilityId": "rogue_assault_akane_support",
+  "tags": [
+    "ONI",
+    "ATTACK",
+    "HP_COST",
+    "SWORD_MATCH"
+  ],
+  "description": {
+    "summary": "곤봉 들고 사고 치는 돌격조장",
+    "details": "오니 출신으로 전면 공격을 담당하는 SR 용병이다. 곤봉 들고 사고 치는 돌격조장. 전투에서는 ‘곤봉으로 해결’을 사용하고, 지원 시 ‘한 대 더’로 힘을 보탠다. 높은 피해와 공격 연계로 상대를 압박하는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

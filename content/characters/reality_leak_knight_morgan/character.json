@@ -1,0 +1,38 @@
+{
+  "id": "reality_leak_knight_morgan",
+  "displayName": "현실누수 처리기사 모르간",
+  "shortName": "모르간",
+  "rarity": "SR",
+  "race": "UNDEAD",
+  "role": "ATTACK",
+  "combatStyle": "SCHEDULED_ATTACK",
+  "stats": {
+    "maxHp": 1040,
+    "swordEffectPct": 105,
+    "shieldEffectPct": 105,
+    "healEffectPct": 105,
+    "manaGainPct": 105
+  },
+  "activeAbilityId": "reality_leak_knight_morgan_active",
+  "supportAbilityId": "reality_leak_knight_morgan_support",
+  "tags": [
+    "UNDEAD",
+    "ATTACK",
+    "SCHEDULED",
+    "ACTIVE_LINK"
+  ],
+  "description": {
+    "summary": "새는 현실을 막는 데 익숙하지만 본인 기억도 가끔 새어 나감",
+    "details": "언데드 출신으로 전면 공격을 담당하는 SR 용병이다. 새는 현실을 막는 데 익숙하지만 본인 기억도 가끔 새어 나감. 전투에서는 ‘균열 봉합 실패’를 사용하고, 지원 시 ‘누수 잔여막’으로 힘을 보탠다. 높은 피해와 공격 연계로 상대를 압박하는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

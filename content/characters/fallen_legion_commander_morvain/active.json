@@ -1,0 +1,59 @@
+{
+  "id": "fallen_legion_commander_morvain_active",
+  "kind": "ACTIVE",
+  "displayName": "잔존 군단 총공세",
+  "shortDescription": "보호막 100을 얻고 잔존 군단을 소환해 적에게 0.4초 간격으로 90 피해를 3회 준다.",
+  "fullDescription": "보호막 100을 얻고 잔존 군단을 소환해 적에게 0.4초 간격으로 90 피해를 3회 준다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "ADD_SHIELD",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 100
+      }
+    },
+    {
+      "type": "DAMAGE",
+      "target": "ENEMY",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 90
+      }
+    },
+    {
+      "type": "SCHEDULE",
+      "delayMs": 400,
+      "effects": [
+        {
+          "type": "DAMAGE",
+          "target": "ENEMY",
+          "amount": {
+            "type": "CONSTANT",
+            "value": 90
+          }
+        }
+      ]
+    },
+    {
+      "type": "SCHEDULE",
+      "delayMs": 800,
+      "effects": [
+        {
+          "type": "DAMAGE",
+          "target": "ENEMY",
+          "amount": {
+            "type": "CONSTANT",
+            "value": 90
+          }
+        }
+      ]
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

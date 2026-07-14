@@ -33,7 +33,6 @@
     "support"
   ],
   "recommendedRole": "combatant",
-  "portraitAsset": "/characters/clarice_heavy_shield.svg",
   "defaultSlots": [
     "bot_combatant"
   ]

@@ -1,0 +1,38 @@
+{
+  "id": "failed_saint_noael",
+  "displayName": "실패작 성녀 노아엘",
+  "shortName": "노아엘",
+  "rarity": "SSR",
+  "race": "ARTIFICIAL_ANGEL",
+  "role": "HEAL",
+  "combatStyle": "OVERHEAL_MIRACLE",
+  "stats": {
+    "maxHp": 1080,
+    "swordEffectPct": 92,
+    "shieldEffectPct": 102,
+    "healEffectPct": 138,
+    "manaGainPct": 112
+  },
+  "activeAbilityId": "failed_saint_noael_active",
+  "supportAbilityId": "failed_saint_noael_support",
+  "tags": [
+    "ARTIFICIAL_ANGEL",
+    "HEAL",
+    "OVERHEAL",
+    "CLEANSE"
+  ],
+  "description": {
+    "summary": "기도보다 임상기록이 익숙함",
+    "details": "인조천사 출신으로 회복 지원을 담당하는 SSR 용병이다. 기도보다 임상기록이 익숙함. 전투에서는 ‘불완전 기적 임상’을 사용하고, 지원 시 ‘부작용은 나중에’로 힘을 보탠다. 큰 회복과 복구 기믹으로 전투를 되돌리는 회복형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

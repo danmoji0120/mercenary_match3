@@ -1,0 +1,28 @@
+{
+  "id": "void_cleaner_nox_support",
+  "kind": "SUPPORT",
+  "displayName": "잔여물 압축",
+  "shortDescription": "자신 또는 적의 상태 효과가 제거될 때 마력 9를 얻는다.",
+  "fullDescription": "자신 또는 적의 상태 효과가 제거될 때 마력 9를 얻는다.",
+  "trigger": {
+    "event": "STATUS_REMOVED"
+  },
+  "cooldownMs": 5000,
+  "battleLimit": null,
+  "chainLimit": null,
+  "effects": [
+    {
+      "type": "MODIFY_MANA",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 9
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

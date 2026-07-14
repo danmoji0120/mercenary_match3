@@ -1,0 +1,38 @@
+{
+  "id": "axe_soldier_karna",
+  "displayName": "도끼병 카르나",
+  "shortName": "도끼 카르나",
+  "rarity": "R",
+  "race": "DEMONKIN",
+  "role": "ATTACK",
+  "combatStyle": "STABLE_ATTACK",
+  "stats": {
+    "maxHp": 920,
+    "swordEffectPct": 115,
+    "shieldEffectPct": 90,
+    "healEffectPct": 90,
+    "manaGainPct": 105
+  },
+  "activeAbilityId": "axe_soldier_karna_active",
+  "supportAbilityId": "axe_soldier_karna_support",
+  "tags": [
+    "DEMONKIN",
+    "ATTACK",
+    "SHIELD",
+    "SWORD_MATCH"
+  ],
+  "description": {
+    "summary": "도끼질은 성실하지만 사과는 도끼등으로 하는 마족 전열병",
+    "details": "마족 출신으로 공격을 담당하는 용병이다. 도끼질은 성실하지만 사과는 도끼등으로 하는 마족 전열병. 전투에서는 ‘도끼등 돌파’를 사용하고, 지원 시 ‘성실한 도끼질’로 힘을 보탠다. 꾸준한 피해를 쌓는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

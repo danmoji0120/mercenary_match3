@@ -1,0 +1,38 @@
+{
+  "id": "acid_javelin_nasika",
+  "displayName": "산성투창 나시카",
+  "shortName": "나시카",
+  "rarity": "SR",
+  "race": "LIZARD_BEASTKIN",
+  "role": "ATTACK",
+  "combatStyle": "SHATTER",
+  "stats": {
+    "maxHp": 940,
+    "swordEffectPct": 120,
+    "shieldEffectPct": 90,
+    "healEffectPct": 95,
+    "manaGainPct": 105
+  },
+  "activeAbilityId": "acid_javelin_nasika_active",
+  "supportAbilityId": "acid_javelin_nasika_support",
+  "tags": [
+    "LIZARD_BEASTKIN",
+    "ATTACK",
+    "SHIELD_BYPASS",
+    "SHIELD_BREAK"
+  ],
+  "description": {
+    "summary": "맞힌 뒤에 녹는지 확인하겠다고 너무 가까이 가는 산성 투창병",
+    "details": "도마뱀수인 출신으로 전면 공격을 담당하는 SR 용병이다. 맞힌 뒤에 녹는지 확인하겠다고 너무 가까이 가는 산성 투창병. 전투에서는 ‘용해 투창’을 사용하고, 지원 시 ‘후속 투창’으로 힘을 보탠다. 높은 피해와 공격 연계로 상대를 압박하는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

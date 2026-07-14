@@ -1,0 +1,48 @@
+{
+  "id": "failed_saint_noael_active",
+  "kind": "ACTIVE",
+  "displayName": "불완전 기적 임상",
+  "shortDescription": "HP를 265 회복하고 초과 회복량 전부를 최대 130의 보호막으로 전환하며 해로운 상태 1개를 제거한다.",
+  "fullDescription": "HP를 265 회복하고 초과 회복량 전부를 최대 130의 보호막으로 전환하며 해로운 상태 1개를 제거한다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "HEAL",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 265
+      },
+      "resultKey": "miracleHeal"
+    },
+    {
+      "type": "CONVERT_OVERHEAL_TO_SHIELD",
+      "target": "SELF",
+      "ratio": 1.0,
+      "maximum": 130,
+      "condition": {
+        "type": "RESULT_COMPARE",
+        "resultKey": "miracleHeal",
+        "path": "overhealing",
+        "operator": "GT",
+        "value": 0
+      },
+      "resultKey": "miracleShield"
+    },
+    {
+      "type": "REMOVE_STATUS",
+      "target": "SELF",
+      "filter": {
+        "tag": "DEBUFF"
+      },
+      "maxCount": 1,
+      "selection": "OLDEST_FIRST",
+      "resultKey": "removedDebuff"
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

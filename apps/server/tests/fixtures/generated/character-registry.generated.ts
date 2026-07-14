@@ -21,7 +21,7 @@ export const generatedCharacterDefinitions = [
       "support"
     ],
     "recommendedRole": "support",
-    "portraitAsset": "/characters/test.svg",
+    "portraitAsset": "",
     "stats": {
       "maxHp": 1234,
       "swordEffectPct": 150,

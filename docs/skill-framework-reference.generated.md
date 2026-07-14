@@ -13,6 +13,7 @@ Required files: `manifest.json`, `character.json`, `active.json`, `support.json`
 | --- | --- | --- | --- | --- |
 | $.activeAbilityId | string | yes | must equal active.json id | combatant ability lookup |
 | $.allowedSlots | array<combatant\|support> | yes | all entries must be combatant or support | loadout validation |
+| $.assets.portrait | relative PNG/JPEG/WebP path | no | package-local, <= 8 MiB, signature checked | compiled to hashed portrait URL only |
 | $.combatStyle | non-empty string ID | yes | normalization-required; no dedicated compiler check | metadata only |
 | $.description.details | string | yes | normalization-required; no dedicated compiler check | presentation metadata |
 | $.description.summary | string | yes | normalization-required; no dedicated compiler check | CharacterDefinition.description |
@@ -93,10 +94,13 @@ Stats are taken only from the combatant slot. Percentage 100 is neutral. Board t
 | RESOURCE | `target`, `resource` | number | none |
 | RESULT_VALUE | `resultKey`, `path` | number\|boolean | none |
 | ROUND | `value` | integer | none |
+| RUNTIME_VALUE | `defaultValue`, `key`, `scope`, `target` | number | none |
 | STAT | `target`, `stat` | number | none |
 | SUBTRACT | `values` | number | none |
 
 Division by zero throws `VALUE_DIVIDE_BY_ZERO`. Non-finite results throw. RESULT_VALUE keys must be declared earlier in the current effect scope. EVENT_VALUE availability is event-specific.
+
+Runtime value keys match `^[a-z][a-zA-Z0-9_.-]{0,63}$`. Scopes: `ABILITY`, `BATTLE`, `CHAIN`, `STATUS`. Operations: `ADD`, `CLAMP`, `CLEAR`, `MAX`, `MIN`, `SET`, `SUBTRACT`. Missing reads require an explicit default expression. Battle/ability values live for the battle, status values are cleared after removal dispatch, and chain values are cleared when the chain completes. The store is part of the deterministic effect snapshot.
 
 #### ABS
 
@@ -294,6 +298,21 @@ Division by zero throws `VALUE_DIVIDE_BY_ZERO`. Non-finite results throw. RESULT
 }
 ```
 
+#### RUNTIME_VALUE
+
+```json
+{
+  "defaultValue": {
+    "type": "CONSTANT",
+    "value": 0
+  },
+  "key": "example.counter",
+  "scope": "BATTLE",
+  "target": "SELF",
+  "type": "RUNTIME_VALUE"
+}
+```
+
 #### STAT
 
 ```json
@@ -471,21 +490,21 @@ Operators: `EQ`, `GTE`, `GT`, `LTE`, `LT`, `NE`.
 
 | Name | Support status | Required fields | Optional fields | Result paths | Notes |
 | --- | --- | --- | --- | --- | --- |
-| ADD_SHIELD | SUPPORTED | `amount` | `cap`, `condition`, `resultKey`, `scope`, `target` | `actualShieldGain`, `finalAmount`, `requestedAmount` | scope currently normalizes only to chain_step. |
-| APPLY_STATUS | SUPPORTED | `statusId` | `condition`, `durationMs`, `resultKey`, `target` | `statusApplied` |  |
-| CLEAR_RUNTIME_FLAG | RUNTIME_PATH_PRESENT_UNVERIFIED | `flag` | `condition` | none |  |
-| CONSUME_RESOURCE | RUNTIME_PATH_PRESENT_UNVERIFIED | `amount`, `resource` | `allowPartial`, `canReduceHpBelowOne`, `condition`, `resultKey`, `target` | `consumedAmount`, `finalAmount`, `requestedAmount` |  |
+| ADD_SHIELD | SUPPORTED | `amount` | `cap`, `condition`, `resultKey`, `scope`, `target` | `actualShieldGain`, `finalAmount`, `overcapAmount`, `requestedAmount`, `shieldAfter`, `shieldBefore` | scope currently normalizes only to chain_step. |
+| APPLY_STATUS | SUPPORTED | `statusId` | `condition`, `durationMs`, `resultKey`, `target` | `currentStacks`, `previousStacks`, `statusApplied`, `statusId`, `statusRefreshed` |  |
+| CLEAR_RUNTIME_FLAG | SUPPORTED | `flag` | `condition`, `resultKey` | `changed`, `existed`, `key`, `previousValue` |  |
+| CONSUME_RESOURCE | SUPPORTED | `amount`, `resource` | `allowPartial`, `canReduceHpBelowOne`, `condition`, `resultKey`, `target` | `consumedAmount`, `finalAmount`, `remainingAmount`, `requestedAmount`, `resource`, `wasPartial` |  |
 | CONVERT_OVERHEAL_TO_SHIELD | SUPPORTED | `ratio` | `condition`, `maximum`, `resultKey`, `target` | `actualShieldGain`, `finalAmount`, `requestedAmount` |  |
 | CUSTOM | SUPPORTED | `handlerId` | `condition`, `parameters` | none |  |
 | DAMAGE | SUPPORTED | `amount` | `condition`, `resultKey`, `shieldBypassPct`, `tags`, `target`, `travelMs` | `finalAmount`, `hpDamage`, `requestedAmount`, `shieldBroken`, `shieldDamage`, `targetDefeated` |  |
-| HEAL | SUPPORTED | `amount` | `condition`, `resultKey`, `target` | `actualHealing`, `finalAmount`, `overhealing`, `requestedAmount` |  |
+| HEAL | SUPPORTED | `amount` | `condition`, `resultKey`, `target` | `actualHealing`, `finalAmount`, `hpAfter`, `hpBefore`, `overhealing`, `requestedAmount` |  |
 | IF | SUPPORTED | `condition`, `then` | `else` | none |  |
-| MODIFY_EVENT | RUNTIME_PATH_PRESENT_UNVERIFIED | none | `amount`, `condition`, `ratio`, `resultKey` | `finalAmount`, `requestedAmount` |  |
-| MODIFY_MANA | SUPPORTED | `amount` | `condition`, `resultKey`, `target` | `finalAmount`, `requestedAmount` |  |
-| REMOVE_STATUS | RUNTIME_PATH_PRESENT_UNVERIFIED | `statusId` | `condition`, `target` | none |  |
+| MODIFY_EVENT | SUPPORTED | `operation`, `path`, `value` | `condition`, `resultKey` | `finalAmount`, `requestedAmount` |  |
+| MODIFY_MANA | SUPPORTED | `amount` | `condition`, `resultKey`, `target` | `finalAmount`, `manaAfter`, `manaBefore`, `overflowAmount`, `requestedAmount` |  |
+| REMOVE_STATUS | SUPPORTED | `statusId or filter` | `condition`, `maxCount`, `resultKey`, `selection`, `target` | `removedCount`, `removedStatusIds`, `removalReason` |  |
 | SCHEDULE | SUPPORTED | `delayMs`, `effects` | `condition`, `target` | none |  |
-| SET_RUNTIME_FLAG | RUNTIME_PATH_PRESENT_UNVERIFIED | `flag`, `value` | `condition` | none |  |
-| STORE_VALUE | RUNTIME_PATH_PRESENT_UNVERIFIED | `value` | `condition`, `resultKey` | `finalAmount` |  |
+| SET_RUNTIME_FLAG | SUPPORTED | `flag`, `value` | `condition`, `resultKey` | `changed`, `currentValue`, `existed`, `key`, `previousValue` |  |
+| STORE_VALUE | SUPPORTED | `key`, `operation`, `scope` | `condition`, `maximum`, `minimum`, `resultKey`, `statusId`, `target`, `value` | `cleared`, `existed`, `finalAmount`, `key`, `nextValue`, `previousValue`, `scope` |  |
 
 Only **SUPPORTED** entries have package validation, an executor path, and current production/fixture runtime evidence. **RUNTIME_PATH_PRESENT_UNVERIFIED** entries have validator and executor branches but no current runtime content/fixture evidence. Runtime-internal effects are listed only in the machine manifest.
 
@@ -520,18 +539,19 @@ Status: **SUPPORTED**; runtime type: `apply_status`.
 
 ### CLEAR_RUNTIME_FLAG
 
-Status: **RUNTIME_PATH_PRESENT_UNVERIFIED**; runtime type: `consume_runtime_flag`.
+Status: **SUPPORTED**; runtime type: `consume_runtime_flag`.
 
 ```json
 {
   "flag": "example.flag",
+  "resultKey": "clearedFlag",
   "type": "CLEAR_RUNTIME_FLAG"
 }
 ```
 
 ### CONSUME_RESOURCE
 
-Status: **RUNTIME_PATH_PRESENT_UNVERIFIED**; runtime type: `consume_resource`.
+Status: **SUPPORTED**; runtime type: `consume_resource`.
 
 ```json
 {
@@ -648,17 +668,18 @@ Status: **SUPPORTED**; runtime type: `conditional`.
 
 ### MODIFY_EVENT
 
-Status: **RUNTIME_PATH_PRESENT_UNVERIFIED**; runtime type: `modify_event_amount`.
+Status: **SUPPORTED**; runtime type: `modify_event_amount`.
 
 ```json
 {
-  "amount": {
-    "type": "CONSTANT",
-    "value": 0
-  },
-  "ratio": 0.8,
+  "operation": "MULTIPLY",
+  "path": "damage.currentAmount",
   "resultKey": "modified",
-  "type": "MODIFY_EVENT"
+  "type": "MODIFY_EVENT",
+  "value": {
+    "type": "CONSTANT",
+    "value": 0.8
+  }
 }
 ```
 
@@ -680,7 +701,7 @@ Status: **SUPPORTED**; runtime type: `gain_mana`.
 
 ### REMOVE_STATUS
 
-Status: **RUNTIME_PATH_PRESENT_UNVERIFIED**; runtime type: `remove_status`.
+Status: **SUPPORTED**; runtime type: `remove_status`.
 
 ```json
 {
@@ -713,11 +734,12 @@ Status: **SUPPORTED**; runtime type: `schedule_effects`.
 
 ### SET_RUNTIME_FLAG
 
-Status: **RUNTIME_PATH_PRESENT_UNVERIFIED**; runtime type: `set_runtime_flag`.
+Status: **SUPPORTED**; runtime type: `set_runtime_flag`.
 
 ```json
 {
   "flag": "example.flag",
+  "resultKey": "setFlag",
   "type": "SET_RUNTIME_FLAG",
   "value": true
 }
@@ -725,11 +747,14 @@ Status: **RUNTIME_PATH_PRESENT_UNVERIFIED**; runtime type: `set_runtime_flag`.
 
 ### STORE_VALUE
 
-Status: **RUNTIME_PATH_PRESENT_UNVERIFIED**; runtime type: `store_value`.
+Status: **SUPPORTED**; runtime type: `store_value`.
 
 ```json
 {
+  "key": "example.stored",
+  "operation": "SET",
   "resultKey": "stored",
+  "scope": "BATTLE",
   "type": "STORE_VALUE",
   "value": {
     "type": "CONSTANT",
@@ -742,27 +767,27 @@ Status: **RUNTIME_PATH_PRESENT_UNVERIFIED**; runtime type: `store_value`.
 
 | Event | Status | Runtime type | Available EVENT_VALUE paths |
 | --- | --- | --- | --- |
-| ACTIVE_USED | TYPE_DEFINED_NOT_EMITTED | active_requested | none |
+| ACTIVE_USED | EMITTED_AND_SUPPORTED | active_requested | `ability.id`, `ability.kind`, `ability.manaCost`, `ability.manaSpent` |
 | AFTER_DAMAGE | EMITTED_AND_SUPPORTED | after_damage | `damage.shieldBroken` |
 | ATTACK_CREATED | TYPE_DEFINED_NOT_EMITTED | attack_created | none |
 | BATTLE_STARTED | EMITTED_AND_SUPPORTED | battle_started | none |
 | BEFORE_ATTACK_IMPACT | EMITTED_AND_SUPPORTED | before_attack_impact | `damage.currentAmount` |
 | BEFORE_DAMAGE | TYPE_DEFINED_NOT_EMITTED | before_damage | none |
-| CHAIN_STEP_RESOLVED | TYPE_DEFINED_NOT_EMITTED | chain_step_resolved | none |
+| CHAIN_STEP_RESOLVED | EMITTED_AND_SUPPORTED | chain_step_resolved | `chain.id`, `chain.isFinalStep`, `chain.matchCount`, `chain.stepIndex`, `chain.totalMatchedTiles` |
 | DEFEATED | EMITTED_AND_SUPPORTED | battle_finished | none |
-| HEALED | TYPE_DEFINED_NOT_EMITTED | after_heal | none |
+| HEALED | EMITTED_AND_SUPPORTED | after_heal | `heal.actualAmount`, `heal.hpAfter`, `heal.hpBefore`, `heal.overhealAmount`, `heal.requestedAmount` |
 | HP_THRESHOLD_CROSSED | EMITTED_AND_SUPPORTED | hp_threshold_crossed | `hp.threshold` |
 | SHIELD_BROKEN | EMITTED_AND_SUPPORTED | shield_broken | `damage.shieldBroken` |
-| SHIELD_GAINED | TYPE_DEFINED_NOT_EMITTED | after_shield_gain | none |
-| STATUS_APPLIED | TYPE_DEFINED_NOT_EMITTED | status_applied | none |
-| STATUS_REMOVED | TYPE_DEFINED_NOT_EMITTED | status_expired | none |
+| SHIELD_GAINED | EMITTED_AND_SUPPORTED | after_shield_gain | `shield.actualAmount`, `shield.after`, `shield.before`, `shield.overcapAmount`, `shield.requestedAmount` |
+| STATUS_APPLIED | EMITTED_AND_SUPPORTED | status_applied | `status.applied`, `status.currentStacks`, `status.durationMs`, `status.id`, `status.previousStacks`, `status.refreshed` |
+| STATUS_REMOVED | EMITTED_AND_SUPPORTED | status_expired | `status.id`, `status.previousStacks`, `status.removalReason`, `status.wasExpired` |
 | TILE_MATCH_RESOLVED | EMITTED_AND_SUPPORTED | match_group_resolved | `chain.depth`, `match.count`, `match.tileType` |
 
 `TYPE_DEFINED_NOT_EMITTED` events pass the current package validator but are not normal support-authoring capabilities because battle runtime does not dispatch them.
 
 ### ACTIVE_USED
 
-Status: **TYPE_DEFINED_NOT_EMITTED**. Timing: not emitted. Actor: undefined for content. Target: undefined for content.
+Status: **EMITTED_AND_SUPPORTED**. Timing: after an active ability is accepted. Actor: active ability owner. Target: opponent.
 
 ```json
 {
@@ -836,7 +861,7 @@ Status: **EMITTED_AND_SUPPORTED**. Timing: after. Actor: attacker. Target: damag
 
 ### ATTACK_CREATED
 
-Status: **TYPE_DEFINED_NOT_EMITTED**. Timing: not emitted. Actor: undefined for content. Target: undefined for content.
+Status: **TYPE_DEFINED_NOT_EMITTED**. Timing: See canonical trigger emitter registry.. Actor: support owner. Target: event counterpart.
 
 ```json
 {
@@ -947,7 +972,7 @@ Status: **EMITTED_AND_SUPPORTED**. Timing: before impact (within 150ms). Actor: 
 
 ### BEFORE_DAMAGE
 
-Status: **TYPE_DEFINED_NOT_EMITTED**. Timing: not emitted. Actor: undefined for content. Target: undefined for content.
+Status: **TYPE_DEFINED_NOT_EMITTED**. Timing: See canonical trigger emitter registry.. Actor: support owner. Target: event counterpart.
 
 ```json
 {
@@ -984,7 +1009,7 @@ Status: **TYPE_DEFINED_NOT_EMITTED**. Timing: not emitted. Actor: undefined for 
 
 ### CHAIN_STEP_RESOLVED
 
-Status: **TYPE_DEFINED_NOT_EMITTED**. Timing: not emitted. Actor: undefined for content. Target: undefined for content.
+Status: **EMITTED_AND_SUPPORTED**. Timing: See canonical trigger emitter registry.. Actor: support owner. Target: event counterpart.
 
 ```json
 {
@@ -1058,7 +1083,7 @@ Status: **EMITTED_AND_SUPPORTED**. Timing: after result decided. Actor: each par
 
 ### HEALED
 
-Status: **TYPE_DEFINED_NOT_EMITTED**. Timing: not emitted. Actor: undefined for content. Target: undefined for content.
+Status: **EMITTED_AND_SUPPORTED**. Timing: See canonical trigger emitter registry.. Actor: support owner. Target: event counterpart.
 
 ```json
 {
@@ -1169,7 +1194,7 @@ Status: **EMITTED_AND_SUPPORTED**. Timing: after damage. Actor: damaged particip
 
 ### SHIELD_GAINED
 
-Status: **TYPE_DEFINED_NOT_EMITTED**. Timing: not emitted. Actor: undefined for content. Target: undefined for content.
+Status: **EMITTED_AND_SUPPORTED**. Timing: after enemy actual shield gain is known. Actor: opposing support owner. Target: shield recipient.
 
 ```json
 {
@@ -1206,7 +1231,7 @@ Status: **TYPE_DEFINED_NOT_EMITTED**. Timing: not emitted. Actor: undefined for 
 
 ### STATUS_APPLIED
 
-Status: **TYPE_DEFINED_NOT_EMITTED**. Timing: not emitted. Actor: undefined for content. Target: undefined for content.
+Status: **EMITTED_AND_SUPPORTED**. Timing: See canonical trigger emitter registry.. Actor: support owner. Target: event counterpart.
 
 ```json
 {
@@ -1243,7 +1268,7 @@ Status: **TYPE_DEFINED_NOT_EMITTED**. Timing: not emitted. Actor: undefined for 
 
 ### STATUS_REMOVED
 
-Status: **TYPE_DEFINED_NOT_EMITTED**. Timing: not emitted. Actor: undefined for content. Target: undefined for content.
+Status: **EMITTED_AND_SUPPORTED**. Timing: after removal and before status runtime-value cleanup. Actor: both support owners. Target: status owner or counterpart.
 
 ```json
 {
@@ -1319,28 +1344,58 @@ Status: **EMITTED_AND_SUPPORTED**. Timing: after base tile effects are applied. 
 
 | Path | Type | Available emitted events | Note |
 | --- | --- | --- | --- |
+| ability.id | string | `ACTIVE_USED` |  |
+| ability.kind | AbilityKind | `ACTIVE_USED` |  |
+| ability.manaCost | integer | `ACTIVE_USED` |  |
+| ability.manaSpent | integer | `ACTIVE_USED` |  |
 | chain.depth | integer | `TILE_MATCH_RESOLVED` |  |
+| chain.id | string | `CHAIN_STEP_RESOLVED` |  |
+| chain.isFinalStep | boolean | `CHAIN_STEP_RESOLVED` |  |
+| chain.matchCount | integer | `CHAIN_STEP_RESOLVED` |  |
+| chain.stepIndex | integer | `CHAIN_STEP_RESOLVED` |  |
+| chain.totalMatchedTiles | integer | `CHAIN_STEP_RESOLVED` |  |
 | damage.currentAmount | number | `BEFORE_ATTACK_IMPACT` |  |
 | damage.finalAmount | number | none | Validator accepts this path, but no emitted support trigger currently supplies finalAmount. |
 | damage.shieldBroken | boolean | `AFTER_DAMAGE`, `SHIELD_BROKEN` |  |
+| heal.actualAmount | number | `HEALED` |  |
+| heal.hpAfter | number | `HEALED` |  |
+| heal.hpBefore | number | `HEALED` |  |
+| heal.overhealAmount | number | `HEALED` |  |
+| heal.requestedAmount | number | `HEALED` |  |
 | hp.threshold | number | `HP_THRESHOLD_CROSSED` |  |
 | match.count | integer | `TILE_MATCH_RESOLVED` |  |
 | match.tileType | TileType | `TILE_MATCH_RESOLVED` |  |
+| shield.actualAmount | number | `SHIELD_GAINED` |  |
+| shield.after | number | `SHIELD_GAINED` |  |
+| shield.before | number | `SHIELD_GAINED` |  |
+| shield.overcapAmount | number | `SHIELD_GAINED` |  |
+| shield.requestedAmount | number | `SHIELD_GAINED` |  |
+| status.applied | boolean | `STATUS_APPLIED` |  |
+| status.currentStacks | integer | `STATUS_APPLIED` |  |
+| status.durationMs | integer | `STATUS_APPLIED` |  |
+| status.id | string | `STATUS_APPLIED`, `STATUS_REMOVED` |  |
+| status.previousStacks | integer | `STATUS_APPLIED`, `STATUS_REMOVED` |  |
+| status.refreshed | boolean | `STATUS_APPLIED` |  |
+| status.removalReason | string enum | `STATUS_REMOVED` |  |
+| status.wasExpired | boolean | `STATUS_REMOVED` |  |
 
 
 ## 10. Effect result paths
 
 | Effect | Paths |
 | --- | --- |
-| ADD_SHIELD | `actualShieldGain`, `finalAmount`, `requestedAmount` |
-| APPLY_STATUS | `statusApplied` |
-| CONSUME_RESOURCE | `consumedAmount`, `finalAmount`, `requestedAmount` |
+| ADD_SHIELD | `actualShieldGain`, `finalAmount`, `overcapAmount`, `requestedAmount`, `shieldAfter`, `shieldBefore` |
+| APPLY_STATUS | `currentStacks`, `previousStacks`, `statusApplied`, `statusId`, `statusRefreshed` |
+| CLEAR_RUNTIME_FLAG | `changed`, `existed`, `key`, `previousValue` |
+| CONSUME_RESOURCE | `consumedAmount`, `finalAmount`, `remainingAmount`, `requestedAmount`, `resource`, `wasPartial` |
 | CONVERT_OVERHEAL_TO_SHIELD | `actualShieldGain`, `finalAmount`, `requestedAmount` |
 | DAMAGE | `finalAmount`, `hpDamage`, `requestedAmount`, `shieldBroken`, `shieldDamage`, `targetDefeated` |
-| HEAL | `actualHealing`, `finalAmount`, `overhealing`, `requestedAmount` |
+| HEAL | `actualHealing`, `finalAmount`, `hpAfter`, `hpBefore`, `overhealing`, `requestedAmount` |
 | MODIFY_EVENT | `finalAmount`, `requestedAmount` |
-| MODIFY_MANA | `finalAmount`, `requestedAmount` |
-| STORE_VALUE | `finalAmount` |
+| MODIFY_MANA | `finalAmount`, `manaAfter`, `manaBefore`, `overflowAmount`, `requestedAmount` |
+| REMOVE_STATUS | `removedCount`, `removedStatusIds`, `removalReason` |
+| SET_RUNTIME_FLAG | `changed`, `currentValue`, `existed`, `key`, `previousValue` |
+| STORE_VALUE | `cleared`, `existed`, `finalAmount`, `key`, `nextValue`, `previousValue`, `scope` |
 
 Asynchronous DAMAGE results are available to deferred result conditions after impact. Result keys are lexical to the compiled effect tree; SCHEDULE receives a copied result store, while independent ability activations do not share result stores.
 
@@ -1364,6 +1419,7 @@ Targets: `ENEMY`, `SELF`. Tile types: `HEAL`, `MANA`, `SHIELD`, `SWORD`. Runtime
 | emergency_guard | 5000 | refresh | 1 | incoming_damage_multiplier:0.55 |
 | exposed_flaw_charge | 6000 | refresh | 1 | shield_bypass_bonus:0.3 |
 | healing_reduction | 7000 | refresh | 1 | healing_received_multiplier:0.55 |
+| noael_aftereffect | 5000 | refresh | 1 | healing_received_multiplier:0.8 |
 
 Statuses are serialized with source/target, stack count, and expiration. Status definition triggers exist in the runtime type but current status files contain no trigger-driven executor path of their own.
 
@@ -1462,13 +1518,14 @@ Validator: **PASSED**
   "cooldownMs": 0,
   "effects": [
     {
-      "amount": {
-        "type": "CONSTANT",
-        "value": 0
-      },
-      "ratio": 0.8,
+      "operation": "MULTIPLY",
+      "path": "damage.currentAmount",
       "resultKey": "modified",
-      "type": "MODIFY_EVENT"
+      "type": "MODIFY_EVENT",
+      "value": {
+        "type": "CONSTANT",
+        "value": 0.8
+      }
     }
   ],
   "trigger": {
@@ -1608,11 +1665,13 @@ Validator: **PASSED**
   "effects": [
     {
       "flag": "example.flag",
+      "resultKey": "setFlag",
       "type": "SET_RUNTIME_FLAG",
       "value": true
     },
     {
       "flag": "example.flag",
+      "resultKey": "clearedFlag",
       "type": "CLEAR_RUNTIME_FLAG"
     }
   ],
@@ -1798,7 +1857,10 @@ Validator: **PASSED**
 {
   "effects": [
     {
+      "key": "example.stored",
+      "operation": "SET",
       "resultKey": "stored",
+      "scope": "BATTLE",
       "type": "STORE_VALUE",
       "value": {
         "type": "CONSTANT",
@@ -1807,9 +1869,14 @@ Validator: **PASSED**
     },
     {
       "amount": {
-        "path": "finalAmount",
-        "resultKey": "stored",
-        "type": "RESULT_VALUE"
+        "defaultValue": {
+          "type": "CONSTANT",
+          "value": 0
+        },
+        "key": "example.stored",
+        "scope": "BATTLE",
+        "target": "SELF",
+        "type": "RUNTIME_VALUE"
       },
       "target": "SELF",
       "type": "ADD_SHIELD"

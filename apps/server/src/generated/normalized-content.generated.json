@@ -11,6 +11,498 @@
         "cost": 100,
         "effects": [
           {
+            "amount": 200,
+            "key": "primaryAttack",
+            "shieldBypassRatio": 0.22,
+            "target": "opponent",
+            "travelMs": 500,
+            "type": "deal_damage"
+          },
+          {
+            "conditions": [
+              {
+                "effectKey": "primaryAttack",
+                "field": "shieldBroken",
+                "operator": "eq",
+                "type": "effect_result_compare",
+                "value": true
+              }
+            ],
+            "effects": [
+              {
+                "amount": 65,
+                "target": "self",
+                "type": "gain_shield"
+              }
+            ],
+            "type": "conditional"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 200 피해를 주며 보호막의 22%를 무시한다. 보호막을 파괴하면 자신은 보호막 65를 얻는다.",
+        "id": "acid_javelin_nasika_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "용해 투창",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 200 피해를 주며 보호막의 22%를 무시한다. 보호막을 파괴하면 자신은 보호막 65를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "acid_javelin_nasika_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "맞힌 뒤에 녹는지 확인하겠다고 너무 가까이 가는 산성 투창병",
+        "enabled": true,
+        "id": "acid_javelin_nasika",
+        "name": "산성투창 나시카",
+        "portraitAsset": "",
+        "race": "LIZARD_BEASTKIN",
+        "rarity": "SR",
+        "recommendedRole": "combatant",
+        "shortName": "나시카",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 95,
+          "manaGainPct": 105,
+          "maxHp": 940,
+          "shieldEffectPct": 90,
+          "swordEffectPct": 120
+        },
+        "support": {
+          "effectId": "acid_javelin_nasika_support"
+        },
+        "tags": [
+          "LIZARD_BEASTKIN",
+          "ATTACK",
+          "SHIELD_BYPASS",
+          "SHIELD_BREAK"
+        ]
+      },
+      "id": "acid_javelin_nasika",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 95,
+        "manaGainPct": 105,
+        "maxHp": 940,
+        "shieldEffectPct": 90,
+        "swordEffectPct": 120
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 5
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 48,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검을 5개 이상 맞추면 적에게 추가로 48 피해를 준다.",
+        "id": "acid_javelin_nasika_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "후속 투창",
+        "oncePerBattle": false,
+        "shortDescription": "검을 5개 이상 맞추면 적에게 추가로 48 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 125,
+            "target": "self",
+            "type": "heal"
+          },
+          {
+            "filter": {
+              "tag": "DEBUFF"
+            },
+            "key": "removedDebuff",
+            "maxCount": 1,
+            "selection": "OLDEST_FIRST",
+            "target": "self",
+            "type": "remove_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "HP를 125 회복하고 해로운 상태 1개를 제거한다.",
+        "id": "apothecary_assistant_brixa_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "응급 해독제",
+        "oncePerBattle": false,
+        "shortDescription": "HP를 125 회복하고 해로운 상태 1개를 제거한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "apothecary_assistant_brixa_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "약 냄새로 사람 상태를 구분한다고 우기는 드워프 약제 담당",
+        "enabled": true,
+        "id": "apothecary_assistant_brixa",
+        "name": "약제조수 브릭사",
+        "portraitAsset": "",
+        "race": "DWARF",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "브릭사",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 120,
+          "manaGainPct": 105,
+          "maxHp": 980,
+          "shieldEffectPct": 95,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "apothecary_assistant_brixa_support"
+        },
+        "tags": [
+          "DWARF",
+          "HEAL",
+          "CLEANSE",
+          "HEAL_MATCH"
+        ]
+      },
+      "id": "apothecary_assistant_brixa",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 120,
+        "manaGainPct": 105,
+        "maxHp": 980,
+        "shieldEffectPct": 95,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "HEAL",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 6000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 28,
+            "target": "self",
+            "type": "heal"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "회복을 4개 이상 맞추면 HP를 28 추가로 회복한다.",
+        "id": "apothecary_assistant_brixa_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "약향 감별",
+        "oncePerBattle": false,
+        "shortDescription": "회복을 4개 이상 맞추면 HP를 28 추가로 회복한다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 170,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 170을 얻는다.",
+        "id": "apprentice_shieldbearer_riel_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "견습 성역",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 170을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "apprentice_shieldbearer_riel_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "성실하지만 성역 유지비 계산을 못 해서 매번 혼나는 견습 천사",
+        "enabled": true,
+        "id": "apprentice_shieldbearer_riel",
+        "name": "견습방패병 리엘",
+        "portraitAsset": "",
+        "race": "ANGEL",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "견습 리엘",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 90,
+          "maxHp": 1120,
+          "shieldEffectPct": 120,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "apprentice_shieldbearer_riel_support"
+        },
+        "tags": [
+          "ANGEL",
+          "DEFENSE",
+          "SHIELD",
+          "BATTLE_START"
+        ]
+      },
+      "id": "apprentice_shieldbearer_riel",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 90,
+        "maxHp": 1120,
+        "shieldEffectPct": 120,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 55,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "전투 시작 시 보호막 55를 얻는다.",
+        "id": "apprentice_shieldbearer_riel_support",
+        "kind": "support",
+        "maxTriggersPerBattle": 1,
+        "name": "수호의 첫걸음",
+        "oncePerBattle": true,
+        "shortDescription": "전투 시작 시 보호막 55를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "battle_started"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 120,
+            "target": "opponent",
+            "type": "deal_damage"
+          },
+          {
+            "amount": 55,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+        "id": "axe_soldier_karna_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "도끼등 돌파",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "axe_soldier_karna_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "도끼질은 성실하지만 사과는 도끼등으로 하는 마족 전열병",
+        "enabled": true,
+        "id": "axe_soldier_karna",
+        "name": "도끼병 카르나",
+        "portraitAsset": "",
+        "race": "DEMONKIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "도끼 카르나",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 105,
+          "maxHp": 920,
+          "shieldEffectPct": 90,
+          "swordEffectPct": 115
+        },
+        "support": {
+          "effectId": "axe_soldier_karna_support"
+        },
+        "tags": [
+          "DEMONKIN",
+          "ATTACK",
+          "SHIELD",
+          "SWORD_MATCH"
+        ]
+      },
+      "id": "axe_soldier_karna",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 105,
+        "maxHp": 920,
+        "shieldEffectPct": 90,
+        "swordEffectPct": 115
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 28,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "id": "axe_soldier_karna_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "성실한 도끼질",
+        "oncePerBattle": false,
+        "shortDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
             "amount": 230,
             "target": "self",
             "type": "gain_shield"
@@ -42,6 +534,7 @@
           "combatant",
           "support"
         ],
+        "assets": {},
         "combatant": {
           "skillId": "clarice_fortress_stance"
         },
@@ -53,7 +546,7 @@
         "enabled": true,
         "id": "clarice_heavy_shield",
         "name": "중갑 방패기사 클라리스",
-        "portraitAsset": "/characters/clarice_heavy_shield.svg",
+        "portraitAsset": "",
         "race": "HUMAN",
         "rarity": "SR",
         "recommendedRole": "combatant",
@@ -172,6 +665,232 @@
         "cost": 100,
         "effects": [
           {
+            "amount": 200,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "amount": 65,
+            "target": "self",
+            "type": "heal"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 200을 얻고 HP를 65 회복한다.",
+        "id": "convoy_captain_graka_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "목적지까지 생존",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 200을 얻고 HP를 65 회복한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "convoy_captain_graka_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "의뢰인은 무조건 목적지까지 데려가지만 풍경은 전부 부서져 있음",
+        "enabled": true,
+        "id": "convoy_captain_graka",
+        "name": "호송대장 그라카",
+        "portraitAsset": "",
+        "race": "ORC",
+        "rarity": "SR",
+        "recommendedRole": "combatant",
+        "shortName": "그라카",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 90,
+          "maxHp": 1150,
+          "shieldEffectPct": 125,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "convoy_captain_graka_support"
+        },
+        "tags": [
+          "ORC",
+          "DEFENSE",
+          "ESCORT",
+          "BATTLE_START"
+        ]
+      },
+      "id": "convoy_captain_graka",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 90,
+        "maxHp": 1150,
+        "shieldEffectPct": 125,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 72,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "전투 시작 시 보호막 72를 얻는다.",
+        "id": "convoy_captain_graka_support",
+        "kind": "support",
+        "maxTriggersPerBattle": 1,
+        "name": "출발 전 적재",
+        "oncePerBattle": true,
+        "shortDescription": "전투 시작 시 보호막 72를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "battle_started"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 145,
+            "shieldBypassRatio": 0.15,
+            "target": "opponent",
+            "travelMs": 400,
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 145 피해를 주며 보호막의 15%를 무시한다.",
+        "id": "dagger_minha_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "틈새 베기",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 145 피해를 주며 보호막의 15%를 무시한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "dagger_minha_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "강한 적은 피하고 약한 적은 끝까지 쫓는 얄미운 단검꾼",
+        "enabled": true,
+        "id": "dagger_minha",
+        "name": "단검꾼 미냐",
+        "portraitAsset": "",
+        "race": "CAT_BEASTKIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "미냐",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 95,
+          "manaGainPct": 115,
+          "maxHp": 900,
+          "shieldEffectPct": 90,
+          "swordEffectPct": 110
+        },
+        "support": {
+          "effectId": "dagger_minha_support"
+        },
+        "tags": [
+          "CAT_BEASTKIN",
+          "ATTACK",
+          "SPEED",
+          "SHIELD_BYPASS"
+        ]
+      },
+      "id": "dagger_minha",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 95,
+        "manaGainPct": 115,
+        "maxHp": 900,
+        "shieldEffectPct": 90,
+        "swordEffectPct": 110
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 28,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "id": "dagger_minha_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "약점 추격",
+        "oncePerBattle": false,
+        "shortDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
             "amount": 155,
             "tags": [
               "active_skill",
@@ -214,6 +933,7 @@
           "combatant",
           "support"
         ],
+        "assets": {},
         "combatant": {
           "skillId": "eda_curse_verdict"
         },
@@ -225,7 +945,7 @@
         "enabled": true,
         "id": "eda_curse_appraiser",
         "name": "저주 감정사 에다",
-        "portraitAsset": "/characters/eda_curse_appraiser.svg",
+        "portraitAsset": "",
         "race": "HUMAN",
         "rarity": "SR",
         "recommendedRole": "support",
@@ -352,6 +1072,7 @@
           "combatant",
           "support"
         ],
+        "assets": {},
         "combatant": {
           "skillId": "evelyn_field_surgery"
         },
@@ -363,7 +1084,7 @@
         "enabled": true,
         "id": "evelyn_trauma_stitcher",
         "name": "외상 봉합사 이브린",
-        "portraitAsset": "/characters/evelyn_trauma_stitcher.svg",
+        "portraitAsset": "",
         "race": "HUMAN",
         "rarity": "SR",
         "recommendedRole": "support",
@@ -456,6 +1177,430 @@
         "cost": 100,
         "effects": [
           {
+            "amount": 265,
+            "key": "miracleHeal",
+            "target": "self",
+            "type": "heal"
+          },
+          {
+            "conditions": [
+              {
+                "effectKey": "miracleHeal",
+                "field": "overhealing",
+                "operator": "gt",
+                "type": "effect_result_compare",
+                "value": 0
+              }
+            ],
+            "key": "miracleShield",
+            "maximum": 130,
+            "ratio": 1,
+            "target": "self",
+            "type": "convert_overheal_to_shield"
+          },
+          {
+            "filter": {
+              "tag": "DEBUFF"
+            },
+            "key": "removedDebuff",
+            "maxCount": 1,
+            "selection": "OLDEST_FIRST",
+            "target": "self",
+            "type": "remove_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "HP를 265 회복하고 초과 회복량 전부를 최대 130의 보호막으로 전환하며 해로운 상태 1개를 제거한다.",
+        "id": "failed_saint_noael_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "불완전 기적 임상",
+        "oncePerBattle": false,
+        "shortDescription": "HP를 265 회복하고 초과 회복량 전부를 최대 130의 보호막으로 전환하며 해로운 상태 1개를 제거한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "failed_saint_noael_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "기도보다 임상기록이 익숙함",
+        "enabled": true,
+        "id": "failed_saint_noael",
+        "name": "실패작 성녀 노아엘",
+        "portraitAsset": "",
+        "race": "ARTIFICIAL_ANGEL",
+        "rarity": "SSR",
+        "recommendedRole": "combatant",
+        "shortName": "노아엘",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 138,
+          "manaGainPct": 112,
+          "maxHp": 1080,
+          "shieldEffectPct": 102,
+          "swordEffectPct": 92
+        },
+        "support": {
+          "effectId": "failed_saint_noael_support"
+        },
+        "tags": [
+          "ARTIFICIAL_ANGEL",
+          "HEAL",
+          "OVERHEAL",
+          "CLEANSE"
+        ]
+      },
+      "id": "failed_saint_noael",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 138,
+        "manaGainPct": 112,
+        "maxHp": 1080,
+        "shieldEffectPct": 102,
+        "swordEffectPct": 92
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [
+          {
+            "direction": "downward",
+            "operator": "eq",
+            "type": "hp_threshold_crossed",
+            "value": 25
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 175,
+            "target": "self",
+            "type": "heal"
+          },
+          {
+            "durationMs": 5000,
+            "statusId": "noael_aftereffect",
+            "target": "self",
+            "type": "apply_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "HP가 처음으로 25% 이하가 되면 HP를 175 회복하지만 5초 동안 받는 회복량이 20% 감소한다.",
+        "id": "failed_saint_noael_support",
+        "kind": "support",
+        "maxTriggersPerBattle": 1,
+        "name": "부작용은 나중에",
+        "oncePerBattle": true,
+        "shortDescription": "HP가 처음으로 25% 이하가 되면 HP를 175 회복하지만 5초 동안 받는 회복량이 20% 감소한다.",
+        "tags": [],
+        "trigger": {
+          "type": "hp_threshold_crossed"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 100,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "amount": 90,
+            "target": "opponent",
+            "type": "deal_damage"
+          },
+          {
+            "delayMs": 400,
+            "effects": [
+              {
+                "amount": 90,
+                "target": "opponent",
+                "type": "deal_damage"
+              }
+            ],
+            "type": "schedule_effects"
+          },
+          {
+            "delayMs": 800,
+            "effects": [
+              {
+                "amount": 90,
+                "target": "opponent",
+                "type": "deal_damage"
+              }
+            ],
+            "type": "schedule_effects"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 100을 얻고 잔존 군단을 소환해 적에게 0.4초 간격으로 90 피해를 3회 준다.",
+        "id": "fallen_legion_commander_morvain_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "잔존 군단 총공세",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 100을 얻고 잔존 군단을 소환해 적에게 0.4초 간격으로 90 피해를 3회 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "fallen_legion_commander_morvain_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "군단을 잃고 사무소 공대를 얻음",
+        "enabled": true,
+        "id": "fallen_legion_commander_morvain",
+        "name": "몰락 군단장 모르베인",
+        "portraitAsset": "",
+        "race": "DEMONKIN",
+        "rarity": "SSR",
+        "recommendedRole": "combatant",
+        "shortName": "모르베인",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 108,
+          "manaGainPct": 108,
+          "maxHp": 1120,
+          "shieldEffectPct": 118,
+          "swordEffectPct": 118
+        },
+        "support": {
+          "effectId": "fallen_legion_commander_morvain_support"
+        },
+        "tags": [
+          "DEMONKIN",
+          "ATTACK",
+          "MULTI_HIT",
+          "SCHEDULED"
+        ]
+      },
+      "id": "fallen_legion_commander_morvain",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 108,
+        "manaGainPct": 108,
+        "maxHp": 1120,
+        "shieldEffectPct": 118,
+        "swordEffectPct": 118
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "delayMs": 1000,
+            "effects": [
+              {
+                "amount": 48,
+                "target": "opponent",
+                "type": "deal_damage"
+              }
+            ],
+            "type": "schedule_effects"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "액티브 스킬을 사용한 뒤 1초 후 적에게 48 피해를 준다.",
+        "id": "fallen_legion_commander_morvain_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "후속대 투입",
+        "oncePerBattle": false,
+        "shortDescription": "액티브 스킬을 사용한 뒤 1초 후 적에게 48 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "allowPartial": true,
+            "amount": 180,
+            "canReduceHpBelowOne": false,
+            "key": "destroyedShield",
+            "resource": "SHIELD",
+            "target": "opponent",
+            "type": "consume_resource"
+          },
+          {
+            "amount": {
+              "type": "ADD",
+              "values": [
+                {
+                  "type": "CONSTANT",
+                  "value": 155
+                },
+                {
+                  "type": "MULTIPLY",
+                  "values": [
+                    {
+                      "path": "consumedAmount",
+                      "resultKey": "destroyedShield",
+                      "type": "RESULT_VALUE"
+                    },
+                    {
+                      "type": "CONSTANT",
+                      "value": 0.6
+                    }
+                  ]
+                }
+              ]
+            },
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적의 보호막을 최대 180까지 직접 파괴한 뒤 155에 파괴한 보호막의 60%를 더한 피해를 준다.",
+        "id": "fortress_breaker_camilla_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "요새 삭제 포격",
+        "oncePerBattle": false,
+        "shortDescription": "적의 보호막을 최대 180까지 직접 파괴한 뒤 155에 파괴한 보호막의 60%를 더한 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "fortress_breaker_camilla_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "요새는 잘 부수지만 주변 민가도 지도에서 지워버리는 포격장교",
+        "enabled": true,
+        "id": "fortress_breaker_camilla",
+        "name": "요새파괴 포격장교 카밀라",
+        "portraitAsset": "",
+        "race": "DWARF",
+        "rarity": "SSR",
+        "recommendedRole": "combatant",
+        "shortName": "카밀라",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 96,
+          "manaGainPct": 112,
+          "maxHp": 940,
+          "shieldEffectPct": 92,
+          "swordEffectPct": 132
+        },
+        "support": {
+          "effectId": "fortress_breaker_camilla_support"
+        },
+        "tags": [
+          "DWARF",
+          "ATTACK",
+          "ANTI_FORTRESS",
+          "SHIELD_DESTROY"
+        ]
+      },
+      "id": "fortress_breaker_camilla",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 96,
+        "manaGainPct": 112,
+        "maxHp": 940,
+        "shieldEffectPct": 92,
+        "swordEffectPct": 132
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [
+          {
+            "left": {
+              "path": "shield.actualAmount",
+              "type": "EVENT_VALUE"
+            },
+            "operator": "gte",
+            "right": {
+              "type": "CONSTANT",
+              "value": 80
+            },
+            "type": "expression_compare"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "allowPartial": true,
+            "amount": 55,
+            "canReduceHpBelowOne": false,
+            "key": "supportShieldDamage",
+            "resource": "SHIELD",
+            "target": "opponent",
+            "type": "consume_resource"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적이 한 번에 보호막을 80 이상 얻으면 그 보호막에 55 피해를 준다.",
+        "id": "fortress_breaker_camilla_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "신축 요새 재철거",
+        "oncePerBattle": false,
+        "shortDescription": "적이 한 번에 보호막을 80 이상 얻으면 그 보호막에 55 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "after_shield_gain"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
             "amount": 120,
             "target": "self",
             "type": "gain_shield"
@@ -487,6 +1632,7 @@
           "combatant",
           "support"
         ],
+        "assets": {},
         "combatant": {
           "skillId": "marta_guard_command"
         },
@@ -499,7 +1645,7 @@
         "enabled": true,
         "id": "marta_guard_captain",
         "name": "방패 경비반장 마르타",
-        "portraitAsset": "/characters/marta_guard_captain.svg",
+        "portraitAsset": "",
         "race": "HUMAN",
         "rarity": "SR",
         "recommendedRole": "support",
@@ -596,6 +1742,648 @@
         "cost": 100,
         "effects": [
           {
+            "amount": 175,
+            "target": "opponent",
+            "travelMs": 650,
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 175 피해를 준다.",
+        "id": "mountain_gunner_berka_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "산악 관통탄",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 175 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "mountain_gunner_berka_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "조준은 느리지만 한 번 맞히면 산적도 바위도 똑같이 눕힘",
+        "enabled": true,
+        "id": "mountain_gunner_berka",
+        "name": "산악포수 베르카",
+        "portraitAsset": "",
+        "race": "BEAR_BEASTKIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "베르카",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 110,
+          "maxHp": 880,
+          "shieldEffectPct": 85,
+          "swordEffectPct": 120
+        },
+        "support": {
+          "effectId": "mountain_gunner_berka_support"
+        },
+        "tags": [
+          "BEAR_BEASTKIN",
+          "ATTACK",
+          "SNIPER",
+          "CHAIN"
+        ]
+      },
+      "id": "mountain_gunner_berka",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 110,
+        "maxHp": 880,
+        "shieldEffectPct": 85,
+        "swordEffectPct": 120
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "left": {
+                  "path": "chain.depth",
+                  "type": "EVENT_VALUE"
+                },
+                "operator": "gte",
+                "right": {
+                  "type": "CONSTANT",
+                  "value": 3
+                },
+                "type": "expression_compare"
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 32,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검 매치를 포함한 연쇄 3 이상 달성 시 적에게 32 피해를 준다.",
+        "id": "mountain_gunner_berka_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "고지 사격",
+        "oncePerBattle": false,
+        "shortDescription": "검 매치를 포함한 연쇄 3 이상 달성 시 적에게 32 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 185,
+            "target": "opponent",
+            "type": "deal_damage"
+          },
+          {
+            "delayMs": 2000,
+            "effects": [
+              {
+                "amount": 65,
+                "target": "opponent",
+                "type": "deal_damage"
+              }
+            ],
+            "type": "schedule_effects"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 185 피해를 주고 2초 뒤 현실 균열이 65 피해를 추가로 준다.",
+        "id": "reality_leak_knight_morgan_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "균열 봉합 실패",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 185 피해를 주고 2초 뒤 현실 균열이 65 피해를 추가로 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "reality_leak_knight_morgan_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "새는 현실을 막는 데 익숙하지만 본인 기억도 가끔 새어 나감",
+        "enabled": true,
+        "id": "reality_leak_knight_morgan",
+        "name": "현실누수 처리기사 모르간",
+        "portraitAsset": "",
+        "race": "UNDEAD",
+        "rarity": "SR",
+        "recommendedRole": "combatant",
+        "shortName": "모르간",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 105,
+          "manaGainPct": 105,
+          "maxHp": 1040,
+          "shieldEffectPct": 105,
+          "swordEffectPct": 105
+        },
+        "support": {
+          "effectId": "reality_leak_knight_morgan_support"
+        },
+        "tags": [
+          "UNDEAD",
+          "ATTACK",
+          "SCHEDULED",
+          "ACTIVE_LINK"
+        ]
+      },
+      "id": "reality_leak_knight_morgan",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 105,
+        "manaGainPct": 105,
+        "maxHp": 1040,
+        "shieldEffectPct": 105,
+        "swordEffectPct": 105
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 48,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "액티브 스킬을 사용한 뒤 보호막 48을 얻는다.",
+        "id": "reality_leak_knight_morgan_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "누수 잔여막",
+        "oncePerBattle": false,
+        "shortDescription": "액티브 스킬을 사용한 뒤 보호막 48을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "allowPartial": false,
+            "amount": 50,
+            "canReduceHpBelowOne": false,
+            "key": "hpCost",
+            "resource": "HP",
+            "target": "self",
+            "type": "consume_resource"
+          },
+          {
+            "amount": 238,
+            "target": "opponent",
+            "travelMs": 500,
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "자신의 HP 50을 소모하고 적에게 238 피해를 준다.",
+        "id": "rogue_assault_akane_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "곤봉으로 해결",
+        "oncePerBattle": false,
+        "shortDescription": "자신의 HP 50을 소모하고 적에게 238 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "rogue_assault_akane_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "곤봉 들고 사고 치는 돌격조장",
+        "enabled": true,
+        "id": "rogue_assault_akane",
+        "name": "불량 돌격병 아카네",
+        "portraitAsset": "",
+        "race": "ONI",
+        "rarity": "SR",
+        "recommendedRole": "combatant",
+        "shortName": "아카네",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 85,
+          "manaGainPct": 115,
+          "maxHp": 850,
+          "shieldEffectPct": 80,
+          "swordEffectPct": 135
+        },
+        "support": {
+          "effectId": "rogue_assault_akane_support"
+        },
+        "tags": [
+          "ONI",
+          "ATTACK",
+          "HP_COST",
+          "SWORD_MATCH"
+        ]
+      },
+      "id": "rogue_assault_akane",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 85,
+        "manaGainPct": 115,
+        "maxHp": 850,
+        "shieldEffectPct": 80,
+        "swordEffectPct": 135
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 42,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검을 4개 이상 맞추면 적에게 추가로 42 피해를 준다.",
+        "id": "rogue_assault_akane_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "한 대 더",
+        "oncePerBattle": false,
+        "shortDescription": "검을 4개 이상 맞추면 적에게 추가로 42 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 165,
+            "target": "self",
+            "type": "heal"
+          },
+          {
+            "amount": 115,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "HP를 165 회복하고 보호막 115를 얻는다.",
+        "id": "siege_cook_borga_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "전투식 대용량 배식",
+        "oncePerBattle": false,
+        "shortDescription": "HP를 165 회복하고 보호막 115를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "siege_cook_borga_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "국자가 무기고 냄비가 방패",
+        "enabled": true,
+        "id": "siege_cook_borga",
+        "name": "공성취사장 보르가",
+        "portraitAsset": "",
+        "race": "ORC",
+        "rarity": "SR",
+        "recommendedRole": "combatant",
+        "shortName": "보르가",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 105,
+          "manaGainPct": 105,
+          "maxHp": 1040,
+          "shieldEffectPct": 105,
+          "swordEffectPct": 105
+        },
+        "support": {
+          "effectId": "siege_cook_borga_support"
+        },
+        "tags": [
+          "ORC",
+          "HEAL",
+          "SHIELD",
+          "HEAL_MATCH"
+        ]
+      },
+      "id": "siege_cook_borga",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 105,
+        "manaGainPct": 105,
+        "maxHp": 1040,
+        "shieldEffectPct": 105,
+        "swordEffectPct": 105
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "HEAL",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 52,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "회복을 4개 이상 맞추면 보호막 52를 얻는다.",
+        "id": "siege_cook_borga_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "냄비뚜껑 엄호",
+        "oncePerBattle": false,
+        "shortDescription": "회복을 4개 이상 맞추면 보호막 52를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "filter": {
+              "tag": "BUFF"
+            },
+            "key": "enemyBuffs",
+            "maxCount": 2,
+            "selection": "OLDEST_FIRST",
+            "target": "opponent",
+            "type": "remove_status"
+          },
+          {
+            "filter": {
+              "tag": "DEBUFF"
+            },
+            "key": "selfDebuffs",
+            "maxCount": 1,
+            "selection": "OLDEST_FIRST",
+            "target": "self",
+            "type": "remove_status"
+          },
+          {
+            "amount": {
+              "type": "ADD",
+              "values": [
+                {
+                  "type": "CONSTANT",
+                  "value": 95
+                },
+                {
+                  "type": "MULTIPLY",
+                  "values": [
+                    {
+                      "type": "ADD",
+                      "values": [
+                        {
+                          "path": "removedCount",
+                          "resultKey": "enemyBuffs",
+                          "type": "RESULT_VALUE"
+                        },
+                        {
+                          "path": "removedCount",
+                          "resultKey": "selfDebuffs",
+                          "type": "RESULT_VALUE"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "CONSTANT",
+                      "value": 60
+                    }
+                  ]
+                }
+              ]
+            },
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적의 강화 상태를 최대 2개, 자신의 약화 상태를 최대 1개 제거하고 적에게 95에 제거한 상태 하나당 60을 더한 피해를 준다.",
+        "id": "void_cleaner_nox_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "전면 차원청소",
+        "oncePerBattle": false,
+        "shortDescription": "적의 강화 상태를 최대 2개, 자신의 약화 상태를 최대 1개 제거하고 적에게 95에 제거한 상태 하나당 60을 더한 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "void_cleaner_nox_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "쓰레기와 차원을 함께 빨아들임",
+        "enabled": true,
+        "id": "void_cleaner_nox",
+        "name": "청소반장 녹스",
+        "portraitAsset": "",
+        "race": "VOIDKIN",
+        "rarity": "SSR",
+        "recommendedRole": "combatant",
+        "shortName": "녹스",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 100,
+          "manaGainPct": 122,
+          "maxHp": 1010,
+          "shieldEffectPct": 96,
+          "swordEffectPct": 118
+        },
+        "support": {
+          "effectId": "void_cleaner_nox_support"
+        },
+        "tags": [
+          "VOIDKIN",
+          "DISRUPT",
+          "STATUS_PURGE",
+          "DISPEL"
+        ]
+      },
+      "id": "void_cleaner_nox",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 100,
+        "manaGainPct": 122,
+        "maxHp": 1010,
+        "shieldEffectPct": 96,
+        "swordEffectPct": 118
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 5000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 9,
+            "target": "self",
+            "type": "gain_mana"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "자신 또는 적의 상태 효과가 제거될 때 마력 9를 얻는다.",
+        "id": "void_cleaner_nox_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "잔여물 압축",
+        "oncePerBattle": false,
+        "shortDescription": "자신 또는 적의 상태 효과가 제거될 때 마력 9를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "status_expired"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
             "amount": 180,
             "key": "primaryAttack",
             "shieldBypassRatio": 0.3,
@@ -658,6 +2446,10 @@
           "combatant",
           "support"
         ],
+        "assets": {
+          "portraitHash": "cc5b73371bbf",
+          "portraitUrl": "/generated/characters/yuria_counter_sword/portrait.cc5b73371bbf.webp"
+        },
         "combatant": {
           "skillId": "yuria_counter_break"
         },
@@ -669,7 +2461,7 @@
         "enabled": true,
         "id": "yuria_counter_sword",
         "name": "반격검사 유리아",
-        "portraitAsset": "/characters/yuria_counter_sword.svg",
+        "portraitAsset": "/generated/characters/yuria_counter_sword/portrait.cc5b73371bbf.webp",
         "race": "HUMAN",
         "rarity": "SR",
         "recommendedRole": "combatant",

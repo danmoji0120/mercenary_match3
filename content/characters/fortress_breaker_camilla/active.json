@@ -1,0 +1,54 @@
+{
+  "id": "fortress_breaker_camilla_active",
+  "kind": "ACTIVE",
+  "displayName": "요새 삭제 포격",
+  "shortDescription": "적의 보호막을 최대 180까지 직접 파괴한 뒤 155에 파괴한 보호막의 60%를 더한 피해를 준다.",
+  "fullDescription": "적의 보호막을 최대 180까지 직접 파괴한 뒤 155에 파괴한 보호막의 60%를 더한 피해를 준다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "CONSUME_RESOURCE",
+      "target": "ENEMY",
+      "resource": "SHIELD",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 180
+      },
+      "allowPartial": true,
+      "canReduceHpBelowOne": false,
+      "resultKey": "destroyedShield"
+    },
+    {
+      "type": "DAMAGE",
+      "target": "ENEMY",
+      "amount": {
+        "type": "ADD",
+        "values": [
+          {
+            "type": "CONSTANT",
+            "value": 155
+          },
+          {
+            "type": "MULTIPLY",
+            "values": [
+              {
+                "type": "RESULT_VALUE",
+                "resultKey": "destroyedShield",
+                "path": "consumedAmount"
+              },
+              {
+                "type": "CONSTANT",
+                "value": 0.6
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

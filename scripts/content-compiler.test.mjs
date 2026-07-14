@@ -1,4 +1,4 @@
-import { cpSync, mkdtempSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -66,5 +66,33 @@ describe('character package compiler', () => {
     expectCode('CONTENT_EVENT_PATH', ({ packageDir }) => { const file = path.join(packageDir, 'active.json'), value = json(file); value.effects[0] = { type: 'ADD_SHIELD', target: 'SELF', amount: { type: 'EVENT_VALUE', path: 'unknown.path' } }; save(file, value) });
     expectCode('CONTENT_CUSTOM_HANDLER_MISSING', ({ packageDir }) => { const file = path.join(packageDir, 'active.json'), value = json(file); value.effects[0].handlerId = 'custom_test_character.missing'; save(file, value) });
     expectCode('CONTENT_PRESENTATION_COMBAT_FIELD', ({ packageDir }) => { const manifestFile = path.join(packageDir, 'manifest.json'), manifest = json(manifestFile); manifest.presentationFile = './presentation.json'; save(manifestFile, manifest); save(path.join(packageDir, 'presentation.json'), { animationKey: 'safe', damage: 999 }) });
+  });
+
+  it('copies package-local raster portraits to deterministic hashed URLs', () => {
+    const { base, root, packageDir } = setup(), assetDir = path.join(packageDir, 'assets'); mkdirSync(assetDir);
+    const portrait = path.join(assetDir, 'portrait.png'); writeFileSync(portrait, Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 1]));
+    const characterFile = path.join(packageDir, 'character.json'), character = json(characterFile); character.assets = { portrait: './assets/portrait.png' }; save(characterFile, character);
+    const generatedDir = path.join(base, 'generated'), assetOutputDir = path.join(base, 'assets-out');
+    const first = compileContent({ root, generatedDir, assetOutputDir }), definition = first.normalized.packages[0].character;
+    expect(definition.portraitAsset).toMatch(/^\/generated\/characters\/custom_test_character\/portrait\.[a-f0-9]{12}\.png$/);
+    expect(readFileSync(path.join(assetOutputDir, definition.portraitAsset.split('/').slice(3).join('/')))).toEqual(readFileSync(portrait));
+    const previous = definition.portraitAsset; expect(compileContent({ root, generatedDir, assetOutputDir }).normalized.packages[0].character.portraitAsset).toBe(previous);
+    writeFileSync(portrait, Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 2]));
+    const changed = compileContent({ root, generatedDir, assetOutputDir }).normalized.packages[0].character.portraitAsset; expect(changed).not.toBe(previous);
+    expect(existsSync(path.join(assetOutputDir, previous.split('/').slice(3).join('/')))).toBe(false);
+    const jpeg = path.join(assetDir, 'portrait.jpg'); writeFileSync(jpeg, Buffer.from([0xff, 0xd8, 0xff, 0xe0])); character.assets.portrait = './assets/portrait.jpg'; save(characterFile, character);
+    expect(compileContent({ root, generatedDir, assetOutputDir }).normalized.packages[0].character.portraitAsset).toMatch(/\.jpg$/);
+    const webp = path.join(assetDir, 'portrait.webp'); writeFileSync(webp, Buffer.from('RIFF0000WEBP', 'ascii')); character.assets.portrait = './assets/portrait.webp'; save(characterFile, character);
+    expect(compileContent({ root, generatedDir, assetOutputDir }).normalized.packages[0].character.portraitAsset).toMatch(/\.webp$/);
+  });
+
+  it('rejects unsafe, unsupported, oversized, and signature-mismatched portraits', () => {
+    expectCode('CONTENT_PORTRAIT_PATH', ({ packageDir }) => { const file = path.join(packageDir, 'character.json'), value = json(file); value.assets = { portrait: '../portrait.png' }; save(file, value) });
+    expectCode('CONTENT_PORTRAIT_PATH', ({ packageDir }) => { const file = path.join(packageDir, 'character.json'), value = json(file); value.assets = { portrait: 'https://example.invalid/portrait.png' }; save(file, value) });
+    expectCode('CONTENT_PORTRAIT_PATH', ({ packageDir }) => { const file = path.join(packageDir, 'character.json'), value = json(file); value.assets = { portrait: 'data:image/png;base64,AA==' }; save(file, value) });
+    expectCode('CONTENT_PORTRAIT_EXTENSION', ({ packageDir }) => { const file = path.join(packageDir, 'character.json'), value = json(file); value.assets = { portrait: './portrait.svg' }; save(file, value); writeFileSync(path.join(packageDir, 'portrait.svg'), Buffer.from('<svg/>')) });
+    expectCode('CONTENT_PORTRAIT_SIGNATURE', ({ packageDir }) => { const file = path.join(packageDir, 'character.json'), value = json(file); value.assets = { portrait: './portrait.png' }; save(file, value); writeFileSync(path.join(packageDir, 'portrait.png'), Buffer.from('not-png')) });
+    expectCode('CONTENT_PORTRAIT_SIZE', ({ packageDir }) => { const file = path.join(packageDir, 'character.json'), value = json(file); value.assets = { portrait: './portrait.png' }; save(file, value); const data = Buffer.alloc(8 * 1024 * 1024 + 1); data.set([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]); writeFileSync(path.join(packageDir, 'portrait.png'), data) });
+    expectCode('CONTENT_PORTRAIT_SYMLINK_ESCAPE', ({ base, packageDir }) => { const outside = path.join(base, 'outside'); mkdirSync(outside); writeFileSync(path.join(outside, 'portrait.png'), Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])); symlinkSync(outside, path.join(packageDir, 'linked'), 'junction'); const file = path.join(packageDir, 'character.json'), value = json(file); value.assets = { portrait: './linked/portrait.png' }; save(file, value) });
   });
 });

@@ -9,11 +9,14 @@ export const OPERATORS = Object.freeze(['EQ', 'GTE', 'GT', 'LTE', 'LT', 'NE']);
 export const RESOURCES = Object.freeze(['HP', 'HP_RATIO', 'MANA', 'SHIELD']);
 export const CONSUMABLE_RESOURCES = Object.freeze(['HP', 'MANA', 'SHIELD']);
 export const STATS = Object.freeze(['MAX_HP']);
-export const VALUE_TYPES = Object.freeze(['ABS', 'ADD', 'CEIL', 'CLAMP', 'CONSTANT', 'DIVIDE', 'EVENT_VALUE', 'FLOOR', 'MAX', 'MIN', 'MULTIPLY', 'RESOURCE', 'RESULT_VALUE', 'ROUND', 'STAT', 'SUBTRACT']);
+export const RUNTIME_VALUE_SCOPES = Object.freeze(['ABILITY', 'BATTLE', 'CHAIN', 'STATUS']);
+export const RUNTIME_VALUE_OPERATIONS = Object.freeze(['ADD', 'CLAMP', 'CLEAR', 'MAX', 'MIN', 'SET', 'SUBTRACT']);
+export const RUNTIME_VALUE_KEY = /^[a-z][a-zA-Z0-9_.-]{0,63}$/;
+export const VALUE_TYPES = Object.freeze(['ABS', 'ADD', 'CEIL', 'CLAMP', 'CONSTANT', 'DIVIDE', 'EVENT_VALUE', 'FLOOR', 'MAX', 'MIN', 'MULTIPLY', 'RESOURCE', 'RESULT_VALUE', 'ROUND', 'RUNTIME_VALUE', 'STAT', 'SUBTRACT']);
 export const CONDITION_TYPES = Object.freeze(['AND', 'COMPARE', 'EVENT_SOURCE', 'EVENT_TYPE', 'FALSE', 'HAS_STATUS', 'HAS_TAG', 'NOT', 'OR', 'RESULT_COMPARE', 'TRUE']);
 export const EFFECT_TYPES = Object.freeze(['ADD_SHIELD', 'APPLY_STATUS', 'CLEAR_RUNTIME_FLAG', 'CONSUME_RESOURCE', 'CONVERT_OVERHEAL_TO_SHIELD', 'CUSTOM', 'DAMAGE', 'HEAL', 'IF', 'MODIFY_EVENT', 'MODIFY_MANA', 'REMOVE_STATUS', 'SCHEDULE', 'SET_RUNTIME_FLAG', 'STORE_VALUE']);
-export const RESULT_PATHS = Object.freeze(['actualHealing', 'actualShieldGain', 'chargeConsumed', 'consumedAmount', 'finalAmount', 'hpDamage', 'overhealing', 'requestedAmount', 'shieldBroken', 'shieldDamage', 'statusApplied', 'targetDefeated']);
-export const EVENT_PATHS = Object.freeze(['chain.depth', 'damage.currentAmount', 'damage.finalAmount', 'damage.shieldBroken', 'hp.threshold', 'match.count', 'match.tileType']);
+export const RESULT_PATHS = Object.freeze(['actualHealing', 'actualShieldGain', 'changed', 'chargeConsumed', 'cleared', 'consumedAmount', 'currentStacks', 'currentValue', 'existed', 'finalAmount', 'hpAfter', 'hpBefore', 'hpDamage', 'manaAfter', 'manaBefore', 'nextValue', 'overcapAmount', 'overflowAmount', 'overhealing', 'previousStacks', 'previousValue', 'remainingAmount', 'removedCount', 'removalReason', 'requestedAmount', 'resource', 'scope', 'shieldAfter', 'shieldBefore', 'shieldBroken', 'shieldDamage', 'statusApplied', 'statusId', 'statusRefreshed', 'targetDefeated', 'wasPartial']);
+export const EVENT_PATHS = Object.freeze(['ability.id', 'ability.kind', 'ability.manaCost', 'ability.manaSpent', 'chain.depth', 'chain.id', 'chain.isFinalStep', 'chain.matchCount', 'chain.stepIndex', 'chain.totalMatchedTiles', 'damage.currentAmount', 'damage.finalAmount', 'damage.shieldBroken', 'heal.actualAmount', 'heal.hpAfter', 'heal.hpBefore', 'heal.overhealAmount', 'heal.requestedAmount', 'hp.threshold', 'match.count', 'match.tileType', 'shield.actualAmount', 'shield.after', 'shield.before', 'shield.overcapAmount', 'shield.requestedAmount', 'status.applied', 'status.currentStacks', 'status.durationMs', 'status.id', 'status.previousStacks', 'status.refreshed', 'status.removalReason', 'status.wasExpired']);
 export const COPY_POLICIES = Object.freeze(['DENY_COPIED']);
 export const RECURSION_POLICIES = Object.freeze(['SAFE_DEFAULT']);
 
@@ -32,33 +35,64 @@ export const EFFECT_RUNTIME_MAP = Object.freeze({
 });
 
 export const EMITTED_RUNTIME_TRIGGERS = Object.freeze([
-  'after_damage', 'battle_finished', 'battle_started', 'before_attack_impact', 'hp_threshold_crossed', 'match_group_resolved', 'shield_broken',
+  'active_requested', 'after_damage', 'after_heal', 'after_shield_gain', 'battle_finished', 'battle_started', 'before_attack_impact', 'chain_step_resolved', 'hp_threshold_crossed', 'match_group_resolved', 'shield_broken', 'status_applied', 'status_expired',
 ]);
 
 export const EVENT_PATH_CAPABILITIES = Object.freeze({
   'chain.depth': { type: 'integer', availableEvents: ['TILE_MATCH_RESOLVED'], example: 2 },
+  'ability.id': { type: 'string', availableEvents: ['ACTIVE_USED'], example: 'sample_active' },
+  'ability.kind': { type: 'AbilityKind', availableEvents: ['ACTIVE_USED'], example: 'active' },
+  'ability.manaCost': { type: 'integer', availableEvents: ['ACTIVE_USED'], example: 100 },
+  'ability.manaSpent': { type: 'integer', availableEvents: ['ACTIVE_USED'], example: 100 },
+  'chain.id': { type: 'string', availableEvents: ['CHAIN_STEP_RESOLVED'], example: 'battle:player:1' },
+  'chain.stepIndex': { type: 'integer', availableEvents: ['CHAIN_STEP_RESOLVED'], example: 0 },
+  'chain.matchCount': { type: 'integer', availableEvents: ['CHAIN_STEP_RESOLVED'], example: 2 },
+  'chain.totalMatchedTiles': { type: 'integer', availableEvents: ['CHAIN_STEP_RESOLVED'], example: 7 },
+  'chain.isFinalStep': { type: 'boolean', availableEvents: ['CHAIN_STEP_RESOLVED'], example: true },
   'damage.currentAmount': { type: 'number', availableEvents: ['BEFORE_ATTACK_IMPACT'], example: 180 },
   'damage.finalAmount': { type: 'number', availableEvents: [], example: 135, note: 'Validator accepts this path, but no emitted support trigger currently supplies finalAmount.' },
   'damage.shieldBroken': { type: 'boolean', availableEvents: ['AFTER_DAMAGE', 'SHIELD_BROKEN'], example: true },
   'hp.threshold': { type: 'number', availableEvents: ['HP_THRESHOLD_CROSSED'], example: 25 },
+  'shield.requestedAmount': { type: 'number', availableEvents: ['SHIELD_GAINED'], example: 100 },
+  'shield.actualAmount': { type: 'number', availableEvents: ['SHIELD_GAINED'], example: 80 },
+  'shield.overcapAmount': { type: 'number', availableEvents: ['SHIELD_GAINED'], example: 20 },
+  'shield.before': { type: 'number', availableEvents: ['SHIELD_GAINED'], example: 420 },
+  'shield.after': { type: 'number', availableEvents: ['SHIELD_GAINED'], example: 500 },
+  'heal.requestedAmount': { type: 'number', availableEvents: ['HEALED'], example: 100 },
+  'heal.actualAmount': { type: 'number', availableEvents: ['HEALED'], example: 60 },
+  'heal.overhealAmount': { type: 'number', availableEvents: ['HEALED'], example: 40 },
+  'heal.hpBefore': { type: 'number', availableEvents: ['HEALED'], example: 900 },
+  'heal.hpAfter': { type: 'number', availableEvents: ['HEALED'], example: 960 },
+  'status.id': { type: 'string', availableEvents: ['STATUS_APPLIED', 'STATUS_REMOVED'], example: 'damage_reduction' },
+  'status.applied': { type: 'boolean', availableEvents: ['STATUS_APPLIED'], example: true },
+  'status.refreshed': { type: 'boolean', availableEvents: ['STATUS_APPLIED'], example: false },
+  'status.previousStacks': { type: 'integer', availableEvents: ['STATUS_APPLIED', 'STATUS_REMOVED'], example: 0 },
+  'status.currentStacks': { type: 'integer', availableEvents: ['STATUS_APPLIED'], example: 1 },
+  'status.durationMs': { type: 'integer', availableEvents: ['STATUS_APPLIED'], example: 4000 },
+  'status.removalReason': { type: 'string enum', availableEvents: ['STATUS_REMOVED'], example: 'EXPLICIT' },
+  'status.wasExpired': { type: 'boolean', availableEvents: ['STATUS_REMOVED'], example: false },
   'match.count': { type: 'integer', availableEvents: ['TILE_MATCH_RESOLVED'], example: 4 },
   'match.tileType': { type: 'TileType', availableEvents: ['TILE_MATCH_RESOLVED'], example: 'SWORD' },
 });
 
 export const RESULT_SCHEMAS = Object.freeze({
-  ADD_SHIELD: ['actualShieldGain', 'finalAmount', 'requestedAmount'],
-  APPLY_STATUS: ['statusApplied'],
-  CONSUME_RESOURCE: ['consumedAmount', 'finalAmount', 'requestedAmount'],
+  ADD_SHIELD: ['actualShieldGain', 'finalAmount', 'overcapAmount', 'requestedAmount', 'shieldAfter', 'shieldBefore'],
+  APPLY_STATUS: ['currentStacks', 'previousStacks', 'statusApplied', 'statusId', 'statusRefreshed'],
+  CLEAR_RUNTIME_FLAG: ['changed', 'existed', 'key', 'previousValue'],
+  CONSUME_RESOURCE: ['consumedAmount', 'finalAmount', 'remainingAmount', 'requestedAmount', 'resource', 'wasPartial'],
   CONVERT_OVERHEAL_TO_SHIELD: ['actualShieldGain', 'finalAmount', 'requestedAmount'],
   DAMAGE: ['finalAmount', 'hpDamage', 'requestedAmount', 'shieldBroken', 'shieldDamage', 'targetDefeated'],
-  HEAL: ['actualHealing', 'finalAmount', 'overhealing', 'requestedAmount'],
+  HEAL: ['actualHealing', 'finalAmount', 'hpAfter', 'hpBefore', 'overhealing', 'requestedAmount'],
   MODIFY_EVENT: ['finalAmount', 'requestedAmount'],
-  MODIFY_MANA: ['finalAmount', 'requestedAmount'],
-  STORE_VALUE: ['finalAmount'],
+  MODIFY_MANA: ['finalAmount', 'manaAfter', 'manaBefore', 'overflowAmount', 'requestedAmount'],
+  REMOVE_STATUS: ['removedCount', 'removedStatusIds', 'removalReason'],
+  SET_RUNTIME_FLAG: ['changed', 'currentValue', 'existed', 'key', 'previousValue'],
+  STORE_VALUE: ['cleared', 'existed', 'finalAmount', 'key', 'nextValue', 'previousValue', 'scope'],
 });
 
 export const CHARACTER_FIELDS = Object.freeze({
   '$.activeAbilityId': { type: 'string', required: true, validation: 'must equal active.json id', runtime: 'combatant ability lookup', example: 'sample_active' },
+  '$.assets.portrait': { type: 'relative PNG/JPEG/WebP path', required: false, validation: 'package-local, <= 8 MiB, signature checked', runtime: 'compiled to hashed portrait URL only', example: './assets/portrait.webp' },
   '$.allowedSlots': { type: 'array<combatant|support>', required: true, validation: 'all entries must be combatant or support', runtime: 'loadout validation', example: ['combatant', 'support'] },
   '$.combatStyle': { type: 'non-empty string ID', required: true, validation: 'normalization-required; no dedicated compiler check', runtime: 'metadata only', example: 'SWORD' },
   '$.description.details': { type: 'string', required: true, validation: 'normalization-required; no dedicated compiler check', runtime: 'presentation metadata', example: 'Detailed description.' },
@@ -93,19 +127,19 @@ export const ABILITY_FIELDS = Object.freeze({
 export const EFFECT_FIELDS = Object.freeze({
   ADD_SHIELD: { required: ['amount'], optional: ['cap', 'condition', 'resultKey', 'scope', 'target'], returns: 'ADD_SHIELD', note: 'scope currently normalizes only to chain_step.' },
   APPLY_STATUS: { required: ['statusId'], optional: ['condition', 'durationMs', 'resultKey', 'target'], returns: 'APPLY_STATUS' },
-  CLEAR_RUNTIME_FLAG: { required: ['flag'], optional: ['condition'], returns: null },
+  CLEAR_RUNTIME_FLAG: { required: ['flag'], optional: ['condition', 'resultKey'], returns: 'CLEAR_RUNTIME_FLAG' },
   CONSUME_RESOURCE: { required: ['amount', 'resource'], optional: ['allowPartial', 'canReduceHpBelowOne', 'condition', 'resultKey', 'target'], returns: 'CONSUME_RESOURCE' },
   CONVERT_OVERHEAL_TO_SHIELD: { required: ['ratio'], optional: ['condition', 'maximum', 'resultKey', 'target'], returns: 'CONVERT_OVERHEAL_TO_SHIELD' },
   CUSTOM: { required: ['handlerId'], optional: ['condition', 'parameters'], returns: null },
   DAMAGE: { required: ['amount'], optional: ['condition', 'resultKey', 'shieldBypassPct', 'tags', 'target', 'travelMs'], returns: 'DAMAGE' },
   HEAL: { required: ['amount'], optional: ['condition', 'resultKey', 'target'], returns: 'HEAL' },
   IF: { required: ['condition', 'then'], optional: ['else'], returns: 'child effect results remain in branch scope' },
-  MODIFY_EVENT: { required: [], optional: ['amount', 'condition', 'ratio', 'resultKey'], returns: 'MODIFY_EVENT' },
+  MODIFY_EVENT: { required: ['operation', 'path', 'value'], optional: ['condition', 'resultKey'], returns: 'MODIFY_EVENT' },
   MODIFY_MANA: { required: ['amount'], optional: ['condition', 'resultKey', 'target'], returns: 'MODIFY_MANA' },
-  REMOVE_STATUS: { required: ['statusId'], optional: ['condition', 'target'], returns: null },
+  REMOVE_STATUS: { required: ['statusId or filter'], optional: ['condition', 'maxCount', 'resultKey', 'selection', 'target'], returns: 'REMOVE_STATUS' },
   SCHEDULE: { required: ['delayMs', 'effects'], optional: ['condition', 'target'], returns: null },
-  SET_RUNTIME_FLAG: { required: ['flag', 'value'], optional: ['condition'], returns: null },
-  STORE_VALUE: { required: ['value'], optional: ['condition', 'resultKey'], returns: 'STORE_VALUE' },
+  SET_RUNTIME_FLAG: { required: ['flag', 'value'], optional: ['condition', 'resultKey'], returns: 'SET_RUNTIME_FLAG' },
+  STORE_VALUE: { required: ['key', 'operation', 'scope'], optional: ['condition', 'maximum', 'minimum', 'resultKey', 'statusId', 'target', 'value'], returns: 'STORE_VALUE' },
 });
 
 export const VALUE_FIELDS = Object.freeze({
@@ -114,7 +148,7 @@ export const VALUE_FIELDS = Object.freeze({
   DIVIDE: { required: ['values'], returns: 'number', errors: ['VALUE_DIVIDE_BY_ZERO', 'VALUE_NON_FINITE'] }, EVENT_VALUE: { required: ['path'], returns: 'number|boolean|string' },
   FLOOR: { required: ['value'], returns: 'integer' }, MAX: { required: ['values'], returns: 'number' }, MIN: { required: ['values'], returns: 'number' },
   MULTIPLY: { required: ['values'], returns: 'number' }, RESOURCE: { required: ['target', 'resource'], returns: 'number' }, RESULT_VALUE: { required: ['resultKey', 'path'], returns: 'number|boolean' },
-  ROUND: { required: ['value'], returns: 'integer' }, STAT: { required: ['target', 'stat'], returns: 'number' }, SUBTRACT: { required: ['values'], returns: 'number' },
+  ROUND: { required: ['value'], returns: 'integer' }, RUNTIME_VALUE: { required: ['defaultValue', 'key', 'scope', 'target'], optional: ['statusId'], returns: 'number' }, STAT: { required: ['target', 'stat'], returns: 'number' }, SUBTRACT: { required: ['values'], returns: 'number' },
 });
 
 export const CONDITION_FIELDS = Object.freeze({

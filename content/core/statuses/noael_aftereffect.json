@@ -1,0 +1,21 @@
+{
+  "id": "noael_aftereffect",
+  "name": "기적 부작용",
+  "description": "5초 동안 받는 회복량이 20% 감소합니다.",
+  "durationMs": 5000,
+  "stacking": "refresh",
+  "maxStacks": 1,
+  "refreshPolicy": "refresh",
+  "consumePolicy": null,
+  "modifiers": [
+    {
+      "type": "healing_received_multiplier",
+      "value": 0.8
+    }
+  ],
+  "triggers": [],
+  "tags": ["DEBUFF"],
+  "visibleToOwner": true,
+  "visibleToOpponent": true,
+  "contentVersion": 1
+}

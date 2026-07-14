@@ -1,18 +1,22 @@
-import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { ABILITY_ID, CONDITION_TYPES as CONDITION_TYPE_VALUES, EFFECT_TYPES as EFFECT_TYPE_VALUES, EVENT_PATHS as EVENT_PATH_VALUES, OPERATORS as OPERATOR_VALUES, PACKAGE_ID, RARITIES as RARITY_VALUES, RESULT_PATHS as RESULT_PATH_VALUES, ROLES as ROLE_VALUES, SUPPORTED_ENGINE_API_VERSION, SUPPORTED_SCHEMA_VERSION, TARGETS as TARGET_VALUES, TRIGGER_MAP, VALUE_TYPES as VALUE_TYPE_VALUES } from './content-schema-metadata.mjs';
+import { ABILITY_ID, CONDITION_TYPES as CONDITION_TYPE_VALUES, EFFECT_TYPES as EFFECT_TYPE_VALUES, EVENT_PATHS as EVENT_PATH_VALUES, OPERATORS as OPERATOR_VALUES, PACKAGE_ID, RARITIES as RARITY_VALUES, RESULT_PATHS as RESULT_PATH_VALUES, ROLES as ROLE_VALUES, RUNTIME_VALUE_KEY, RUNTIME_VALUE_OPERATIONS, RUNTIME_VALUE_SCOPES, SUPPORTED_ENGINE_API_VERSION, SUPPORTED_SCHEMA_VERSION, TARGETS as TARGET_VALUES, TRIGGER_MAP, VALUE_TYPES as VALUE_TYPE_VALUES } from './content-schema-metadata.mjs';
 
 export { ABILITY_ID, PACKAGE_ID, SUPPORTED_ENGINE_API_VERSION, SUPPORTED_SCHEMA_VERSION, TRIGGER_MAP } from './content-schema-metadata.mjs';
 const RARITIES = new Set(RARITY_VALUES), ROLES = new Set(ROLE_VALUES), TARGETS = new Set(TARGET_VALUES), OPERATORS = new Set(OPERATOR_VALUES);
 const EFFECTS = new Set(EFFECT_TYPE_VALUES), RESULT_PATHS = new Set(RESULT_PATH_VALUES), EVENT_PATHS = new Set(EVENT_PATH_VALUES), VALUE_TYPES = new Set(VALUE_TYPE_VALUES), CONDITION_TYPES = new Set(CONDITION_TYPE_VALUES);
+const RUNTIME_SCOPES = new Set(RUNTIME_VALUE_SCOPES), RUNTIME_OPERATIONS = new Set(RUNTIME_VALUE_OPERATIONS), PORTRAIT_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp']);
+export const MAX_PORTRAIT_BYTES = 8 * 1024 * 1024;
 
 const posix = (value) => value.split(path.sep).join('/');
 const stable = (value) => Array.isArray(value) ? value.map(stable) : value && typeof value === 'object' ? Object.fromEntries(Object.keys(value).sort().map((key) => [key, stable(value[key])])) : value;
 const stringify = (value) => `${JSON.stringify(stable(value), null, 2)}\n`;
 const readJson = (file) => JSON.parse(readFileSync(file, 'utf8'));
 const isObject = (value) => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+function relativeFiles(root) { if (!existsSync(root)) return []; const result = []; for (const entry of readdirSync(root, { withFileTypes: true })) { const file = path.join(root, entry.name); if (entry.isDirectory()) result.push(...relativeFiles(file).map((child) => `${entry.name}/${child}`)); else result.push(entry.name) } return result.sort() }
 
 export class ContentCompilationError extends Error {
   constructor(issues) { super(`${issues.length} content issue(s)\n${issues.map(formatIssue).join('\n')}`); this.name = 'ContentCompilationError'; this.issues = issues }
@@ -36,21 +40,40 @@ function safeDeclaredFile(packageDir, declared, packageId, manifestFile, field, 
   return resolved;
 }
 
-function validateValue(value, state, file, jsonPath, report) {
+function portraitAsset(value, packageDir, packageId, characterFile, report) {
+  const declared = value?.assets?.portrait;
+  if (declared === undefined) return null;
+  if (typeof declared !== 'string' || !declared || /^(?:https?:|data:)/i.test(declared) || path.isAbsolute(declared) || declared.split(/[\\/]/).includes('..')) { report.add('CONTENT_PORTRAIT_PATH', packageId, characterFile, '$.assets.portrait', 'Portrait must be a package-local relative path.', declared); return null }
+  const source = path.resolve(packageDir, declared), relative = path.relative(packageDir, source), extension = path.extname(source).toLowerCase();
+  if (relative.startsWith('..') || path.isAbsolute(relative)) { report.add('CONTENT_PORTRAIT_ESCAPE', packageId, characterFile, '$.assets.portrait', 'Portrait path escapes the character package.', declared); return null }
+  if (!PORTRAIT_EXTENSIONS.has(extension)) { report.add('CONTENT_PORTRAIT_EXTENSION', packageId, characterFile, '$.assets.portrait', 'Portrait must be PNG, JPEG, or WebP.', extension); return null }
+  if (!existsSync(source)) { report.add('CONTENT_PORTRAIT_MISSING', packageId, characterFile, '$.assets.portrait', 'Portrait file does not exist.', declared); return null }
+  const packageReal = realpathSync(packageDir), sourceReal = realpathSync(source), realRelative = path.relative(packageReal, sourceReal);
+  if (realRelative.startsWith('..') || path.isAbsolute(realRelative) || lstatSync(source).isSymbolicLink()) { report.add('CONTENT_PORTRAIT_SYMLINK_ESCAPE', packageId, characterFile, '$.assets.portrait', 'Portrait symlinks and paths outside the package are forbidden.', declared); return null }
+  const size = statSync(source).size;
+  if (size > MAX_PORTRAIT_BYTES) { report.add('CONTENT_PORTRAIT_SIZE', packageId, characterFile, '$.assets.portrait', `Portrait exceeds ${MAX_PORTRAIT_BYTES} bytes.`, size); return null }
+  const bytes = readFileSync(source), validSignature = extension === '.png' ? bytes.subarray(0, 8).equals(Buffer.from([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a])) : extension === '.jpg' || extension === '.jpeg' ? bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff : bytes.subarray(0, 4).toString('ascii') === 'RIFF' && bytes.subarray(8, 12).toString('ascii') === 'WEBP';
+  if (!validSignature) { report.add('CONTENT_PORTRAIT_SIGNATURE', packageId, characterFile, '$.assets.portrait', 'Portrait signature does not match its extension.', declared); return null }
+  const hash = createHash('sha256').update(bytes).digest('hex').slice(0, 12), outputRelative = `${packageId}/portrait.${hash}${extension}`;
+  return { source, outputRelative, portraitUrl: `/generated/characters/${outputRelative}`, portraitHash: hash };
+}
+
+function validateValue(value, state, file, jsonPath, report, allowRuntimeValue = true) {
   if (!isObject(value) || !VALUE_TYPES.has(value.type)) { report.add('CONTENT_VALUE_TYPE', state.packageId, file, `${jsonPath}.type`, 'Unsupported ValueExpression type.', value?.type); return }
   if (value.type === 'CONSTANT') { if ((typeof value.value !== 'number' && typeof value.value !== 'string' && typeof value.value !== 'boolean') || (typeof value.value === 'number' && !Number.isFinite(value.value))) report.add('CONTENT_VALUE_CONSTANT', state.packageId, file, `${jsonPath}.value`, 'Constant must be a finite number, string, or boolean.', value.value); return }
   if (value.type === 'EVENT_VALUE') { if (!EVENT_PATHS.has(value.path)) report.add('CONTENT_EVENT_PATH', state.packageId, file, `${jsonPath}.path`, 'Unsupported event value path.', value.path); return }
   if (value.type === 'RESULT_VALUE') { if (!state.keys.has(value.resultKey)) report.add('CONTENT_RESULT_REFERENCE_ORDER', state.packageId, file, `${jsonPath}.resultKey`, 'Result key must be declared by an earlier effect.', value.resultKey); if (!RESULT_PATHS.has(value.path)) report.add('CONTENT_RESULT_PATH', state.packageId, file, `${jsonPath}.path`, 'Unsupported result path.', value.path); return }
+  if (value.type === 'RUNTIME_VALUE') { if (!allowRuntimeValue) report.add('CONTENT_RUNTIME_DEFAULT_RECURSION', state.packageId, file, jsonPath, 'RUNTIME_VALUE defaultValue cannot contain another RUNTIME_VALUE.'); if (!RUNTIME_SCOPES.has(value.scope)) report.add('CONTENT_RUNTIME_SCOPE', state.packageId, file, `${jsonPath}.scope`, 'Unsupported runtime value scope.', value.scope); if (!TARGETS.has(value.target)) report.add('CONTENT_EFFECT_TARGET', state.packageId, file, `${jsonPath}.target`, 'Target must be SELF or ENEMY.', value.target); if (!RUNTIME_VALUE_KEY.test(value.key ?? '')) report.add('CONTENT_RUNTIME_KEY', state.packageId, file, `${jsonPath}.key`, 'Runtime value key is invalid.', value.key); if (value.scope === 'STATUS' && (typeof value.statusId !== 'string' || !value.statusId)) report.add('CONTENT_RUNTIME_STATUS', state.packageId, file, `${jsonPath}.statusId`, 'STATUS runtime values require statusId.', value.statusId); if (value.defaultValue === undefined) report.add('CONTENT_RUNTIME_DEFAULT', state.packageId, file, `${jsonPath}.defaultValue`, 'RUNTIME_VALUE requires an explicit defaultValue.'); else validateValue(value.defaultValue, state, file, `${jsonPath}.defaultValue`, report, false); return }
   if (value.type === 'STAT') { if (!['SELF', 'ENEMY'].includes(value.target) || !['MAX_HP'].includes(value.stat)) report.add('CONTENT_STAT_VALUE', state.packageId, file, jsonPath, 'Unsupported stat expression.', value); return }
   if (value.type === 'RESOURCE') { if (!TARGETS.has(value.target) || !['HP', 'HP_RATIO', 'SHIELD', 'MANA'].includes(value.resource)) report.add('CONTENT_RESOURCE_VALUE', state.packageId, file, jsonPath, 'Unsupported resource expression.', value); return }
   if (['ADD', 'SUBTRACT', 'MULTIPLY', 'DIVIDE', 'MIN', 'MAX'].includes(value.type)) {
     if (!Array.isArray(value.values) || value.values.length < 2) report.add('CONTENT_VALUE_OPERANDS', state.packageId, file, `${jsonPath}.values`, 'At least two operands are required.', value.values);
-    else value.values.forEach((item, index) => validateValue(item, state, file, `${jsonPath}.values[${index}]`, report));
+    else value.values.forEach((item, index) => validateValue(item, state, file, `${jsonPath}.values[${index}]`, report, allowRuntimeValue));
     if (value.type === 'DIVIDE' && value.values?.slice(1).some((item) => item?.type === 'CONSTANT' && item.value === 0)) report.add('CONTENT_DIVIDE_BY_ZERO', state.packageId, file, `${jsonPath}.values`, 'A constant zero divisor is forbidden. Runtime zero divisors fail explicitly.', value.values);
     return;
   }
-  if (value.type === 'CLAMP') { validateValue(value.value, state, file, `${jsonPath}.value`, report); validateValue(value.min, state, file, `${jsonPath}.min`, report); validateValue(value.max, state, file, `${jsonPath}.max`, report); return }
-  validateValue(value.value, state, file, `${jsonPath}.value`, report);
+  if (value.type === 'CLAMP') { validateValue(value.value, state, file, `${jsonPath}.value`, report, allowRuntimeValue); validateValue(value.min, state, file, `${jsonPath}.min`, report, allowRuntimeValue); validateValue(value.max, state, file, `${jsonPath}.max`, report, allowRuntimeValue); return }
+  validateValue(value.value, state, file, `${jsonPath}.value`, report, allowRuntimeValue);
 }
 
 function validateCondition(value, state, file, jsonPath, report) {
@@ -73,9 +96,15 @@ function validateEffects(effects, state, file, jsonPath, report, depth = 0) {
     if (effect.target !== undefined && !TARGETS.has(effect.target)) report.add('CONTENT_EFFECT_TARGET', state.packageId, file, `${at}.target`, 'Target must be SELF or ENEMY.', effect.target);
     if (effect.condition) validateCondition(effect.condition, state, file, `${at}.condition`, report);
     for (const field of ['amount', 'shieldBypassPct']) if (effect[field] !== undefined) validateValue(effect[field], state, file, `${at}.${field}`, report);
+    for (const field of ['value', 'minimum', 'maximum']) if (isObject(effect[field]) && effect[field].type) validateValue(effect[field], state, file, `${at}.${field}`, report);
     if (effect.type === 'IF') { validateCondition(effect.condition, state, file, `${at}.condition`, report); validateEffects(effect.then ?? [], { ...state, keys: new Set(state.keys) }, file, `${at}.then`, report, depth + 1); validateEffects(effect.else ?? [], { ...state, keys: new Set(state.keys) }, file, `${at}.else`, report, depth + 1) }
     if (effect.type === 'SCHEDULE') { if (!Number.isInteger(effect.delayMs) || effect.delayMs < 0) report.add('CONTENT_SCHEDULE_DELAY', state.packageId, file, `${at}.delayMs`, 'delayMs must be a non-negative integer.', effect.delayMs); validateEffects(effect.effects ?? [], { ...state, keys: new Set(state.keys) }, file, `${at}.effects`, report, depth + 1) }
     if (effect.type === 'CUSTOM') { if (typeof effect.handlerId !== 'string' || !effect.handlerId.startsWith(`${state.packageId}.`)) report.add('CONTENT_CUSTOM_NAMESPACE', state.packageId, file, `${at}.handlerId`, 'Custom handler ID must use the package namespace.', effect.handlerId); state.customHandlers.add(effect.handlerId) }
+    if (effect.type === 'CONSUME_RESOURCE') { if (!['HP', 'SHIELD', 'MANA'].includes(effect.resource)) report.add('CONTENT_CONSUME_RESOURCE', state.packageId, file, `${at}.resource`, 'CONSUME_RESOURCE supports HP, SHIELD, or MANA.', effect.resource); if (effect.amount === undefined) report.add('CONTENT_EFFECT_AMOUNT', state.packageId, file, `${at}.amount`, 'CONSUME_RESOURCE requires amount.') }
+    if (effect.type === 'REMOVE_STATUS') { const hasStatus = typeof effect.statusId === 'string' && Boolean(effect.statusId), hasFilter = effect.filter?.tag === 'BUFF' || effect.filter?.tag === 'DEBUFF'; if (hasStatus === hasFilter) report.add('CONTENT_REMOVE_STATUS_SELECTOR', state.packageId, file, at, 'Specify exactly one of statusId or filter.tag.'); if (effect.maxCount !== undefined && (!Number.isInteger(effect.maxCount) || effect.maxCount <= 0)) report.add('CONTENT_REMOVE_STATUS_COUNT', state.packageId, file, `${at}.maxCount`, 'maxCount must be a positive integer.', effect.maxCount); if (effect.selection !== undefined && !['OLDEST_FIRST', 'NEWEST_FIRST'].includes(effect.selection)) report.add('CONTENT_REMOVE_STATUS_SELECTION', state.packageId, file, `${at}.selection`, 'Unsupported deterministic status selection.', effect.selection) }
+    if (effect.type === 'MODIFY_EVENT') { if (effect.path !== 'damage.currentAmount') report.add('CONTENT_MODIFY_EVENT_PATH', state.packageId, file, `${at}.path`, 'MODIFY_EVENT currently supports damage.currentAmount only.', effect.path); if (!['SET', 'ADD', 'MULTIPLY'].includes(effect.operation)) report.add('CONTENT_MODIFY_EVENT_OPERATION', state.packageId, file, `${at}.operation`, 'MODIFY_EVENT supports SET, ADD, or MULTIPLY.', effect.operation); if (effect.value === undefined) report.add('CONTENT_MODIFY_EVENT_VALUE', state.packageId, file, `${at}.value`, 'MODIFY_EVENT requires value.') }
+    if (effect.type === 'SET_RUNTIME_FLAG' || effect.type === 'CLEAR_RUNTIME_FLAG') { if (!RUNTIME_VALUE_KEY.test(effect.flag ?? '')) report.add('CONTENT_RUNTIME_FLAG_KEY', state.packageId, file, `${at}.flag`, 'Runtime flag key is invalid.', effect.flag) }
+    if (effect.type === 'STORE_VALUE') { if (!RUNTIME_SCOPES.has(effect.scope)) report.add('CONTENT_RUNTIME_SCOPE', state.packageId, file, `${at}.scope`, 'Unsupported runtime value scope.', effect.scope); if (!RUNTIME_VALUE_KEY.test(effect.key ?? '')) report.add('CONTENT_RUNTIME_KEY', state.packageId, file, `${at}.key`, 'Runtime value key is invalid.', effect.key); if (!RUNTIME_OPERATIONS.has(effect.operation)) report.add('CONTENT_RUNTIME_OPERATION', state.packageId, file, `${at}.operation`, 'Unsupported STORE_VALUE operation.', effect.operation); if (effect.scope === 'STATUS' && (typeof effect.statusId !== 'string' || !effect.statusId)) report.add('CONTENT_RUNTIME_STATUS', state.packageId, file, `${at}.statusId`, 'STATUS runtime values require statusId.', effect.statusId); if (['CLEAR', 'CLAMP'].includes(effect.operation) && effect.value !== undefined) report.add('CONTENT_RUNTIME_VALUE_FORBIDDEN', state.packageId, file, `${at}.value`, `${effect.operation} does not accept value.`, effect.value); if (!['CLEAR', 'CLAMP'].includes(effect.operation) && effect.value === undefined) report.add('CONTENT_RUNTIME_VALUE_REQUIRED', state.packageId, file, `${at}.value`, `${effect.operation} requires value.`); const min = effect.minimum?.type === 'CONSTANT' ? effect.minimum.value : undefined, max = effect.maximum?.type === 'CONSTANT' ? effect.maximum.value : undefined; if (typeof min === 'number' && typeof max === 'number' && min > max) report.add('CONTENT_RUNTIME_BOUNDS', state.packageId, file, at, 'minimum cannot exceed maximum.') }
     if (effect.resultKey !== undefined) { if (state.keys.has(effect.resultKey)) report.add('CONTENT_DUPLICATE_RESULT_KEY', state.packageId, file, `${at}.resultKey`, 'Result key is already declared.', effect.resultKey); else state.keys.add(effect.resultKey) }
   }
 }
@@ -109,7 +138,7 @@ function effectToRuntime(effect) {
   if (effect.type === 'ADD_SHIELD') return { type: 'gain_shield', ...common, amount: valueToRuntime(effect.amount), ...(effect.scope ? { scope: 'chain_step' } : {}), ...(effect.cap !== undefined ? { cap: effect.cap } : {}) };
   if (effect.type === 'MODIFY_MANA') return { type: 'gain_mana', ...common, amount: valueToRuntime(effect.amount) };
   if (effect.type === 'APPLY_STATUS') return { type: 'apply_status', ...common, statusId: effect.statusId, ...(effect.durationMs !== undefined ? { durationMs: effect.durationMs } : {}) };
-  if (effect.type === 'REMOVE_STATUS') return { type: 'remove_status', ...common, statusId: effect.statusId };
+  if (effect.type === 'REMOVE_STATUS') return { type: 'remove_status', ...common, ...(effect.statusId ? { statusId: effect.statusId } : {}), ...(effect.filter ? { filter: effect.filter } : {}), ...(effect.maxCount !== undefined ? { maxCount: effect.maxCount } : {}), ...(effect.selection ? { selection: effect.selection } : {}) };
   if (effect.type === 'IF') return { type: 'conditional', conditions: [conditionToRuntime(effect.condition)], effects: effect.then.map(effectToRuntime), ...(effect.else?.length ? { elseEffects: effect.else.map(effectToRuntime) } : {}) };
   if (effect.type === 'SCHEDULE') return { type: 'schedule_effects', ...common, delayMs: effect.delayMs, effects: effect.effects.map(effectToRuntime) };
   if (effect.type === 'SET_RUNTIME_FLAG') return { type: 'set_runtime_flag', ...common, flag: effect.flag, value: effect.value };
@@ -117,8 +146,8 @@ function effectToRuntime(effect) {
   if (effect.type === 'CONVERT_OVERHEAL_TO_SHIELD') return { type: 'convert_overheal_to_shield', ...common, ratio: effect.ratio, maximum: effect.maximum };
   if (effect.type === 'CUSTOM') return { type: 'custom', ...common, handlerId: effect.handlerId, parameters: effect.parameters ?? {} };
   if (effect.type === 'CONSUME_RESOURCE') return { type: 'consume_resource', ...common, resource: effect.resource, amount: valueToRuntime(effect.amount), allowPartial: effect.allowPartial ?? false, canReduceHpBelowOne: effect.canReduceHpBelowOne ?? false };
-  if (effect.type === 'STORE_VALUE') return { type: 'store_value', ...common, amount: valueToRuntime(effect.value) };
-  if (effect.type === 'MODIFY_EVENT') return { type: 'modify_event_amount', ...common, amount: valueToRuntime(effect.amount), ratio: effect.ratio ?? 1 };
+  if (effect.type === 'STORE_VALUE') return { type: 'store_value', ...common, scope: effect.scope, runtimeKey: effect.key, operation: effect.operation, ...(effect.statusId ? { statusId: effect.statusId } : {}), ...(effect.value !== undefined ? { value: valueToRuntime(effect.value) } : {}), ...(effect.minimum !== undefined ? { minimum: valueToRuntime(effect.minimum) } : {}), ...(effect.maximum !== undefined ? { maximum: valueToRuntime(effect.maximum) } : {}) };
+  if (effect.type === 'MODIFY_EVENT') return { type: 'modify_event_amount', ...common, path: effect.path, operation: effect.operation, value: valueToRuntime(effect.value) };
   throw new Error(`Unsupported normalized effect ${effect.type}`);
 }
 
@@ -134,8 +163,9 @@ function normalizeAbility(value) {
   };
 }
 
-function normalizeCharacter(value) {
-  return { id: value.id, name: value.displayName, shortName: value.shortName, rarity: value.rarity, race: value.race, tags: value.tags, description: value.description.summary, enabled: value.enabled ?? true, starter: value.starter ?? false, contentVersion: value.contentVersion ?? 1, allowedSlots: value.allowedSlots, recommendedRole: value.recommendedRole, portraitAsset: value.portraitAsset, stats: value.stats, ...(value.defaultSlots ? { defaultSlots: value.defaultSlots } : {}), combatant: { skillId: value.activeAbilityId }, support: { effectId: value.supportAbilityId } };
+function normalizeCharacter(value, asset) {
+  const assets = asset ? { portraitUrl: asset.portraitUrl, portraitHash: asset.portraitHash } : {};
+  return { id: value.id, name: value.displayName, shortName: value.shortName, rarity: value.rarity, race: value.race, tags: value.tags, description: value.description.summary, enabled: value.enabled ?? true, starter: value.starter ?? false, contentVersion: value.contentVersion ?? 1, allowedSlots: value.allowedSlots, recommendedRole: value.recommendedRole, portraitAsset: asset?.portraitUrl ?? '', assets, stats: value.stats, ...(value.defaultSlots ? { defaultSlots: value.defaultSlots } : {}), combatant: { skillId: value.activeAbilityId }, support: { effectId: value.supportAbilityId } };
 }
 
 function validateAbility(value, expectedKind, packageId, file, report, customHandlers) {
@@ -178,7 +208,7 @@ function validatePresentation(value, packageId, file, report, jsonPath = '$') {
   else if (isObject(value)) for (const [key, item] of Object.entries(value)) { if (forbidden.has(key)) report.add('CONTENT_PRESENTATION_COMBAT_FIELD', packageId, file, `${jsonPath}.${key}`, 'presentation.json may contain presentation keys only.', key); else validatePresentation(item, packageId, file, report, `${jsonPath}.${key}`) }
 }
 
-export function compileContent({ root = path.resolve('content/characters'), generatedDir = path.resolve('apps/server/src/generated'), importBaseDir = generatedDir, write = true } = {}) {
+export function compileContent({ root = path.resolve('content/characters'), generatedDir = path.resolve('apps/server/src/generated'), importBaseDir = generatedDir, assetOutputDir = path.resolve('apps/client/public/generated/characters'), write = true } = {}) {
   const report = collector(path.resolve('.')), packages = [], seenCharacters = new Map(), seenAbilities = new Map(), seenHandlers = new Map(), serverModules = [];
   if (!existsSync(root)) throw new ContentCompilationError([{ code: 'CONTENT_ROOT_MISSING', packageId: '(root)', file: posix(root), path: '$', message: 'Character content root does not exist.' }]);
   const directories = readdirSync(root, { withFileTypes: true }).filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort();
@@ -203,7 +233,7 @@ export function compileContent({ root = path.resolve('content/characters'), gene
     try { support = readJson(supportFile) } catch (error) { report.add('CONTENT_JSON_PARSE', packageId, supportFile, '$', `Cannot parse JSON: ${error.message}`); continue }
     if (presentationFile) { try { presentation = readJson(presentationFile) } catch (error) { report.add('CONTENT_JSON_PARSE', packageId, presentationFile, '$', `Cannot parse JSON: ${error.message}`) } }
     if (presentationFile && presentation) validatePresentation(presentation, packageId, presentationFile, report);
-    const customHandlers = new Set();
+    const customHandlers = new Set(), asset = portraitAsset(character, packageDir, packageId, characterFile, report);
     validateCharacter(character, packageId, characterFile, report); validateAbility(active, 'ACTIVE', packageId, activeFile, report, customHandlers); validateAbility(support, 'SUPPORT', packageId, supportFile, report, customHandlers);
     if (character.activeAbilityId !== active.id) report.add('CONTENT_ACTIVE_REFERENCE', packageId, characterFile, '$.activeAbilityId', 'activeAbilityId must match active.json.', character.activeAbilityId);
     if (character.supportAbilityId !== support.id) report.add('CONTENT_SUPPORT_REFERENCE', packageId, characterFile, '$.supportAbilityId', 'supportAbilityId must match support.json.', character.supportAbilityId);
@@ -216,11 +246,12 @@ export function compileContent({ root = path.resolve('content/characters'), gene
       for (const handlerId of customHandlers) if (!declaredHandlers.includes(handlerId)) report.add('CONTENT_CUSTOM_HANDLER_MISSING', packageId, serverFile, '$.handlers', 'CUSTOM handlerId is not exported by the declared module.', handlerId);
       serverModules.push({ packageId, file: serverFile, handlers: declaredHandlers.sort() });
     }
-    if (report.issues.length === packageIssueStart) packages.push({ id: packageId, character: normalizeCharacter(character), stats: character.stats, active: normalizeAbility(active), support: normalizeAbility(support), presentation: presentation ?? null });
+    if (report.issues.length === packageIssueStart) packages.push({ id: packageId, character: normalizeCharacter(character, asset), stats: character.stats, active: normalizeAbility(active), support: normalizeAbility(support), presentation: presentation ?? null, asset });
   }
   if (report.issues.length) throw new ContentCompilationError(report.issues);
-  const normalized = { _generated: 'AUTO-GENERATED FILE. DO NOT EDIT.', schemaVersion: 1, engineApiVersion: 1, packages: packages.sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0) };
-  const contentReport = { _generated: 'AUTO-GENERATED FILE. DO NOT EDIT.', packageCount: packages.length, characterCount: packages.length, abilityCount: packages.length * 2, customModuleCount: serverModules.length, packageIds: packages.map((item) => item.id) };
+  packages.sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+  const normalized = { _generated: 'AUTO-GENERATED FILE. DO NOT EDIT.', schemaVersion: 1, engineApiVersion: 1, packages: packages.map((item) => Object.fromEntries(Object.entries(item).filter(([key]) => key !== 'asset'))) };
+  const contentReport = { _generated: 'AUTO-GENERATED FILE. DO NOT EDIT.', packageCount: packages.length, characterCount: packages.length, abilityCount: packages.length * 2, customModuleCount: serverModules.length, packageIds: packages.map((item) => item.id), portraitCount: packages.filter((item) => item.asset).length, missingPortraitPackageIds: packages.filter((item) => !item.asset).map((item) => item.id) };
   if (write) {
     mkdirSync(generatedDir, { recursive: true });
     writeFileSync(path.join(generatedDir, 'normalized-content.generated.json'), stringify(normalized), 'utf8');
@@ -230,6 +261,8 @@ export function compileContent({ root = path.resolve('content/characters'), gene
     writeFileSync(path.join(generatedDir, 'character-registry.generated.ts'), `${banner}import type { CharacterDefinition } from '@mercenary/shared';\nimport type { AbilityDefinition } from '${effectTypesImport}';\n\nexport const generatedCharacterDefinitions = ${JSON.stringify(packages.map((item) => item.character), null, 2)} as CharacterDefinition[];\nexport const generatedAbilityDefinitions = ${JSON.stringify(packages.flatMap((item) => [item.active, item.support]), null, 2)} as AbilityDefinition[];\nexport const generatedCharacterStats = ${JSON.stringify(Object.fromEntries(packages.map((item) => [item.id, item.stats])), null, 2)} as const;\nexport const generatedPresentation = ${JSON.stringify(Object.fromEntries(packages.filter((item) => item.presentation).map((item) => [item.id, item.presentation])), null, 2)} as const;\n`, 'utf8');
     const imports = serverModules.map((item, index) => `import { characterServerModule as module${index} } from '${posix(path.relative(importBaseDir, item.file)).replace(/^([^./])/, './$1').replace(/\.ts$/, '.js')}';`).join('\n');
     writeFileSync(path.join(generatedDir, 'custom-handler-registry.generated.ts'), `${banner}${imports}${imports ? '\n\n' : ''}export const generatedCharacterServerModules = [${serverModules.map((_item, index) => `module${index}`).join(', ')}] as const;\n`, 'utf8');
+    rmSync(assetOutputDir, { recursive: true, force: true });
+    for (const item of packages) if (item.asset) { const output = path.join(assetOutputDir, item.asset.outputRelative); mkdirSync(path.dirname(output), { recursive: true }); copyFileSync(item.asset.source, output) }
   }
   return { normalized, contentReport, serverModules };
 }
@@ -240,8 +273,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     let result;
     if (check) {
       const temporary = mkdtempSync(path.join(tmpdir(), 'mercenary-generated-'));
-      const expectedDir = path.resolve('apps/server/src/generated');
-      try { result = compileContent({ generatedDir: temporary, importBaseDir: expectedDir }); for (const file of ['character-registry.generated.ts', 'custom-handler-registry.generated.ts', 'normalized-content.generated.json', 'content-report.generated.json']) { const expected = path.join(expectedDir, file), actual = path.join(temporary, file); if (!existsSync(expected) || readFileSync(expected, 'utf8') !== readFileSync(actual, 'utf8')) throw new Error(`CONTENT_GENERATED_STALE:${file}`) } } finally { rmSync(temporary, { recursive: true, force: true }) }
+      const expectedDir = path.resolve('apps/server/src/generated'), expectedAssets = path.resolve('apps/client/public/generated/characters'), generated = path.join(temporary, 'server'), assets = path.join(temporary, 'assets');
+      try { result = compileContent({ generatedDir: generated, importBaseDir: expectedDir, assetOutputDir: assets }); for (const file of ['character-registry.generated.ts', 'custom-handler-registry.generated.ts', 'normalized-content.generated.json', 'content-report.generated.json']) { const expected = path.join(expectedDir, file), actual = path.join(generated, file); if (!existsSync(expected) || readFileSync(expected, 'utf8') !== readFileSync(actual, 'utf8')) throw new Error(`CONTENT_GENERATED_STALE:${file}`) } const expectedFiles = relativeFiles(expectedAssets), actualFiles = relativeFiles(assets); if (JSON.stringify(expectedFiles) !== JSON.stringify(actualFiles)) throw new Error('CONTENT_GENERATED_ASSETS_STALE:file-list'); for (const file of actualFiles) if (!readFileSync(path.join(expectedAssets, file)).equals(readFileSync(path.join(assets, file)))) throw new Error(`CONTENT_GENERATED_ASSETS_STALE:${file}`) } finally { rmSync(temporary, { recursive: true, force: true }) }
     } else result = compileContent({ write: !validateOnly });
     console.log(`Validated ${result.contentReport.packageCount} character package(s) and ${result.contentReport.abilityCount} abilities.`);
   }

@@ -16,5 +16,5 @@
   "contentVersion": 1,
   "allowedSlots": ["combatant", "support"],
   "recommendedRole": "support",
-  "portraitAsset": "/characters/test.svg"
+  "assets": {}
 }

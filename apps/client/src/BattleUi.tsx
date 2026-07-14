@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { AbilityRuntimeSnapshot, BattleLoadoutSnapshot, BattleResult, BattleSnapshot, BattleStats, EffectRuntimeSnapshot, PublicParticipant, StatusSnapshot } from '@mercenary/shared';
 import type { BattlePresentationEvent, FeedbackOwner } from './battle-presentation';
+import { CharacterPortrait } from './CharacterPortrait';
 
 export function ResourceBar({ value, max, kind, label }: { value: number; max: number; kind: 'hp' | 'shield' | 'mana'; label: string }) {
   const percent = Math.max(0, Math.min(100, value / max * 100));
@@ -18,7 +19,7 @@ export function SupportAbilityIcon({ portrait, name, runtime, cooldownMs, active
   const completed = Boolean(runtime?.usedThisBattle && cooldownMs === 0);
   const [open, setOpen] = useState(false);
   useEffect(() => { if (!open) return; const close = (event: KeyboardEvent) => { if (event.key === 'Escape') setOpen(false) }; addEventListener('keydown', close); return () => removeEventListener('keydown', close) }, [open]);
-  return <span className="support-anchor"><button type="button" className={`support-icon ${active ? 'triggered' : ''} ${completed ? 'completed' : ''}`} aria-label={`${name}${remaining ? `, ${remaining}초 쿨다운` : completed ? ', 사용 완료' : ''}`} aria-expanded={open} onClick={() => setOpen((value) => !value)}><img src={portrait} alt=""/>{remaining > 0 && <b>{remaining}</b>}{completed && <b aria-hidden="true">✓</b>}</button>{open && <span className="icon-popover" role="tooltip"><strong>{name}</strong>{remaining > 0 ? `${remaining}초 후 준비` : completed ? '이 전투에서 사용 완료' : '발동 준비'}</span>}</span>;
+  return <span className="support-anchor"><button type="button" className={`support-icon ${active ? 'triggered' : ''} ${completed ? 'completed' : ''}`} aria-label={`${name}${remaining ? `, ${remaining}초 쿨다운` : completed ? ', 사용 완료' : ''}`} aria-expanded={open} onClick={() => setOpen((value) => !value)}><CharacterPortrait src={portrait} alt="" eager/>{remaining > 0 && <b>{remaining}</b>}{completed && <b aria-hidden="true">✓</b>}</button>{open && <span className="icon-popover" role="tooltip"><strong>{name}</strong>{remaining > 0 ? `${remaining}초 후 준비` : completed ? '이 전투에서 사용 완료' : '발동 준비'}</span>}</span>;
 }
 
 function StatusIcon({ status, selfId }: { status: StatusSnapshot; selfId: string }) {
@@ -37,7 +38,7 @@ export function StatusIconList({ runtime, selfId }: { runtime?: EffectRuntimeSna
 export function CombatantHeader({ participant, selfId, side, activeAbilityId }: { participant: PublicParticipant; selfId: string; side: 'self' | 'opponent'; activeAbilityId: string }) {
   const main = participant.loadout.combatant, runtime = participant.effectRuntime;
   return <section className={`combatant-header ${side}`} aria-label={`${participant.name} 전투 정보`}>
-    <img className="combatant-portrait" src={main.portraitAsset} alt={`${main.name} 초상화`}/>
+    <CharacterPortrait className="combatant-portrait" src={main.portraitAsset} alt={`${main.name} 초상화`} eager/>
     <div className="combatant-main"><div className="combatant-title"><strong>{main.name}</strong><span>{main.rarity}</span><small>{participant.name}</small></div><div className="hp-line"><b data-testid={`${side}-hp`}>HP {participant.hp} / {participant.maxHp}</b>{participant.hp <= participant.maxHp * .25 && <em>위험</em>}</div><ResourceBar value={participant.hp} max={participant.maxHp} kind="hp" label={`${side === 'self' ? '내' : '상대'} HP`}/>{participant.shield > 0 && <div className="shield-line" data-testid={`${side}-shield`}><span>◇ {participant.shield}</span><ResourceBar value={participant.shield} max={500} kind="shield" label={`${side === 'self' ? '내' : '상대'} 보호막`}/></div>}</div>
     <div className="combatant-effects"><div className="support-icons" data-testid={`${side}-supports`}>{participant.loadout.supports.map((support, index) => <SupportAbilityIcon key={support.characterId} portrait={support.portraitAsset} name={runtime?.supportAbilities[index]?.name ?? support.name} runtime={runtime?.abilities[index + 1]} cooldownMs={runtime?.supportAbilities[index]?.cooldownMs ?? 0} active={activeAbilityId === runtime?.supportAbilities[index]?.id}/>)}</div><StatusIconList runtime={runtime} selfId={selfId}/></div>
   </section>;
@@ -76,7 +77,7 @@ export function ResultSummary({ snapshot, opponentExit, rematchPending, lobbyPen
 }
 
 export function LoadoutSummary({ loadout }: { loadout: BattleLoadoutSnapshot }) {
-  return <div className="loadout-summary" aria-label="현재 편성">{[loadout.combatant, ...loadout.supports].map((character, index) => <figure key={character.characterId}><img src={character.portraitAsset} alt=""/><figcaption><small>{index === 0 ? '전투원' : `지원 ${index}`}</small><b>{character.name}</b><span>{character.rarity}</span></figcaption></figure>)}</div>;
+  return <div className="loadout-summary" aria-label="현재 편성">{[loadout.combatant, ...loadout.supports].map((character, index) => <figure key={character.characterId}><CharacterPortrait src={character.portraitAsset} alt=""/><figcaption><small>{index === 0 ? '전투원' : `지원 ${index}`}</small><b>{character.name}</b><span>{character.rarity}</span></figcaption></figure>)}</div>;
 }
 
 export function abilityRuntimeFor(runtime: EffectRuntimeSnapshot | undefined, index: number) { return runtime?.abilities[index] }

@@ -1,0 +1,59 @@
+{
+  "id": "siege_cook_borga_support",
+  "kind": "SUPPORT",
+  "displayName": "냄비뚜껑 엄호",
+  "shortDescription": "회복을 4개 이상 맞추면 보호막 52를 얻는다.",
+  "fullDescription": "회복을 4개 이상 맞추면 보호막 52를 얻는다.",
+  "trigger": {
+    "event": "TILE_MATCH_RESOLVED",
+    "filter": {
+      "type": "AND",
+      "conditions": [
+        {
+          "type": "COMPARE",
+          "left": {
+            "type": "EVENT_VALUE",
+            "path": "match.tileType"
+          },
+          "operator": "EQ",
+          "right": {
+            "type": "CONSTANT",
+            "value": "HEAL"
+          }
+        },
+        {
+          "type": "COMPARE",
+          "left": {
+            "type": "EVENT_VALUE",
+            "path": "match.count"
+          },
+          "operator": "GTE",
+          "right": {
+            "type": "CONSTANT",
+            "value": 4
+          }
+        }
+      ]
+    }
+  },
+  "cooldownMs": 8000,
+  "battleLimit": null,
+  "chainLimit": {
+    "maxTriggers": 1
+  },
+  "effects": [
+    {
+      "type": "ADD_SHIELD",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 52
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

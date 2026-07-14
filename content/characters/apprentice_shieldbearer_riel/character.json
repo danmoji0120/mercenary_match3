@@ -1,0 +1,38 @@
+{
+  "id": "apprentice_shieldbearer_riel",
+  "displayName": "견습방패병 리엘",
+  "shortName": "견습 리엘",
+  "rarity": "R",
+  "race": "ANGEL",
+  "role": "DEFENSE",
+  "combatStyle": "STABLE_DEFENSE",
+  "stats": {
+    "maxHp": 1120,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 120,
+    "healEffectPct": 90,
+    "manaGainPct": 90
+  },
+  "activeAbilityId": "apprentice_shieldbearer_riel_active",
+  "supportAbilityId": "apprentice_shieldbearer_riel_support",
+  "tags": [
+    "ANGEL",
+    "DEFENSE",
+    "SHIELD",
+    "BATTLE_START"
+  ],
+  "description": {
+    "summary": "성실하지만 성역 유지비 계산을 못 해서 매번 혼나는 견습 천사",
+    "details": "천사 출신으로 방어를 담당하는 용병이다. 성실하지만 성역 유지비 계산을 못 해서 매번 혼나는 견습 천사. 전투에서는 ‘견습 성역’을 사용하고, 지원 시 ‘수호의 첫걸음’으로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

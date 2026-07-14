@@ -1,0 +1,38 @@
+{
+  "id": "fortress_breaker_camilla",
+  "displayName": "요새파괴 포격장교 카밀라",
+  "shortName": "카밀라",
+  "rarity": "SSR",
+  "race": "DWARF",
+  "role": "ATTACK",
+  "combatStyle": "ANTI_FORTRESS",
+  "stats": {
+    "maxHp": 940,
+    "swordEffectPct": 132,
+    "shieldEffectPct": 92,
+    "healEffectPct": 96,
+    "manaGainPct": 112
+  },
+  "activeAbilityId": "fortress_breaker_camilla_active",
+  "supportAbilityId": "fortress_breaker_camilla_support",
+  "tags": [
+    "DWARF",
+    "ATTACK",
+    "ANTI_FORTRESS",
+    "SHIELD_DESTROY"
+  ],
+  "description": {
+    "summary": "요새는 잘 부수지만 주변 민가도 지도에서 지워버리는 포격장교",
+    "details": "드워프 출신으로 전면 공격을 담당하는 SSR 용병이다. 요새는 잘 부수지만 주변 민가도 지도에서 지워버리는 포격장교. 전투에서는 ‘요새 삭제 포격’을 사용하고, 지원 시 ‘신축 요새 재철거’로 힘을 보탠다. 높은 고점과 공격 연계로 상대의 대응을 압박하는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

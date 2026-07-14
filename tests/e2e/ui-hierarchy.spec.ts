@@ -12,7 +12,7 @@ test('combat hierarchy is compact, accessible, and responsive', async ({ page },
   await expect(page.getByTestId('opponent-hp')).toBeVisible();
   await expect(page.getByTestId('battle-timer')).toBeVisible();
   await expect(page.getByTestId('combat-stage')).toBeVisible();
-  await expect(page.locator('.stage-fighter img')).toHaveCount(2);
+  await expect(page.locator('.stage-fighter :is(img, .character-portrait-fallback)')).toHaveCount(2);
   await expect(page.getByTestId('self-supports').getByRole('button')).toHaveCount(2);
   await expect(page.getByTestId('skill')).toBeDisabled();
   await expect(page.locator('.skill-control [role="progressbar"]')).toHaveAttribute('aria-valuemax', '100');

@@ -1,0 +1,38 @@
+{
+  "id": "dagger_minha",
+  "displayName": "단검꾼 미냐",
+  "shortName": "미냐",
+  "rarity": "R",
+  "race": "CAT_BEASTKIN",
+  "role": "ATTACK",
+  "combatStyle": "SPEED_ATTACK",
+  "stats": {
+    "maxHp": 900,
+    "swordEffectPct": 110,
+    "shieldEffectPct": 90,
+    "healEffectPct": 95,
+    "manaGainPct": 115
+  },
+  "activeAbilityId": "dagger_minha_active",
+  "supportAbilityId": "dagger_minha_support",
+  "tags": [
+    "CAT_BEASTKIN",
+    "ATTACK",
+    "SPEED",
+    "SHIELD_BYPASS"
+  ],
+  "description": {
+    "summary": "강한 적은 피하고 약한 적은 끝까지 쫓는 얄미운 단검꾼",
+    "details": "고양이수인 출신으로 공격을 담당하는 용병이다. 강한 적은 피하고 약한 적은 끝까지 쫓는 얄미운 단검꾼. 전투에서는 ‘틈새 베기’를 사용하고, 지원 시 ‘약점 추격’으로 힘을 보탠다. 꾸준한 피해를 쌓는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

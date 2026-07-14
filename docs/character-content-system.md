@@ -152,6 +152,14 @@ At battle creation, `CharacterRegistry.snapshot` copies the combatant stats into
 
 The non-neutral stats fixtures under `apps/server/tests/fixtures` are test-only and are not generated into the production character registry. Explicit ability scaling, equipment, levels, support-stat aggregation, and team synergy remain outside this milestone.
 
+## Runtime values, newly emitted events, and portrait assets
+
+`RUNTIME_VALUE` reads numeric state from `BATTLE`, `ABILITY`, `STATUS`, or `CHAIN` scope and requires an explicit `defaultValue`. `STORE_VALUE` supports `SET`, `ADD`, `SUBTRACT`, `MIN`, `MAX`, `CLAMP`, and `CLEAR`. Battle and ability values live for the battle, status values are cleared after `STATUS_REMOVED` support dispatch, and chain values are cleared when the chain completes. Runtime values are included in effect snapshots; legacy snapshots without the field restore an empty store rather than reading current content.
+
+The canonical trigger emitter registry records events that are both authored and emitted. In addition to existing events, the runtime now emits `ACTIVE_USED`, `CHAIN_STEP_RESOLVED`, `SHIELD_GAINED`, `HEALED`, `STATUS_APPLIED`, and `STATUS_REMOVED` with event-specific payload paths. Support effects inherit origin metadata, generation depth, and the same-root self-retrigger guard. `MODIFY_EVENT` operates on the shared pre-impact `damage.currentAmount` context, so later support effects and the attack resolver observe the same value.
+
+`character.json` may optionally declare `assets.portrait` as a package-local PNG, JPEG, or WebP path. The compiler rejects absolute paths, traversal, symlink escape, unsupported extensions, signature mismatches, and files larger than 8 MiB. Valid files are copied deterministically to `/generated/characters/<character-id>/portrait.<sha256-12>.<ext>`; only this generated URL enters `CharacterDefinition`. The client uses one `CharacterPortrait` boundary with lazy loading outside battle, eager loading in battle, and a shared CSS fallback when no raster asset exists or loading fails. SVG package portraits and remote URLs are unsupported.
+
 1. `content/characters` 아래에 ID와 같은 폴더를 만든다.
 2. manifest를 작성한다.
 3. character를 작성한다.

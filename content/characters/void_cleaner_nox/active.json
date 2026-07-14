@@ -1,0 +1,72 @@
+{
+  "id": "void_cleaner_nox_active",
+  "kind": "ACTIVE",
+  "displayName": "전면 차원청소",
+  "shortDescription": "적의 강화 상태를 최대 2개, 자신의 약화 상태를 최대 1개 제거하고 적에게 95에 제거한 상태 하나당 60을 더한 피해를 준다.",
+  "fullDescription": "적의 강화 상태를 최대 2개, 자신의 약화 상태를 최대 1개 제거하고 적에게 95에 제거한 상태 하나당 60을 더한 피해를 준다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "REMOVE_STATUS",
+      "target": "ENEMY",
+      "filter": {
+        "tag": "BUFF"
+      },
+      "maxCount": 2,
+      "selection": "OLDEST_FIRST",
+      "resultKey": "enemyBuffs"
+    },
+    {
+      "type": "REMOVE_STATUS",
+      "target": "SELF",
+      "filter": {
+        "tag": "DEBUFF"
+      },
+      "maxCount": 1,
+      "selection": "OLDEST_FIRST",
+      "resultKey": "selfDebuffs"
+    },
+    {
+      "type": "DAMAGE",
+      "target": "ENEMY",
+      "amount": {
+        "type": "ADD",
+        "values": [
+          {
+            "type": "CONSTANT",
+            "value": 95
+          },
+          {
+            "type": "MULTIPLY",
+            "values": [
+              {
+                "type": "ADD",
+                "values": [
+                  {
+                    "type": "RESULT_VALUE",
+                    "resultKey": "enemyBuffs",
+                    "path": "removedCount"
+                  },
+                  {
+                    "type": "RESULT_VALUE",
+                    "resultKey": "selfDebuffs",
+                    "path": "removedCount"
+                  }
+                ]
+              },
+              {
+                "type": "CONSTANT",
+                "value": 60
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

@@ -66,7 +66,7 @@ export function createMercenaryServer(options: ServerOptions = {}) {
       setHeaders(response, filename) {
         const normalized = filename.replaceAll('\\', '/');
         if (path.basename(filename) === 'index.html') response.setHeader('Cache-Control', 'no-store');
-        else if (normalized.includes('/assets/')) response.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        else if (normalized.includes('/assets/') || normalized.includes('/generated/characters/')) response.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
         else response.setHeader('Cache-Control', 'public, max-age=3600');
       },
     }));

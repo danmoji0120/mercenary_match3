@@ -47,7 +47,7 @@
         "enabled": true,
         "id": "custom_test_character",
         "name": "Custom Test Character",
-        "portraitAsset": "/characters/test.svg",
+        "portraitAsset": "",
         "race": "TEST",
         "rarity": "R",
         "recommendedRole": "support",

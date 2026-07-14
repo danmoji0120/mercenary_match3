@@ -1,0 +1,38 @@
+{
+  "id": "mountain_gunner_berka",
+  "displayName": "산악포수 베르카",
+  "shortName": "베르카",
+  "rarity": "R",
+  "race": "BEAR_BEASTKIN",
+  "role": "ATTACK",
+  "combatStyle": "SNIPER",
+  "stats": {
+    "maxHp": 880,
+    "swordEffectPct": 120,
+    "shieldEffectPct": 85,
+    "healEffectPct": 90,
+    "manaGainPct": 110
+  },
+  "activeAbilityId": "mountain_gunner_berka_active",
+  "supportAbilityId": "mountain_gunner_berka_support",
+  "tags": [
+    "BEAR_BEASTKIN",
+    "ATTACK",
+    "SNIPER",
+    "CHAIN"
+  ],
+  "description": {
+    "summary": "조준은 느리지만 한 번 맞히면 산적도 바위도 똑같이 눕힘",
+    "details": "곰수인 출신으로 공격을 담당하는 용병이다. 조준은 느리지만 한 번 맞히면 산적도 바위도 똑같이 눕힘. 전투에서는 ‘산악 관통탄’을 사용하고, 지원 시 ‘고지 사격’으로 힘을 보탠다. 꾸준한 피해를 쌓는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

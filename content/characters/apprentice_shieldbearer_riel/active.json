@@ -1,0 +1,23 @@
+{
+  "id": "apprentice_shieldbearer_riel_active",
+  "kind": "ACTIVE",
+  "displayName": "견습 성역",
+  "shortDescription": "보호막 170을 얻는다.",
+  "fullDescription": "보호막 170을 얻는다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "ADD_SHIELD",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 170
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+
