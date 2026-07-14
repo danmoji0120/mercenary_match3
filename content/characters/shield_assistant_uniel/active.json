@@ -1,0 +1,29 @@
+{
+  "id": "shield_assistant_uniel_active",
+  "kind": "ACTIVE",
+  "displayName": "보조익 전개",
+  "shortDescription": "보호막 100을 얻고 5초 안에 받는 다음 공격 피해를 30% 감소시킨다.",
+  "fullDescription": "보호막 100을 얻고 5초 안에 받는 다음 공격 피해를 30% 감소시킨다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "ADD_SHIELD",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 100
+      }
+    },
+    {
+      "type": "APPLY_STATUS",
+      "target": "SELF",
+      "statusId": "r_next_incoming_damage_reduction_30",
+      "durationMs": 5000
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

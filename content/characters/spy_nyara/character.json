@@ -1,0 +1,39 @@
+{
+  "id": "spy_nyara",
+  "displayName": "첩보원 냐라",
+  "shortName": "냐라",
+  "rarity": "R",
+  "race": "CAT_BEASTKIN",
+  "role": "DISRUPT",
+  "combatStyle": "SKIRMISH",
+  "stats": {
+    "maxHp": 950,
+    "swordEffectPct": 105,
+    "shieldEffectPct": 90,
+    "healEffectPct": 95,
+    "manaGainPct": 115
+  },
+  "activeAbilityId": "spy_nyara_active",
+  "supportAbilityId": "spy_nyara_support",
+  "tags": [
+    "CAT_BEASTKIN",
+    "DISRUPT",
+    "SKIRMISH",
+    "DAMAGE",
+    "MANA_MATCH"
+  ],
+  "description": {
+    "summary": "정보는 훔치고 간식은 더 훔친다",
+    "details": "고양이수인 출신으로 전투 방해를 담당하는 용병이다. 정보는 훔치고 간식은 더 훔친다. 전투에서는 ‘정보 탈취’를 사용하고, 지원 시 ‘은밀한 보급’으로 힘을 보탠다. 피해와 약화 효과로 상대 전개를 끊는 방해형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

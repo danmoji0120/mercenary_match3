@@ -1,0 +1,40 @@
+{
+  "id": "armor_mender_tilda",
+  "displayName": "방어구 수선공 틸다",
+  "shortName": "틸다",
+  "rarity": "R",
+  "race": "DWARF",
+  "role": "DEFENSE",
+  "combatStyle": "SUPPORT",
+  "stats": {
+    "maxHp": 1080,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 110,
+    "healEffectPct": 110,
+    "manaGainPct": 90
+  },
+  "activeAbilityId": "armor_mender_tilda_active",
+  "supportAbilityId": "armor_mender_tilda_support",
+  "tags": [
+    "DWARF",
+    "DEFENSE",
+    "SUPPORT",
+    "SHIELD",
+    "MANA",
+    "SHIELD_MATCH"
+  ],
+  "description": {
+    "summary": "갑옷은 잘 고치는데 착용자 체형 평가는 너무 솔직함",
+    "details": "드워프 출신으로 방어를 담당하는 용병이다. 갑옷은 잘 고치는데 착용자 체형 평가는 너무 솔직함. 전투에서는 ‘즉석 판금 수선’을 사용하고, 지원 시 ‘리벳 보강’으로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

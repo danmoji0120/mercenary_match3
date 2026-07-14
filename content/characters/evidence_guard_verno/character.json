@@ -1,0 +1,39 @@
+{
+  "id": "evidence_guard_verno",
+  "displayName": "증거품 감시자 베르노",
+  "shortName": "베르노",
+  "rarity": "R",
+  "race": "UNDEAD",
+  "role": "DEFENSE",
+  "combatStyle": "STABLE_DEFENSE",
+  "stats": {
+    "maxHp": 1080,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 110,
+    "healEffectPct": 110,
+    "manaGainPct": 90
+  },
+  "activeAbilityId": "evidence_guard_verno_active",
+  "supportAbilityId": "evidence_guard_verno_support",
+  "tags": [
+    "UNDEAD",
+    "DEFENSE",
+    "STABLE_DEFENSE",
+    "STABLE",
+    "SHIELD",
+    "BATTLE_START"
+  ],
+  "description": {
+    "summary": "밤새 꼼짝 않고 감시하지만 가끔 본인도 증거품처럼 서 있음",
+    "details": "언데드 출신으로 방어를 담당하는 용병이다. 밤새 꼼짝 않고 감시하지만 가끔 본인도 증거품처럼 서 있음. 전투에서는 ‘증거품 봉쇄’를 사용하고, 지원 시 ‘밤샘 감시’로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

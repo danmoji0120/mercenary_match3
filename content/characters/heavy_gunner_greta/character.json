@@ -1,0 +1,40 @@
+{
+  "id": "heavy_gunner_greta",
+  "displayName": "중갑총수 그레타",
+  "shortName": "그레타",
+  "rarity": "R",
+  "race": "DWARF",
+  "role": "ATTACK",
+  "combatStyle": "FORTRESS",
+  "stats": {
+    "maxHp": 920,
+    "swordEffectPct": 115,
+    "shieldEffectPct": 90,
+    "healEffectPct": 90,
+    "manaGainPct": 105
+  },
+  "activeAbilityId": "heavy_gunner_greta_active",
+  "supportAbilityId": "heavy_gunner_greta_support",
+  "tags": [
+    "DWARF",
+    "ATTACK",
+    "FORTRESS",
+    "HEAVY_ATTACK",
+    "DAMAGE",
+    "BATTLE_START"
+  ],
+  "description": {
+    "summary": "총은 튼튼한데 바닥이 먼저 무너지는 중갑 총수",
+    "details": "드워프 출신으로 공격을 담당하는 용병이다. 총은 튼튼한데 바닥이 먼저 무너지는 중갑 총수. 전투에서는 ‘중갑 포격’을 사용하고, 지원 시 ‘고정 사격’으로 힘을 보탠다. 꾸준한 피해를 쌓는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

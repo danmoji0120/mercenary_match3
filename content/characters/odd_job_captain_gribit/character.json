@@ -1,0 +1,41 @@
+{
+  "id": "odd_job_captain_gribit",
+  "displayName": "잡역공대장 그리빗",
+  "shortName": "그리빗",
+  "rarity": "R",
+  "race": "GOBLIN",
+  "role": "DEFENSE",
+  "combatStyle": "BALANCED",
+  "stats": {
+    "maxHp": 1000,
+    "swordEffectPct": 100,
+    "shieldEffectPct": 100,
+    "healEffectPct": 100,
+    "manaGainPct": 100
+  },
+  "activeAbilityId": "odd_job_captain_gribit_active",
+  "supportAbilityId": "odd_job_captain_gribit_support",
+  "tags": [
+    "GOBLIN",
+    "DEFENSE",
+    "BALANCED",
+    "HYBRID",
+    "DAMAGE",
+    "SHIELD",
+    "BATTLE_START"
+  ],
+  "description": {
+    "summary": "따까리들의 따까리 대장. 도망 경로도 지휘한다",
+    "details": "고블린 출신으로 공수 양면을 담당하는 용병이다. 따까리들의 따까리 대장. 도망 경로도 지휘한다. 전투에서는 ‘잡역 총동원’을 사용하고, 지원 시 ‘퇴로 지휘’로 힘을 보탠다. 공격과 수비를 함께 수행하는 혼합형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

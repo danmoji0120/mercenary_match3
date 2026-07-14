@@ -1,0 +1,40 @@
+{
+  "id": "trap_thrower_poppo",
+  "displayName": "함정투척병 포포",
+  "shortName": "포포",
+  "rarity": "R",
+  "race": "KOBOLD",
+  "role": "ATTACK",
+  "combatStyle": "VANGUARD",
+  "stats": {
+    "maxHp": 950,
+    "swordEffectPct": 105,
+    "shieldEffectPct": 90,
+    "healEffectPct": 95,
+    "manaGainPct": 115
+  },
+  "activeAbilityId": "trap_thrower_poppo_active",
+  "supportAbilityId": "trap_thrower_poppo_support",
+  "tags": [
+    "KOBOLD",
+    "ATTACK",
+    "VANGUARD",
+    "DAMAGE",
+    "SHIELD_BYPASS",
+    "SWORD_MATCH"
+  ],
+  "description": {
+    "summary": "작아서 함정에 안 걸리는 게 아니라 함정 옆에 숨어있던 코볼트",
+    "details": "코볼트 출신으로 공격을 담당하는 용병이다. 작아서 함정에 안 걸리는 게 아니라 함정 옆에 숨어있던 코볼트. 전투에서는 ‘함정 옆 투척’을 사용하고, 지원 시 ‘숨은 기습’으로 힘을 보탠다. 꾸준한 피해를 쌓는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

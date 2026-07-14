@@ -1,0 +1,28 @@
+{
+  "id": "feather_sniper_erika_active",
+  "kind": "ACTIVE",
+  "displayName": "낙하 저격",
+  "shortDescription": "적에게 145 피해를 주며 보호막의 15%를 무시한다.",
+  "fullDescription": "적에게 145 피해를 주며 보호막의 15%를 무시한다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "DAMAGE",
+      "target": "ENEMY",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 145
+      },
+      "travelMs": 650,
+      "shieldBypassPct": {
+        "type": "CONSTANT",
+        "value": 15
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

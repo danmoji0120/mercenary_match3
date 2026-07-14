@@ -8,7 +8,7 @@ import { Server } from 'socket.io';
 import type { ClientToServerEvents, ServerToClientEvents } from '@mercenary/shared';
 import { GameServer } from './game-server.js';
 import { InMemoryAccountRepository, InMemoryAuthVerifier, createSupabaseServices, type AccountServices } from './account.js';
-import { ensureAccount, installAccountApi } from './account-api.js';
+import { ensureAccount, installAccountApi, installDevelopmentAccountApi } from './account-api.js';
 import { readSupabaseServerEnvironment } from './environment.js';
 import { loadCharacterRegistry } from './character-registry.js';
 import { installTestAuthApi } from './test-auth-api.js';
@@ -59,6 +59,7 @@ export function createMercenaryServer(options: ServerOptions = {}) {
   app.get('/health', (_request, response) => response.status(200).json({ status: 'ok', service: 'mercenary-match3', uptimeSeconds: Math.floor(process.uptime()), clientReady }));
   if (!production && process.env.ACCOUNT_TEST_MODE === 'true') installTestAuthApi(app);
   installAccountApi(app, accountServices);
+  if (!production) installDevelopmentAccountApi(app, accountServices);
 
   if (clientReady) {
     app.use(express.static(clientDistPath, {

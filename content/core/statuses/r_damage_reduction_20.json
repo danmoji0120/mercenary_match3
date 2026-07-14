@@ -1,0 +1,21 @@
+{
+  "id": "r_damage_reduction_20",
+  "name": "피해 감소 20%",
+  "description": "4초 동안 받는 피해가 20% 감소합니다.",
+  "durationMs": 4000,
+  "stacking": "refresh",
+  "maxStacks": 1,
+  "refreshPolicy": "refresh",
+  "consumePolicy": null,
+  "modifiers": [
+    {
+      "type": "incoming_damage_multiplier",
+      "value": 0.8
+    }
+  ],
+  "triggers": [],
+  "tags": ["BUFF"],
+  "visibleToOwner": true,
+  "visibleToOpponent": true,
+  "contentVersion": 1
+}

@@ -1,0 +1,41 @@
+{
+  "id": "spear_shield_soldier_rina",
+  "displayName": "창방패병 리나",
+  "shortName": "리나",
+  "rarity": "R",
+  "race": "HUMAN",
+  "role": "DEFENSE",
+  "combatStyle": "BALANCED",
+  "stats": {
+    "maxHp": 1000,
+    "swordEffectPct": 100,
+    "shieldEffectPct": 100,
+    "healEffectPct": 100,
+    "manaGainPct": 100
+  },
+  "activeAbilityId": "spear_shield_soldier_rina_active",
+  "supportAbilityId": "spear_shield_soldier_rina_support",
+  "tags": [
+    "HUMAN",
+    "DEFENSE",
+    "BALANCED",
+    "HYBRID",
+    "DAMAGE",
+    "SHIELD",
+    "SHIELD_MATCH"
+  ],
+  "description": {
+    "summary": "교본대로만 움직여서 변칙 상황에는 잠깐 멈추는 신참 창방패병",
+    "details": "인간 출신으로 공수 양면을 담당하는 용병이다. 교본대로만 움직여서 변칙 상황에는 잠깐 멈추는 신참 창방패병. 전투에서는 ‘교본식 창방패’를 사용하고, 지원 시 ‘정석 방진’으로 힘을 보탠다. 공격과 수비를 함께 수행하는 혼합형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

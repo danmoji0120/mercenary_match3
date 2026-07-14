@@ -1,0 +1,39 @@
+{
+  "id": "spear_assault_fiona",
+  "displayName": "창돌격병 피오나",
+  "shortName": "피오나",
+  "rarity": "R",
+  "race": "RABBIT_BEASTKIN",
+  "role": "ATTACK",
+  "combatStyle": "VANGUARD",
+  "stats": {
+    "maxHp": 860,
+    "swordEffectPct": 125,
+    "shieldEffectPct": 80,
+    "healEffectPct": 85,
+    "manaGainPct": 115
+  },
+  "activeAbilityId": "spear_assault_fiona_active",
+  "supportAbilityId": "spear_assault_fiona_support",
+  "tags": [
+    "RABBIT_BEASTKIN",
+    "ATTACK",
+    "VANGUARD",
+    "HEAVY_ATTACK",
+    "DAMAGE",
+    "SWORD_MATCH"
+  ],
+  "description": {
+    "summary": "빠른 돌격은 좋은데 멈추는 법을 아직 배우는 중인 토끼수인",
+    "details": "토끼수인 출신으로 공격을 담당하는 용병이다. 빠른 돌격은 좋은데 멈추는 법을 아직 배우는 중인 토끼수인. 전투에서는 ‘과속 창돌격’을 사용하고, 지원 시 ‘멈춤 없는 후속타’로 힘을 보탠다. 꾸준한 피해를 쌓는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

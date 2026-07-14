@@ -1,0 +1,30 @@
+{
+  "id": "black_ledger_clerk_griselda_active",
+  "kind": "ACTIVE",
+  "displayName": "검은장부 정산",
+  "shortDescription": "마력 30과 보호막 65를 얻는다.",
+  "fullDescription": "마력 30과 보호막 65를 얻는다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "MODIFY_MANA",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 30
+      }
+    },
+    {
+      "type": "ADD_SHIELD",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 65
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

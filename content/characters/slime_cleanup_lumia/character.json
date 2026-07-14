@@ -1,0 +1,38 @@
+{
+  "id": "slime_cleanup_lumia",
+  "displayName": "점액 청소반 루미아",
+  "shortName": "루미아",
+  "rarity": "R",
+  "race": "SLIME",
+  "role": "HEAL",
+  "combatStyle": "SURVIVAL",
+  "stats": {
+    "maxHp": 1080,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 110,
+    "healEffectPct": 110,
+    "manaGainPct": 90
+  },
+  "activeAbilityId": "slime_cleanup_lumia_active",
+  "supportAbilityId": "slime_cleanup_lumia_support",
+  "tags": [
+    "SLIME",
+    "HEAL",
+    "SURVIVAL",
+    "SHIELD",
+    "LARGE_HEAL"
+  ],
+  "description": {
+    "summary": "점액을 잘 치우지만 본인도 점액이라 완료 판정이 늘 애매함",
+    "details": "슬라임 출신으로 회복을 담당하는 용병이다. 점액을 잘 치우지만 본인도 점액이라 완료 판정이 늘 애매함. 전투에서는 ‘점액 세척’을 사용하고, 지원 시 ‘얼룩 흡수’로 힘을 보탠다. 회복과 위기 대응을 맡는 회복형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

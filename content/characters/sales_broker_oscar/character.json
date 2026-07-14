@@ -1,0 +1,40 @@
+{
+  "id": "sales_broker_oscar",
+  "displayName": "영업 브로커 오스카",
+  "shortName": "오스카",
+  "rarity": "R",
+  "race": "HUMAN",
+  "role": "SUPPORT",
+  "combatStyle": "SUPPORT",
+  "stats": {
+    "maxHp": 970,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 100,
+    "healEffectPct": 105,
+    "manaGainPct": 120
+  },
+  "activeAbilityId": "sales_broker_oscar_active",
+  "supportAbilityId": "sales_broker_oscar_support",
+  "tags": [
+    "HUMAN",
+    "SUPPORT",
+    "SUPPORT",
+    "MANA",
+    "SHIELD",
+    "MANA_RECOVERY"
+  ],
+  "description": {
+    "summary": "진실보다 소개비를 더 믿는 남자",
+    "details": "인간 출신으로 마력 지원을 담당하는 용병이다. 진실보다 소개비를 더 믿는 남자. 전투에서는 ‘소개비 선입금’을 사용하고, 지원 시 ‘중개 수수료’로 힘을 보탠다. 마력 순환과 전투 보조를 담당하는 지원형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "support",
+  "defaultSlots": []
+}
+

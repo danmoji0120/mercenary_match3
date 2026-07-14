@@ -1,0 +1,57 @@
+{
+  "id": "thread_shield_neria_support",
+  "kind": "SUPPORT",
+  "displayName": "접착 엄호",
+  "shortDescription": "큰 공격이 도착하기 전에 보호막 50을 얻는다.",
+  "fullDescription": "큰 공격이 도착하기 전에 보호막 50을 얻는다.",
+  "trigger": {
+    "event": "BEFORE_ATTACK_IMPACT",
+    "filter": {
+      "type": "AND",
+      "conditions": [
+        {
+          "type": "COMPARE",
+          "left": {
+            "type": "EVENT_VALUE",
+            "path": "damage.currentAmount"
+          },
+          "operator": "GTE",
+          "right": {
+            "type": "CONSTANT",
+            "value": 150
+          }
+        },
+        {
+          "type": "COMPARE",
+          "left": {
+            "type": "RESOURCE",
+            "target": "SELF",
+            "resource": "SHIELD"
+          },
+          "operator": "LT",
+          "right": {
+            "type": "CONSTANT",
+            "value": 100
+          }
+        }
+      ]
+    }
+  },
+  "cooldownMs": 10000,
+  "battleLimit": null,
+  "chainLimit": null,
+  "effects": [
+    {
+      "type": "ADD_SHIELD",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 50
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

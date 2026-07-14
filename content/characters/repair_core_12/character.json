@@ -1,0 +1,39 @@
+{
+  "id": "repair_core_12",
+  "displayName": "수리핵 12호",
+  "shortName": "12호",
+  "rarity": "R",
+  "race": "GOLEM",
+  "role": "HEAL",
+  "combatStyle": "SUPPORT",
+  "stats": {
+    "maxHp": 980,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 95,
+    "healEffectPct": 120,
+    "manaGainPct": 105
+  },
+  "activeAbilityId": "repair_core_12_active",
+  "supportAbilityId": "repair_core_12_support",
+  "tags": [
+    "GOLEM",
+    "HEAL",
+    "SUPPORT",
+    "SHIELD",
+    "LARGE_HEAL"
+  ],
+  "description": {
+    "summary": "작동은 느리지만 부서진 아군을 부품처럼 꼼꼼히 맞추는 수리핵",
+    "details": "골렘 출신으로 회복을 담당하는 용병이다. 작동은 느리지만 부서진 아군을 부품처럼 꼼꼼히 맞추는 수리핵. 전투에서는 ‘부품 재조립’을 사용하고, 지원 시 ‘자동 수리’로 힘을 보탠다. 회복과 위기 대응을 맡는 회복형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

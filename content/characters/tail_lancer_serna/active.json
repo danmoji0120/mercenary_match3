@@ -1,0 +1,32 @@
+{
+  "id": "tail_lancer_serna_active",
+  "kind": "ACTIVE",
+  "displayName": "꼬리창 연타",
+  "shortDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+  "fullDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "DAMAGE",
+      "target": "ENEMY",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 120
+      },
+      "travelMs": 450
+    },
+    {
+      "type": "ADD_SHIELD",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 55
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

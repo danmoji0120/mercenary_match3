@@ -1,0 +1,24 @@
+{
+  "id": "lancer_ravia_active",
+  "kind": "ACTIVE",
+  "displayName": "호위 창격",
+  "shortDescription": "적에게 160 피해를 준다.",
+  "fullDescription": "적에게 160 피해를 준다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "DAMAGE",
+      "target": "ENEMY",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 160
+      },
+      "travelMs": 550
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

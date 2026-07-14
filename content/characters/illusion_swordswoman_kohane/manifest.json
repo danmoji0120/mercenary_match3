@@ -1,0 +1,9 @@
+{
+  "id": "illusion_swordswoman_kohane",
+  "schemaVersion": 1,
+  "engineApiVersion": 1,
+  "characterFile": "./character.json",
+  "activeFile": "./active.json",
+  "supportFile": "./support.json"
+}
+

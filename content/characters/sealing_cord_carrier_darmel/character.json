@@ -1,0 +1,40 @@
+{
+  "id": "sealing_cord_carrier_darmel",
+  "displayName": "봉인끈 운반자 다르멜",
+  "shortName": "다르멜",
+  "rarity": "R",
+  "race": "HUMAN",
+  "role": "DEFENSE",
+  "combatStyle": "STABLE_DEFENSE",
+  "stats": {
+    "maxHp": 1000,
+    "swordEffectPct": 100,
+    "shieldEffectPct": 100,
+    "healEffectPct": 100,
+    "manaGainPct": 100
+  },
+  "activeAbilityId": "sealing_cord_carrier_darmel_active",
+  "supportAbilityId": "sealing_cord_carrier_darmel_support",
+  "tags": [
+    "HUMAN",
+    "DEFENSE",
+    "STABLE_DEFENSE",
+    "STABLE",
+    "SHIELD",
+    "NEXT_ATTACK_GUARD",
+    "SHIELD_MATCH"
+  ],
+  "description": {
+    "summary": "봉인끈 매듭은 완벽하지만 본인 신발끈은 매번 풀려 있음",
+    "details": "인간 출신으로 방어를 담당하는 용병이다. 봉인끈 매듭은 완벽하지만 본인 신발끈은 매번 풀려 있음. 전투에서는 ‘봉인끈 결속’을 사용하고, 지원 시 ‘매듭 보강’으로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

@@ -1,0 +1,39 @@
+{
+  "id": "rooftop_scout_neria",
+  "displayName": "지붕길 정찰꾼 네리아",
+  "shortName": "지붕 네리아",
+  "rarity": "R",
+  "race": "CAT_BEASTKIN",
+  "role": "ATTACK",
+  "combatStyle": "SKIRMISH",
+  "stats": {
+    "maxHp": 900,
+    "swordEffectPct": 110,
+    "shieldEffectPct": 90,
+    "healEffectPct": 95,
+    "manaGainPct": 115
+  },
+  "activeAbilityId": "rooftop_scout_neria_active",
+  "supportAbilityId": "rooftop_scout_neria_support",
+  "tags": [
+    "CAT_BEASTKIN",
+    "ATTACK",
+    "SKIRMISH",
+    "DAMAGE",
+    "SHIELD_BYPASS",
+    "CHAIN"
+  ],
+  "description": {
+    "summary": "길은 잘 찾지만 반드시 가장 높은 곳으로만 안내해서 모두를 피곤하게 함",
+    "details": "고양이수인 출신으로 공격을 담당하는 용병이다. 길은 잘 찾지만 반드시 가장 높은 곳으로만 안내해서 모두를 피곤하게 함. 전투에서는 ‘지붕길 급습’을 사용하고, 지원 시 ‘고지 이동’으로 힘을 보탠다. 꾸준한 피해를 쌓는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

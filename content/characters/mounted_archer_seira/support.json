@@ -1,0 +1,59 @@
+{
+  "id": "mounted_archer_seira_support",
+  "kind": "SUPPORT",
+  "displayName": "기마 연사",
+  "shortDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+  "fullDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+  "trigger": {
+    "event": "TILE_MATCH_RESOLVED",
+    "filter": {
+      "type": "AND",
+      "conditions": [
+        {
+          "type": "COMPARE",
+          "left": {
+            "type": "EVENT_VALUE",
+            "path": "match.tileType"
+          },
+          "operator": "EQ",
+          "right": {
+            "type": "CONSTANT",
+            "value": "SWORD"
+          }
+        },
+        {
+          "type": "COMPARE",
+          "left": {
+            "type": "EVENT_VALUE",
+            "path": "match.count"
+          },
+          "operator": "GTE",
+          "right": {
+            "type": "CONSTANT",
+            "value": 4
+          }
+        }
+      ]
+    }
+  },
+  "cooldownMs": 7000,
+  "battleLimit": null,
+  "chainLimit": {
+    "maxTriggers": 1
+  },
+  "effects": [
+    {
+      "type": "DAMAGE",
+      "target": "ENEMY",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 28
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

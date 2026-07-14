@@ -1,0 +1,38 @@
+{
+  "id": "jelly_shield_melty",
+  "displayName": "젤리 방패병 멜티",
+  "shortName": "멜티",
+  "rarity": "R",
+  "race": "SLIME",
+  "role": "DEFENSE",
+  "combatStyle": "SURVIVAL",
+  "stats": {
+    "maxHp": 1080,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 110,
+    "healEffectPct": 110,
+    "manaGainPct": 90
+  },
+  "activeAbilityId": "jelly_shield_melty_active",
+  "supportAbilityId": "jelly_shield_melty_support",
+  "tags": [
+    "SLIME",
+    "DEFENSE",
+    "SURVIVAL",
+    "SHIELD",
+    "SHIELD_BREAK"
+  ],
+  "description": {
+    "summary": "맞으면 찌그러지지만 다음 순간 다시 웃고 있는 젤리 방패병",
+    "details": "슬라임 출신으로 방어를 담당하는 용병이다. 맞으면 찌그러지지만 다음 순간 다시 웃고 있는 젤리 방패병. 전투에서는 ‘젤리 충격흡수’를 사용하고, 지원 시 ‘원상 복구’로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

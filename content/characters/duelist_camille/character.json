@@ -1,0 +1,40 @@
+{
+  "id": "duelist_camille",
+  "displayName": "결투사 카밀레",
+  "shortName": "카밀레",
+  "rarity": "R",
+  "race": "VAMPIRE",
+  "role": "ATTACK",
+  "combatStyle": "STABLE_ATTACK",
+  "stats": {
+    "maxHp": 920,
+    "swordEffectPct": 115,
+    "shieldEffectPct": 90,
+    "healEffectPct": 90,
+    "manaGainPct": 105
+  },
+  "activeAbilityId": "duelist_camille_active",
+  "supportAbilityId": "duelist_camille_support",
+  "tags": [
+    "VAMPIRE",
+    "ATTACK",
+    "STABLE_ATTACK",
+    "STABLE",
+    "DAMAGE",
+    "SHIELD_BYPASS",
+    "SWORD_MATCH"
+  ],
+  "description": {
+    "summary": "밤에는 우아하지만 낮 회의에는 커튼 뒤에서만 참석하는 결투사",
+    "details": "흡혈귀 출신으로 공격을 담당하는 용병이다. 밤에는 우아하지만 낮 회의에는 커튼 뒤에서만 참석하는 결투사. 전투에서는 ‘야간 결투’를 사용하고, 지원 시 ‘피의 예법’으로 힘을 보탠다. 꾸준한 피해를 쌓는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

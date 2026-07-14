@@ -1,0 +1,52 @@
+{
+  "id": "bandage_inspector_michaela_support",
+  "kind": "SUPPORT",
+  "displayName": "대충 안심",
+  "shortDescription": "HP가 처음으로 25% 이하가 되면 HP를 100 회복한다.",
+  "fullDescription": "HP가 처음으로 25% 이하가 되면 HP를 100 회복한다.",
+  "trigger": {
+    "event": "HP_THRESHOLD_CROSSED",
+    "filter": {
+      "type": "COMPARE",
+      "left": {
+        "type": "EVENT_VALUE",
+        "path": "hp.threshold"
+      },
+      "operator": "EQ",
+      "right": {
+        "type": "CONSTANT",
+        "value": 25
+      }
+    }
+  },
+  "cooldownMs": 0,
+  "battleLimit": 1,
+  "chainLimit": null,
+  "effects": [
+    {
+      "type": "HEAL",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 100
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true,
+  "activationCondition": {
+    "type": "COMPARE",
+    "left": {
+      "type": "RESOURCE",
+      "target": "SELF",
+      "resource": "HP"
+    },
+    "operator": "GT",
+    "right": {
+      "type": "CONSTANT",
+      "value": 0
+    }
+  }
+}

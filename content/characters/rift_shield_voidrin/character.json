@@ -1,0 +1,39 @@
+{
+  "id": "rift_shield_voidrin",
+  "displayName": "균열방패 보이드린",
+  "shortName": "보이드린",
+  "rarity": "R",
+  "race": "VOIDKIN",
+  "role": "DEFENSE",
+  "combatStyle": "CONTROL",
+  "stats": {
+    "maxHp": 1120,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 120,
+    "healEffectPct": 90,
+    "manaGainPct": 90
+  },
+  "activeAbilityId": "rift_shield_voidrin_active",
+  "supportAbilityId": "rift_shield_voidrin_support",
+  "tags": [
+    "VOIDKIN",
+    "DEFENSE",
+    "CONTROL",
+    "SHIELD",
+    "NEXT_ATTACK_GUARD",
+    "SHIELD_BREAK"
+  ],
+  "description": {
+    "summary": "문틈 같은 균열 뒤에 숨어서 세상도 같이 막아버리는 공허 방패병",
+    "details": "공허족 출신으로 방어를 담당하는 용병이다. 문틈 같은 균열 뒤에 숨어서 세상도 같이 막아버리는 공허 방패병. 전투에서는 ‘균열 차폐’를 사용하고, 지원 시 ‘공허 봉합’으로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

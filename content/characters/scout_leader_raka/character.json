@@ -1,0 +1,40 @@
+{
+  "id": "scout_leader_raka",
+  "displayName": "정찰조장 라카",
+  "shortName": "라카",
+  "rarity": "R",
+  "race": "WOLF_BEASTKIN",
+  "role": "SUPPORT",
+  "combatStyle": "SUPPORT",
+  "stats": {
+    "maxHp": 970,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 100,
+    "healEffectPct": 105,
+    "manaGainPct": 120
+  },
+  "activeAbilityId": "scout_leader_raka_active",
+  "supportAbilityId": "scout_leader_raka_support",
+  "tags": [
+    "WOLF_BEASTKIN",
+    "SUPPORT",
+    "SUPPORT",
+    "MANA",
+    "SHIELD",
+    "MANA_MATCH",
+    "MANA_RECOVERY"
+  ],
+  "description": {
+    "summary": "도망친 사역마와 빚쟁이를 냄새로 찾는다",
+    "details": "늑대수인 출신으로 마력 지원을 담당하는 용병이다. 도망친 사역마와 빚쟁이를 냄새로 찾는다. 전투에서는 ‘추적 경로 공유’를 사용하고, 지원 시 ‘냄새 표식’으로 힘을 보탠다. 마력 순환과 전투 보조를 담당하는 지원형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "support",
+  "defaultSlots": []
+}

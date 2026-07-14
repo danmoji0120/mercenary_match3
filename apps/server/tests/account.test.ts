@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { InMemoryAccountRepository, InMemoryAuthVerifier } from '../src/account';
 import { CharacterRegistry, DEFAULT_LOADOUT, loadCharacterRegistry } from '../src/character-registry';
+import { R_BATCH_0_5_1_CHARACTER_IDS, R_BATCH_0_5_2_CHARACTER_IDS, REPRESENTATIVE_0_4_CHARACTER_IDS, resolveDevelopmentCharacterGroup } from '../src/development-character-grants';
 
 describe('character registry and account foundation', () => {
   it('loads five immutable starter characters and both loadouts', () => {
-    const registry = loadCharacterRegistry(); expect(registry.starters).toHaveLength(5); expect(Object.isFrozen(registry.all)).toBe(true); expect(() => registry.validateLoadout(DEFAULT_LOADOUT, new Set(registry.starters.map((item) => item.id)))).not.toThrow();
+    const registry = loadCharacterRegistry(); expect(registry.all).toHaveLength(79); expect(registry.enabled).toHaveLength(79); expect(registry.starters).toHaveLength(5); expect(resolveDevelopmentCharacterGroup(registry, 'representative-0.4')).toEqual([...REPRESENTATIVE_0_4_CHARACTER_IDS]); expect(resolveDevelopmentCharacterGroup(registry, 'r-batch-0.5.1')).toEqual([...R_BATCH_0_5_1_CHARACTER_IDS]); expect(resolveDevelopmentCharacterGroup(registry, 'r-batch-0.5.2')).toEqual([...R_BATCH_0_5_2_CHARACTER_IDS]); expect(resolveDevelopmentCharacterGroup(registry, 'all-enabled')).toHaveLength(79); expect(Object.isFrozen(registry.all)).toBe(true); expect(() => registry.validateLoadout(DEFAULT_LOADOUT, new Set(registry.starters.map((item) => item.id)))).not.toThrow();
   });
   it('rejects duplicate ids, invalid rarity, and unavailable default characters', () => {
     const values = loadCharacterRegistry().all.map((item) => ({ ...item, tags: [...item.tags], allowedSlots: [...item.allowedSlots] }));
@@ -19,6 +20,26 @@ describe('character registry and account foundation', () => {
   });
   it('supports deterministic fake auth and rejects forged tokens', async () => {
     const verifier = new InMemoryAuthVerifier(), token = verifier.issue('user-a', 'valid'); expect(await verifier.verify(token)).toMatchObject({ userId: 'user-a' }); await expect(verifier.verify('forged')).rejects.toThrow('INVALID_TOKEN');
+  });
+  it('grants representative characters idempotently without changing the saved loadout', async () => {
+    const registry = loadCharacterRegistry(), repository = new InMemoryAccountRepository(), starters = registry.starters.map((item) => item.id);
+    const before = await repository.bootstrap('user-a', 'A', starters, DEFAULT_LOADOUT), savedLoadout = structuredClone(before.loadout);
+    const first = await repository.grantCharacters('user-a', resolveDevelopmentCharacterGroup(registry, 'representative-0.4'), 'development:representative-0.4');
+    expect(first).toMatchObject({ addedCharacterIds: expect.arrayContaining([...REPRESENTATIVE_0_4_CHARACTER_IDS]), existingCharacterIds: [], failedCharacterIds: [] });
+    expect((await repository.get('user-a'))?.ownedCharacterIds).toHaveLength(19); expect((await repository.get('user-a'))?.loadout).toEqual(savedLoadout);
+    const second = await repository.grantCharacters('user-a', resolveDevelopmentCharacterGroup(registry, 'representative-0.4'), 'development:representative-0.4');
+    expect(second).toMatchObject({ addedCharacterIds: [], existingCharacterIds: expect.arrayContaining([...REPRESENTATIVE_0_4_CHARACTER_IDS]), failedCharacterIds: [] });
+    expect((await repository.get('user-a'))?.ownedCharacterIds).toHaveLength(19); expect((await repository.get('user-a'))?.loadout).toEqual(savedLoadout);
+    const batch = await repository.grantCharacters('user-a', resolveDevelopmentCharacterGroup(registry, 'r-batch-0.5.1'), 'development:r-batch-0.5.1');
+    expect(batch).toMatchObject({ addedCharacterIds: expect.arrayContaining([...R_BATCH_0_5_1_CHARACTER_IDS]), existingCharacterIds: [], failedCharacterIds: [] });
+    expect((await repository.get('user-a'))?.ownedCharacterIds).toHaveLength(49); expect((await repository.get('user-a'))?.loadout).toEqual(savedLoadout);
+    const repeated = await repository.grantCharacters('user-a', resolveDevelopmentCharacterGroup(registry, 'r-batch-0.5.1'), 'development:r-batch-0.5.1');
+    expect(repeated.addedCharacterIds).toEqual([]); expect(repeated.existingCharacterIds).toHaveLength(30); expect((await repository.get('user-a'))?.ownedCharacterIds).toHaveLength(49);
+    const nextBatch = await repository.grantCharacters('user-a', resolveDevelopmentCharacterGroup(registry, 'r-batch-0.5.2'), 'development:r-batch-0.5.2');
+    expect(nextBatch).toMatchObject({ addedCharacterIds: expect.arrayContaining([...R_BATCH_0_5_2_CHARACTER_IDS]), existingCharacterIds: [], failedCharacterIds: [] });
+    expect((await repository.get('user-a'))?.ownedCharacterIds).toHaveLength(79); expect((await repository.get('user-a'))?.loadout).toEqual(savedLoadout);
+    const repeatedNextBatch = await repository.grantCharacters('user-a', resolveDevelopmentCharacterGroup(registry, 'r-batch-0.5.2'), 'development:r-batch-0.5.2');
+    expect(repeatedNextBatch.addedCharacterIds).toEqual([]); expect(repeatedNextBatch.existingCharacterIds).toHaveLength(30); expect((await repository.get('user-a'))?.ownedCharacterIds).toHaveLength(79); expect((await repository.get('user-a'))?.loadout).toEqual(savedLoadout);
   });
   it('validates ownership, duplicate slots, and optimistic loadout versions', async () => {
     const registry = loadCharacterRegistry(), repository = new InMemoryAccountRepository(), starters = registry.starters.map((item) => item.id); await repository.bootstrap('user-a', 'A', starters, DEFAULT_LOADOUT);

@@ -1,0 +1,40 @@
+{
+  "id": "demolition_foreman_doyle",
+  "displayName": "철거반장 도일",
+  "shortName": "도일",
+  "rarity": "R",
+  "race": "HUMAN",
+  "role": "ATTACK",
+  "combatStyle": "BALANCED",
+  "stats": {
+    "maxHp": 920,
+    "swordEffectPct": 115,
+    "shieldEffectPct": 90,
+    "healEffectPct": 90,
+    "manaGainPct": 105
+  },
+  "activeAbilityId": "demolition_foreman_doyle_active",
+  "supportAbilityId": "demolition_foreman_doyle_support",
+  "tags": [
+    "HUMAN",
+    "ATTACK",
+    "BALANCED",
+    "HEAVY_ATTACK",
+    "DAMAGE",
+    "SHIELD_BREAK"
+  ],
+  "description": {
+    "summary": "전직 마탑 시설 철거반장. 벽부터 없애고 보고서를 쓴다",
+    "details": "인간 출신으로 공격을 담당하는 용병이다. 전직 마탑 시설 철거반장. 벽부터 없애고 보고서를 쓴다. 전투에서는 ‘선철거 후보고’를 사용하고, 지원 시 ‘균열 확대’로 힘을 보탠다. 꾸준한 피해를 쌓는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

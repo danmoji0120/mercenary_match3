@@ -1,0 +1,24 @@
+{
+  "id": "r_next_incoming_damage_reduction_30",
+  "name": "다음 공격 피해 감소 30%",
+  "description": "5초 안에 다음으로 받는 공격 피해가 30% 감소하고 효과가 소비됩니다.",
+  "durationMs": 5000,
+  "stacking": "refresh",
+  "maxStacks": 1,
+  "refreshPolicy": "refresh",
+  "consumePolicy": {
+    "type": "on_next_incoming_attack",
+    "consumeAfter": "attack_arrived"
+  },
+  "modifiers": [
+    {
+      "type": "incoming_damage_multiplier",
+      "value": 0.7
+    }
+  ],
+  "triggers": [],
+  "tags": ["BUFF"],
+  "visibleToOwner": true,
+  "visibleToOpponent": true,
+  "contentVersion": 1
+}

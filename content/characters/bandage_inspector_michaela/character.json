@@ -1,0 +1,38 @@
+{
+  "id": "bandage_inspector_michaela",
+  "displayName": "붕대 검수원 미카엘라",
+  "shortName": "미카엘라",
+  "rarity": "R",
+  "race": "HUMAN",
+  "role": "HEAL",
+  "combatStyle": "STABLE_HEAL",
+  "stats": {
+    "maxHp": 980,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 95,
+    "healEffectPct": 120,
+    "manaGainPct": 105
+  },
+  "activeAbilityId": "bandage_inspector_michaela_active",
+  "supportAbilityId": "bandage_inspector_michaela_support",
+  "tags": [
+    "HUMAN",
+    "HEAL",
+    "STABLE_HEAL",
+    "STABLE",
+    "LOW_HP"
+  ],
+  "description": {
+    "summary": "붕대 길이를 엄격하게 재지만 정작 환자는 대충 안심시킴",
+    "details": "인간 출신으로 회복을 담당하는 용병이다. 붕대 길이를 엄격하게 재지만 정작 환자는 대충 안심시킴. 전투에서는 ‘규격 붕대’를 사용하고, 지원 시 ‘대충 안심’으로 힘을 보탠다. 회복과 위기 대응을 맡는 회복형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

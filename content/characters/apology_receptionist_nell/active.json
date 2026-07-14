@@ -1,0 +1,31 @@
+{
+  "id": "apology_receptionist_nell_active",
+  "kind": "ACTIVE",
+  "displayName": "민원 접수 방벽",
+  "shortDescription": "보호막 135와 마력 15를 얻는다.",
+  "fullDescription": "보호막 135와 마력 15를 얻는다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "ADD_SHIELD",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 135
+      }
+    },
+    {
+      "type": "MODIFY_MANA",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 15
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

@@ -1,0 +1,39 @@
+{
+  "id": "shield_soldier_nadia",
+  "displayName": "방패병 나디아",
+  "shortName": "나디아",
+  "rarity": "R",
+  "race": "LION_BEASTKIN",
+  "role": "DEFENSE",
+  "combatStyle": "BALANCED",
+  "stats": {
+    "maxHp": 1120,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 120,
+    "healEffectPct": 90,
+    "manaGainPct": 90
+  },
+  "activeAbilityId": "shield_soldier_nadia_active",
+  "supportAbilityId": "shield_soldier_nadia_support",
+  "tags": [
+    "LION_BEASTKIN",
+    "DEFENSE",
+    "BALANCED",
+    "SHIELD",
+    "SHIELD_MATCH"
+  ],
+  "description": {
+    "summary": "전선대장을 존경하지만 방패를 광택 내느라 출격을 늦추는 사자수인 방패병",
+    "details": "사자수인 출신으로 방어를 담당하는 용병이다. 전선대장을 존경하지만 방패를 광택 내느라 출격을 늦추는 사자수인 방패병. 전투에서는 ‘광택 방벽’을 사용하고, 지원 시 ‘전선대장 흉내’로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

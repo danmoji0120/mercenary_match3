@@ -1,0 +1,39 @@
+{
+  "id": "smoke_thief_tami",
+  "displayName": "연막도둑 타미",
+  "shortName": "타미",
+  "rarity": "R",
+  "race": "RACCOON_BEASTKIN",
+  "role": "DISRUPT",
+  "combatStyle": "SKIRMISH",
+  "stats": {
+    "maxHp": 950,
+    "swordEffectPct": 105,
+    "shieldEffectPct": 90,
+    "healEffectPct": 95,
+    "manaGainPct": 115
+  },
+  "activeAbilityId": "smoke_thief_tami_active",
+  "supportAbilityId": "smoke_thief_tami_support",
+  "tags": [
+    "RACCOON_BEASTKIN",
+    "DISRUPT",
+    "SKIRMISH",
+    "DAMAGE",
+    "HEALING_REDUCTION",
+    "MANA_MATCH"
+  ],
+  "description": {
+    "summary": "분실물을 찾아온다며 본인 주머니부터 검사하게 만드는 연막 도둑",
+    "details": "너구리수인 출신으로 전투 방해를 담당하는 용병이다. 분실물을 찾아온다며 본인 주머니부터 검사하게 만드는 연막 도둑. 전투에서는 ‘연막 절도’를 사용하고, 지원 시 ‘주머니 수색’으로 힘을 보탠다. 피해와 약화 효과로 상대 전개를 끊는 방해형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

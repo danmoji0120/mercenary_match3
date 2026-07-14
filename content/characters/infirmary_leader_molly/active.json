@@ -1,0 +1,30 @@
+{
+  "id": "infirmary_leader_molly_active",
+  "kind": "ACTIVE",
+  "displayName": "의무실 총정리",
+  "shortDescription": "HP를 120 회복하고 보호막 50을 얻는다.",
+  "fullDescription": "HP를 120 회복하고 보호막 50을 얻는다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "HEAL",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 120
+      }
+    },
+    {
+      "type": "ADD_SHIELD",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 50
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

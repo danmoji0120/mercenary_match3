@@ -1,0 +1,40 @@
+{
+  "id": "night_accountant_vivian",
+  "displayName": "야근 회계원 비비안",
+  "shortName": "비비안",
+  "rarity": "R",
+  "race": "VAMPIRE",
+  "role": "SUPPORT",
+  "combatStyle": "BALANCED",
+  "stats": {
+    "maxHp": 970,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 100,
+    "healEffectPct": 105,
+    "manaGainPct": 120
+  },
+  "activeAbilityId": "night_accountant_vivian_active",
+  "supportAbilityId": "night_accountant_vivian_support",
+  "tags": [
+    "VAMPIRE",
+    "SUPPORT",
+    "BALANCED",
+    "MANA",
+    "STABLE",
+    "SHIELD",
+    "MANA_RECOVERY"
+  ],
+  "description": {
+    "summary": "피보다 미수금을 더 무서워하는 야간 회계 담당",
+    "details": "흡혈귀 출신으로 마력 지원을 담당하는 용병이다. 피보다 미수금을 더 무서워하는 야간 회계 담당. 전투에서는 ‘미수금 정산’을 사용하고, 지원 시 ‘야간 회계’로 힘을 보탠다. 마력 순환과 전투 보조를 담당하는 지원형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "support",
+  "defaultSlots": []
+}

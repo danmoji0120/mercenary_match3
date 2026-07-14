@@ -1,0 +1,28 @@
+{
+  "id": "lancer_ravia_support",
+  "kind": "SUPPORT",
+  "displayName": "왕녀 경호",
+  "shortDescription": "액티브 스킬을 사용한 뒤 보호막 35를 얻는다.",
+  "fullDescription": "액티브 스킬을 사용한 뒤 보호막 35를 얻는다.",
+  "trigger": {
+    "event": "ACTIVE_USED"
+  },
+  "cooldownMs": 8000,
+  "battleLimit": null,
+  "chainLimit": null,
+  "effects": [
+    {
+      "type": "ADD_SHIELD",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 35
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

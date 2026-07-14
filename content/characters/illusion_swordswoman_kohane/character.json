@@ -1,0 +1,40 @@
+{
+  "id": "illusion_swordswoman_kohane",
+  "displayName": "환영검사 코하네",
+  "shortName": "코하네",
+  "rarity": "R",
+  "race": "FOX_BEASTKIN",
+  "role": "ATTACK",
+  "combatStyle": "CHAIN",
+  "stats": {
+    "maxHp": 900,
+    "swordEffectPct": 110,
+    "shieldEffectPct": 90,
+    "healEffectPct": 95,
+    "manaGainPct": 115
+  },
+  "activeAbilityId": "illusion_swordswoman_kohane_active",
+  "supportAbilityId": "illusion_swordswoman_kohane_support",
+  "tags": [
+    "FOX_BEASTKIN",
+    "ATTACK",
+    "CHAIN",
+    "DAMAGE",
+    "SHIELD_BYPASS",
+    "SWORD_MATCH"
+  ],
+  "description": {
+    "summary": "칼보다 잔상을 더 많이 휘둘러서 정산서도 두 장씩 청구함",
+    "details": "여우수인 출신으로 공격을 담당하는 용병이다. 칼보다 잔상을 더 많이 휘둘러서 정산서도 두 장씩 청구함. 전투에서는 ‘환영 겹검’을 사용하고, 지원 시 ‘잔상 추격’으로 힘을 보탠다. 꾸준한 피해를 쌓는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

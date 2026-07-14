@@ -1,0 +1,39 @@
+{
+  "id": "infirmary_leader_molly",
+  "displayName": "의무실 조장 몰리",
+  "shortName": "몰리",
+  "rarity": "R",
+  "race": "UNDEAD",
+  "role": "HEAL",
+  "combatStyle": "STABLE_HEAL",
+  "stats": {
+    "maxHp": 980,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 95,
+    "healEffectPct": 120,
+    "manaGainPct": 105
+  },
+  "activeAbilityId": "infirmary_leader_molly_active",
+  "supportAbilityId": "infirmary_leader_molly_support",
+  "tags": [
+    "UNDEAD",
+    "HEAL",
+    "STABLE_HEAL",
+    "STABLE",
+    "SHIELD",
+    "LOW_HP"
+  ],
+  "description": {
+    "summary": "죽었는데 근태가 좋아 사무소가 차마 해고하지 못했다",
+    "details": "언데드 출신으로 회복을 담당하는 용병이다. 죽었는데 근태가 좋아 사무소가 차마 해고하지 못했다. 전투에서는 ‘의무실 총정리’를 사용하고, 지원 시 ‘죽어도 당직’으로 힘을 보탠다. 회복과 위기 대응을 맡는 회복형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

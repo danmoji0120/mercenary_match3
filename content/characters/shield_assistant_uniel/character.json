@@ -1,0 +1,40 @@
+{
+  "id": "shield_assistant_uniel",
+  "displayName": "방패보조 유니엘",
+  "shortName": "유니엘",
+  "rarity": "R",
+  "race": "ARTIFICIAL_ANGEL",
+  "role": "DEFENSE",
+  "combatStyle": "REACTIVE",
+  "stats": {
+    "maxHp": 1120,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 120,
+    "healEffectPct": 90,
+    "manaGainPct": 90
+  },
+  "activeAbilityId": "shield_assistant_uniel_active",
+  "supportAbilityId": "shield_assistant_uniel_support",
+  "tags": [
+    "ARTIFICIAL_ANGEL",
+    "DEFENSE",
+    "REACTIVE",
+    "SHIELD",
+    "NEXT_ATTACK_GUARD",
+    "SHIELD_BREAK"
+  ],
+  "description": {
+    "summary": "노아엘의 실패 데이터를 참고해 더 튼튼하지만 더 고장 잘 나는 방패보조기",
+    "details": "인조천사 출신으로 방어를 담당하는 용병이다. 노아엘의 실패 데이터를 참고해 더 튼튼하지만 더 고장 잘 나는 방패보조기. 전투에서는 ‘보조익 전개’를 사용하고, 지원 시 ‘복구 프로토콜’로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

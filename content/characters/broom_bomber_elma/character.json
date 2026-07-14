@@ -1,0 +1,38 @@
+{
+  "id": "broom_bomber_elma",
+  "displayName": "빗자루폭격수 엘마",
+  "shortName": "엘마",
+  "rarity": "R",
+  "race": "WITCH",
+  "role": "ATTACK",
+  "combatStyle": "CHAIN",
+  "stats": {
+    "maxHp": 920,
+    "swordEffectPct": 115,
+    "shieldEffectPct": 90,
+    "healEffectPct": 90,
+    "manaGainPct": 105
+  },
+  "activeAbilityId": "broom_bomber_elma_active",
+  "supportAbilityId": "broom_bomber_elma_support",
+  "tags": [
+    "WITCH",
+    "ATTACK",
+    "CHAIN",
+    "DAMAGE",
+    "SHIELD"
+  ],
+  "description": {
+    "summary": "빗자루로 날아가 물약폭탄을 떨구지만 착륙비가 더 드는 마녀",
+    "details": "마녀 출신으로 공격을 담당하는 용병이다. 빗자루로 날아가 물약폭탄을 떨구지만 착륙비가 더 드는 마녀. 전투에서는 ‘물약 폭격’을 사용하고, 지원 시 ‘빗자루 급강하’로 힘을 보탠다. 꾸준한 피해를 쌓는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

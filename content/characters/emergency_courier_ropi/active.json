@@ -1,0 +1,22 @@
+{
+  "id": "emergency_courier_ropi_active",
+  "kind": "ACTIVE",
+  "displayName": "초고속 응급배송",
+  "shortDescription": "HP를 160 회복한다.",
+  "fullDescription": "HP를 160 회복한다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "HEAL",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 160
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

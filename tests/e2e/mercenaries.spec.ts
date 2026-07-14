@@ -1,6 +1,29 @@
 import { expect, test } from '@playwright/test';
 import { startGuest } from './helpers';
 
+test('development grant exposes all enabled characters and keeps them battle-ready', async ({ page }) => {
+  await startGuest(page, '/mercenaries');
+  await expect(page.getByTestId('mercenary-card')).toHaveCount(5);
+  await page.getByTestId('grant-representative-characters').click();
+  await expect(page.locator('.development-character-grant output')).toContainText('캐릭터 74명을 지급했습니다.');
+  await expect(page.getByTestId('mercenary-card')).toHaveCount(79);
+  await expect(page.getByTestId('grant-representative-characters')).toBeDisabled();
+
+  await page.getByTestId('open-loadout').click();
+  await page.getByRole('tab', { name: /전투원/ }).click();
+  await page.locator('.loadout-candidate').filter({ hasText: '카밀라' }).click();
+  await page.getByRole('tab', { name: /지원 1/ }).click();
+  await page.locator('.loadout-candidate').filter({ hasText: '녹스' }).click();
+  await page.getByRole('tab', { name: /지원 2/ }).click();
+  await page.locator('.loadout-candidate').filter({ hasText: '노아엘' }).click();
+  await page.getByTestId('save-loadout').click();
+  await expect(page).toHaveURL(/\/mercenaries$/);
+  await page.getByTestId('bottom-navigation').locator('[data-tab="lobby"]').click();
+  await expect(page.locator('.home-loadout-summary')).toContainText('카밀라');
+  await page.getByRole('button', { name: /봇 대전/ }).click();
+  await expect(page.locator('.combat-summary.self')).toContainText('카밀라');
+});
+
 test('collection search, filters, detail route, and focus restoration', async ({ page }) => {
   await startGuest(page, '/mercenaries');
   await expect(page.getByText('보유 5명')).toBeVisible();

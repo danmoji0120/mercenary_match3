@@ -1,0 +1,40 @@
+{
+  "id": "black_ledger_clerk_griselda",
+  "displayName": "검은장부 계산원 그리젤다",
+  "shortName": "그리젤다",
+  "rarity": "R",
+  "race": "DWARF",
+  "role": "SUPPORT",
+  "combatStyle": "BALANCED",
+  "stats": {
+    "maxHp": 970,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 100,
+    "healEffectPct": 105,
+    "manaGainPct": 120
+  },
+  "activeAbilityId": "black_ledger_clerk_griselda_active",
+  "supportAbilityId": "black_ledger_clerk_griselda_support",
+  "tags": [
+    "DWARF",
+    "SUPPORT",
+    "BALANCED",
+    "MANA",
+    "STABLE",
+    "SHIELD",
+    "MANA_RECOVERY"
+  ],
+  "description": {
+    "summary": "동전 소리만 듣고 금액을 맞히지만 가끔 남의 지갑도 장부에 올림",
+    "details": "드워프 출신으로 마력 지원을 담당하는 용병이다. 동전 소리만 듣고 금액을 맞히지만 가끔 남의 지갑도 장부에 올림. 전투에서는 ‘검은장부 정산’을 사용하고, 지원 시 ‘동전 계수’로 힘을 보탠다. 마력 순환과 전투 보조를 담당하는 지원형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "support",
+  "defaultSlots": []
+}

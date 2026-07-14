@@ -1,0 +1,40 @@
+{
+  "id": "gatekeeper_brom",
+  "displayName": "문지기 브롬",
+  "shortName": "브롬",
+  "rarity": "R",
+  "race": "BEAR_BEASTKIN",
+  "role": "DEFENSE",
+  "combatStyle": "FORTRESS",
+  "stats": {
+    "maxHp": 1200,
+    "swordEffectPct": 80,
+    "shieldEffectPct": 125,
+    "healEffectPct": 85,
+    "manaGainPct": 85
+  },
+  "activeAbilityId": "gatekeeper_brom_active",
+  "supportAbilityId": "gatekeeper_brom_support",
+  "tags": [
+    "BEAR_BEASTKIN",
+    "DEFENSE",
+    "FORTRESS",
+    "SHIELD",
+    "DAMAGE_REDUCTION",
+    "BATTLE_START"
+  ],
+  "description": {
+    "summary": "문을 지키라 했더니 벽까지 지킨다",
+    "details": "곰수인 출신으로 방어를 담당하는 용병이다. 문을 지키라 했더니 벽까지 지킨다. 전투에서는 ‘문전 봉쇄’를 사용하고, 지원 시 ‘벽까지 사수’로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

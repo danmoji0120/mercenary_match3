@@ -1,0 +1,31 @@
+{
+  "id": "recovery_team_paco_active",
+  "kind": "ACTIVE",
+  "displayName": "긴급 회수",
+  "shortDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+  "fullDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "DAMAGE",
+      "target": "ENEMY",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 120
+      },
+      "travelMs": 550
+    },
+    {
+      "type": "ADD_SHIELD",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 55
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

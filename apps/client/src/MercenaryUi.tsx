@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { CharacterDefinition, UpdateLoadoutRequest, UserAccountState } from '@mercenary/shared';
-import { saveLoadout } from './account';
+import { grantDevelopmentCharacters, saveLoadout } from './account';
 import { filterMercenaries, isLoadoutDirty, LOADOUT_SLOTS, loadoutDraft, ownedMercenaries, placementFor, recommendedRoleLabel, type CollectionRole, type CollectionSort, type LoadoutSlotKey } from './mercenary-model';
 import { CharacterPortrait } from './CharacterPortrait';
 
@@ -49,8 +49,9 @@ function MercenaryDetailDialog({ character, placement, onClose, onOpenLoadout }:
   </div>;
 }
 
-export function MercenaryCollectionScreen({ account, detailId, onOpenDetail, onCloseDetail, onOpenLoadout, onInvalidDetail, onRetry }: { account: UserAccountState | null; detailId?: string; onOpenDetail(id: string): void; onCloseDetail(): void; onOpenLoadout(characterId?: string): void; onInvalidDetail(): void; onRetry(): void }) {
+export function MercenaryCollectionScreen({ account, token, detailId, onOpenDetail, onCloseDetail, onOpenLoadout, onInvalidDetail, onRetry, onAccountSaved }: { account: UserAccountState | null; token: string; detailId?: string; onOpenDetail(id: string): void; onCloseDetail(): void; onOpenLoadout(characterId?: string): void; onInvalidDetail(): void; onRetry(): void; onAccountSaved(value: UserAccountState): void }) {
   const [query, setQuery] = useState(''), [rarity, setRarity] = useState('all'), [role, setRole] = useState<CollectionRole>('all'), [sort, setSort] = useState<CollectionSort>('default');
+  const [granting, setGranting] = useState(false), [grantMessage, setGrantMessage] = useState('');
   const cardRefs = useRef(new Map<string, HTMLButtonElement>()), lastOpened = useRef<string | undefined>(undefined);
   const characters = useMemo(() => account ? ownedMercenaries(account) : [], [account]);
   const placement = useMemo(() => account ? placementFor(account.loadout) : new Map<string, string>(), [account]);
@@ -58,10 +59,18 @@ export function MercenaryCollectionScreen({ account, detailId, onOpenDetail, onC
   const filtered = useMemo(() => filterMercenaries(characters, query, rarity, role, sort), [characters, query, rarity, role, sort]);
   const selected = characters.find((character) => character.id === detailId);
   const reset = () => { setQuery(''); setRarity('all'); setRole('all'); setSort('default') };
+  const grantAll = async () => {
+    if (granting) return;
+    setGranting(true); setGrantMessage('');
+    try { const result = await grantDevelopmentCharacters(token); onAccountSaved(result.account); setGrantMessage(result.grant.failedCharacterIds.length ? `${result.grant.failedCharacterIds.length}명의 지급에 실패했습니다.` : result.grant.addedCharacterIds.length ? `캐릭터 ${result.grant.addedCharacterIds.length}명을 지급했습니다.` : '활성 캐릭터를 이미 모두 보유하고 있습니다.'); }
+    catch { setGrantMessage('개발용 용병 지급에 실패했습니다.') }
+    finally { setGranting(false) }
+  };
   useEffect(() => { if (detailId && account && !selected) onInvalidDetail() }, [account, detailId, onInvalidDetail, selected]);
   useEffect(() => { if (!detailId && lastOpened.current) cardRefs.current.get(lastOpened.current)?.focus() }, [detailId]);
   if (!account) return <section className="app-screen pending-screen"><span aria-hidden="true">…</span><h2>용병 명부 확인 중</h2><p>저장된 보관함을 불러오고 있습니다.</p></section>;
   return <section className="app-screen collection-screen" aria-labelledby="collection-title">
+    {import.meta.env.DEV && <div className="development-character-grant"><button type="button" className="secondary" data-testid="grant-representative-characters" disabled={granting || account.ownedCharacterIds.length >= account.characters.filter((character) => character.enabled).length} onClick={() => void grantAll()}>{granting ? '지급 중…' : 'DEV 전체 캐릭터 지급'}</button>{grantMessage && <output role="status">{grantMessage}</output>}</div>}
     <header className="collection-header"><div><small>보유 {characters.length}명</small><h2 id="collection-title">용병 보관함</h2><p>보유한 용병의 기록과 능력을 살펴보세요.</p></div><button data-testid="open-loadout" onClick={() => onOpenLoadout()}>출전 편성</button></header>
     <div className="collection-controls"><label className="mercenary-search"><span className="sr-only">용병 검색</span><input value={query} type="search" placeholder="이름·설명·태그 검색" onChange={(event) => setQuery(event.target.value)}/></label><div className="collection-selects"><label><span>등급</span><select aria-label="등급 필터" value={rarity} onChange={(event) => setRarity(event.target.value)}><option value="all">전체</option>{rarities.map((item) => <option key={item} value={item}>{item}</option>)}</select></label><label><span>역할</span><select aria-label="역할 필터" value={role} onChange={(event) => setRole(event.target.value as CollectionRole)}><option value="all">전체</option><option value="combatant">전투원 추천</option><option value="support">지원 추천</option><option value="versatile">양쪽 가능</option></select></label><label><span>정렬</span><select aria-label="정렬" value={sort} onChange={(event) => setSort(event.target.value as CollectionSort)}><option value="default">기본</option><option value="name">이름</option><option value="rarity">등급</option></select></label></div></div>
     {filtered.length ? <div className="collection-grid" aria-label="보유 용병">{filtered.map((character) => <MercenaryCard key={character.id} character={character} placement={placement.get(character.id)} buttonRef={(node) => { if (node) cardRefs.current.set(character.id, node); else cardRefs.current.delete(character.id) }} onOpen={() => { lastOpened.current = character.id; onOpenDetail(character.id) }}/>)}</div> : <EmptyCollection filtered={Boolean(query || rarity !== 'all' || role !== 'all')} onReset={reset} onRetry={onRetry}/>} 

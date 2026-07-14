@@ -1,0 +1,27 @@
+{
+  "id": "black_ledger_clerk_griselda_support",
+  "kind": "SUPPORT",
+  "displayName": "동전 계수",
+  "shortDescription": "액티브 스킬을 사용한 뒤 마력 8을 얻는다.",
+  "fullDescription": "액티브 스킬을 사용한 뒤 마력 8을 얻는다.",
+  "trigger": {
+    "event": "ACTIVE_USED"
+  },
+  "cooldownMs": 8000,
+  "battleLimit": null,
+  "chainLimit": null,
+  "effects": [
+    {
+      "type": "MODIFY_MANA",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 8
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

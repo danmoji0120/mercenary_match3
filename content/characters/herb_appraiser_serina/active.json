@@ -1,0 +1,32 @@
+{
+  "id": "herb_appraiser_serina_active",
+  "kind": "ACTIVE",
+  "displayName": "약초 감별 처방",
+  "shortDescription": "HP를 125 회복하고 해로운 상태 1개를 제거한다.",
+  "fullDescription": "HP를 125 회복하고 해로운 상태 1개를 제거한다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "HEAL",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 125
+      }
+    },
+    {
+      "type": "REMOVE_STATUS",
+      "target": "SELF",
+      "filter": {
+        "tag": "DEBUFF"
+      },
+      "maxCount": 1,
+      "selection": "OLDEST_FIRST",
+      "resultKey": "removedDebuff"
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

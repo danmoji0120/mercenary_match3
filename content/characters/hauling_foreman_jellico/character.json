@@ -1,0 +1,39 @@
+{
+  "id": "hauling_foreman_jellico",
+  "displayName": "운반반장 젤리코",
+  "shortName": "젤리코",
+  "rarity": "R",
+  "race": "SLIME",
+  "role": "SUPPORT",
+  "combatStyle": "SUPPORT",
+  "stats": {
+    "maxHp": 970,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 100,
+    "healEffectPct": 105,
+    "manaGainPct": 120
+  },
+  "activeAbilityId": "hauling_foreman_jellico_active",
+  "supportAbilityId": "hauling_foreman_jellico_support",
+  "tags": [
+    "SLIME",
+    "SUPPORT",
+    "SUPPORT",
+    "MANA",
+    "SHIELD",
+    "MANA_RECOVERY"
+  ],
+  "description": {
+    "summary": "물건을 삼켜서 운반하지만 가끔 영수증도 같이 녹인다",
+    "details": "슬라임 출신으로 마력 지원을 담당하는 용병이다. 물건을 삼켜서 운반하지만 가끔 영수증도 같이 녹인다. 전투에서는 ‘점액 운반’을 사용하고, 지원 시 ‘삼킨 영수증’으로 힘을 보탠다. 마력 순환과 전투 보조를 담당하는 지원형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "support",
+  "defaultSlots": []
+}

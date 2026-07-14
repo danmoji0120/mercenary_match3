@@ -1,0 +1,39 @@
+{
+  "id": "pursuer_lena",
+  "displayName": "추격자 레나",
+  "shortName": "레나",
+  "rarity": "R",
+  "race": "WOLF_BEASTKIN",
+  "role": "ATTACK",
+  "combatStyle": "SKIRMISH",
+  "stats": {
+    "maxHp": 900,
+    "swordEffectPct": 110,
+    "shieldEffectPct": 90,
+    "healEffectPct": 95,
+    "manaGainPct": 115
+  },
+  "activeAbilityId": "pursuer_lena_active",
+  "supportAbilityId": "pursuer_lena_support",
+  "tags": [
+    "WOLF_BEASTKIN",
+    "ATTACK",
+    "SKIRMISH",
+    "DAMAGE",
+    "SHIELD_BYPASS",
+    "SWORD_MATCH"
+  ],
+  "description": {
+    "summary": "도망치는 적은 잘 잡지만 의뢰비도 냄새 맡고 먼저 찾아감",
+    "details": "늑대수인 출신으로 공격을 담당하는 용병이다. 도망치는 적은 잘 잡지만 의뢰비도 냄새 맡고 먼저 찾아감. 전투에서는 ‘냄새 추격’을 사용하고, 지원 시 ‘도주 차단’으로 힘을 보탠다. 꾸준한 피해를 쌓는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

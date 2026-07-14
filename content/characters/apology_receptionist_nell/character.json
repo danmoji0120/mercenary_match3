@@ -1,0 +1,40 @@
+{
+  "id": "apology_receptionist_nell",
+  "displayName": "사과문 접수원 넬",
+  "shortName": "접수 넬",
+  "rarity": "R",
+  "race": "HUMAN",
+  "role": "DEFENSE",
+  "combatStyle": "BALANCED",
+  "stats": {
+    "maxHp": 1000,
+    "swordEffectPct": 100,
+    "shieldEffectPct": 100,
+    "healEffectPct": 100,
+    "manaGainPct": 100
+  },
+  "activeAbilityId": "apology_receptionist_nell_active",
+  "supportAbilityId": "apology_receptionist_nell_support",
+  "tags": [
+    "HUMAN",
+    "DEFENSE",
+    "BALANCED",
+    "SHIELD",
+    "MANA",
+    "SHIELD_MATCH"
+  ],
+  "description": {
+    "summary": "상냥한 미소로 모든 민원을 번호표 뒤에 묻어버리는 접수원",
+    "details": "인간 출신으로 방어를 담당하는 용병이다. 상냥한 미소로 모든 민원을 번호표 뒤에 묻어버리는 접수원. 전투에서는 ‘민원 접수 방벽’을 사용하고, 지원 시 ‘번호표 대기’로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

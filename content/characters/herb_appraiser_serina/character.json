@@ -1,0 +1,39 @@
+{
+  "id": "herb_appraiser_serina",
+  "displayName": "약초감별사 세리나",
+  "shortName": "세리나",
+  "rarity": "R",
+  "race": "ELF",
+  "role": "HEAL",
+  "combatStyle": "SUPPORT_HEAL",
+  "stats": {
+    "maxHp": 980,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 95,
+    "healEffectPct": 120,
+    "manaGainPct": 105
+  },
+  "activeAbilityId": "herb_appraiser_serina_active",
+  "supportAbilityId": "herb_appraiser_serina_support",
+  "tags": [
+    "ELF",
+    "HEAL",
+    "SUPPORT_HEAL",
+    "SUPPORT",
+    "STATUS_CLEANSE",
+    "HEAL_MATCH"
+  ],
+  "description": {
+    "summary": "약초는 정확히 구분하지만 맛 평가가 길어서 의무실 줄이 밀림",
+    "details": "엘프 출신으로 회복을 담당하는 용병이다. 약초는 정확히 구분하지만 맛 평가가 길어서 의무실 줄이 밀림. 전투에서는 ‘약초 감별 처방’을 사용하고, 지원 시 ‘쓴맛 판별’로 힘을 보탠다. 회복과 위기 대응을 맡는 회복형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

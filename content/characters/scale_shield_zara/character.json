@@ -1,0 +1,39 @@
+{
+  "id": "scale_shield_zara",
+  "displayName": "비늘방패 자라",
+  "shortName": "자라",
+  "rarity": "R",
+  "race": "LIZARD_BEASTKIN",
+  "role": "DEFENSE",
+  "combatStyle": "FORTRESS",
+  "stats": {
+    "maxHp": 1080,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 110,
+    "healEffectPct": 110,
+    "manaGainPct": 90
+  },
+  "activeAbilityId": "scale_shield_zara_active",
+  "supportAbilityId": "scale_shield_zara_support",
+  "tags": [
+    "LIZARD_BEASTKIN",
+    "DEFENSE",
+    "FORTRESS",
+    "SHIELD",
+    "DAMAGE_REDUCTION",
+    "SHIELD_BREAK"
+  ],
+  "description": {
+    "summary": "비늘이 단단해서 방패값은 아끼지만 겨울 의뢰에는 사무소 난로를 독점함",
+    "details": "도마뱀수인 출신으로 방어를 담당하는 용병이다. 비늘이 단단해서 방패값은 아끼지만 겨울 의뢰에는 사무소 난로를 독점함. 전투에서는 ‘비늘 방벽’을 사용하고, 지원 시 ‘냉기 버티기’로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

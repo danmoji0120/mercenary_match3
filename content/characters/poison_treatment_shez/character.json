@@ -1,0 +1,39 @@
+{
+  "id": "poison_treatment_shez",
+  "displayName": "독물처치사 셰즈",
+  "shortName": "셰즈",
+  "rarity": "R",
+  "race": "LIZARD_BEASTKIN",
+  "role": "HEAL",
+  "combatStyle": "SUPPORT_HEAL",
+  "stats": {
+    "maxHp": 980,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 95,
+    "healEffectPct": 120,
+    "manaGainPct": 105
+  },
+  "activeAbilityId": "poison_treatment_shez_active",
+  "supportAbilityId": "poison_treatment_shez_support",
+  "tags": [
+    "LIZARD_BEASTKIN",
+    "HEAL",
+    "SUPPORT_HEAL",
+    "SUPPORT",
+    "STATUS_CLEANSE",
+    "LOW_HP"
+  ],
+  "description": {
+    "summary": "독을 맛봐야 정확히 안다고 믿는 불안한 해독 전문가",
+    "details": "도마뱀수인 출신으로 회복을 담당하는 용병이다. 독을 맛봐야 정확히 안다고 믿는 불안한 해독 전문가. 전투에서는 ‘독맛 해독’을 사용하고, 지원 시 ‘응급 중화’로 힘을 보탠다. 회복과 위기 대응을 맡는 회복형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

@@ -1,0 +1,39 @@
+{
+  "id": "shield_girl_taura",
+  "displayName": "방패소녀 타우라",
+  "shortName": "타우라",
+  "rarity": "R",
+  "race": "MINOTAUR",
+  "role": "DEFENSE",
+  "combatStyle": "BALANCED",
+  "stats": {
+    "maxHp": 1200,
+    "swordEffectPct": 80,
+    "shieldEffectPct": 125,
+    "healEffectPct": 85,
+    "manaGainPct": 85
+  },
+  "activeAbilityId": "shield_girl_taura_active",
+  "supportAbilityId": "shield_girl_taura_support",
+  "tags": [
+    "MINOTAUR",
+    "DEFENSE",
+    "BALANCED",
+    "SHIELD",
+    "BATTLE_START"
+  ],
+  "description": {
+    "summary": "덩치는 산만 한데 칭찬받으면 방패 뒤에 숨어버리는 미노타우로스",
+    "details": "미노타우로스 출신으로 방어를 담당하는 용병이다. 덩치는 산만 한데 칭찬받으면 방패 뒤에 숨어버리는 미노타우로스. 전투에서는 ‘수줍은 대방패’를 사용하고, 지원 시 ‘칭찬 회피’로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

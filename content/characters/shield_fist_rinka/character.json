@@ -1,0 +1,41 @@
+{
+  "id": "shield_fist_rinka",
+  "displayName": "방패주먹 린카",
+  "shortName": "린카",
+  "rarity": "R",
+  "race": "ONI",
+  "role": "ATTACK",
+  "combatStyle": "VANGUARD",
+  "stats": {
+    "maxHp": 860,
+    "swordEffectPct": 125,
+    "shieldEffectPct": 80,
+    "healEffectPct": 85,
+    "manaGainPct": 115
+  },
+  "activeAbilityId": "shield_fist_rinka_active",
+  "supportAbilityId": "shield_fist_rinka_support",
+  "tags": [
+    "ONI",
+    "ATTACK",
+    "VANGUARD",
+    "HYBRID",
+    "DAMAGE",
+    "SHIELD",
+    "SWORD_MATCH"
+  ],
+  "description": {
+    "summary": "방패를 들라 했더니 주먹에 묶고 돌격하는 문제아 오니",
+    "details": "오니 출신으로 공수 양면을 담당하는 용병이다. 방패를 들라 했더니 주먹에 묶고 돌격하는 문제아 오니. 전투에서는 ‘방패주먹 돌진’을 사용하고, 지원 시 ‘주먹 막기’로 힘을 보탠다. 공격과 수비를 함께 수행하는 혼합형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

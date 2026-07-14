@@ -1,0 +1,58 @@
+{
+  "id": "overtime_receptionist_ines_support",
+  "kind": "SUPPORT",
+  "displayName": "번호표 판단",
+  "shortDescription": "마력을 4개 이상 맞추면 마력 9를 추가로 얻는다.",
+  "fullDescription": "마력을 4개 이상 맞추면 마력 9를 추가로 얻는다.",
+  "trigger": {
+    "event": "TILE_MATCH_RESOLVED",
+    "filter": {
+      "type": "AND",
+      "conditions": [
+        {
+          "type": "COMPARE",
+          "left": {
+            "type": "EVENT_VALUE",
+            "path": "match.tileType"
+          },
+          "operator": "EQ",
+          "right": {
+            "type": "CONSTANT",
+            "value": "MANA"
+          }
+        },
+        {
+          "type": "COMPARE",
+          "left": {
+            "type": "EVENT_VALUE",
+            "path": "match.count"
+          },
+          "operator": "GTE",
+          "right": {
+            "type": "CONSTANT",
+            "value": 4
+          }
+        }
+      ]
+    }
+  },
+  "cooldownMs": 7000,
+  "battleLimit": null,
+  "chainLimit": {
+    "maxTriggers": 1
+  },
+  "effects": [
+    {
+      "type": "MODIFY_MANA",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 9
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

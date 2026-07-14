@@ -5,6 +5,7 @@ import type { UpdateLoadoutRequest } from '@mercenary/shared';
 import type { AccountServices, AuthIdentity } from './account.js';
 import { accountState, type StoredAccount } from './account.js';
 import { DEFAULT_LOADOUT } from './character-registry.js';
+import { DEVELOPMENT_CHARACTER_GROUPS, resolveDevelopmentCharacterGroup, type DevelopmentCharacterGroup } from './development-character-grants.js';
 
 declare global {
   // Express exposes request augmentation through its namespace.
@@ -12,6 +13,7 @@ declare global {
   namespace Express { interface Request { authIdentity?: AuthIdentity } }
 }
 const loadoutSchema = z.object({ combatantCharacterId: z.string().regex(/^[a-z0-9_]{3,64}$/), supportCharacterId1: z.string().regex(/^[a-z0-9_]{3,64}$/), supportCharacterId2: z.string().regex(/^[a-z0-9_]{3,64}$/), expectedVersion: z.number().int().positive().optional() }).strict();
+const developmentGrantSchema = z.object({ group: z.enum(Object.keys(DEVELOPMENT_CHARACTER_GROUPS) as [DevelopmentCharacterGroup]) }).strict();
 const displayPrefixes = ['\uD3D0\uAE09\uC6A9\uBCD1', '\uC2E0\uC785\uB2E8\uC6D0', '\uC784\uC2DC\uACE0\uC6A9'];
 export const makeDisplayName = () => `${displayPrefixes[randomInt(displayPrefixes.length)]} ${randomInt(1000, 10000)}`;
 
@@ -36,6 +38,19 @@ export function installAccountApi(router: Router, services: AccountServices) {
     const parsed = loadoutSchema.safeParse(request.body); if (!parsed.success) { response.status(400).json({ error: 'Invalid loadout' }); return }
     try { const account = await ensureAccount(services, request.authIdentity!.userId); services.registry.validateLoadout(accountLoadout(parsed.data), new Set(account.ownedCharacterIds)); const loadout = await services.accounts.saveLoadout(request.authIdentity!.userId, parsed.data); response.json({ loadout }) }
     catch (error) { const code = error instanceof Error && error.message === 'VERSION_CONFLICT' ? 409 : 400; response.status(code).json({ error: code === 409 ? 'Loadout changed elsewhere' : 'Loadout is not available' }) }
+  });
+}
+export function installDevelopmentAccountApi(router: Router, services: AccountServices) {
+  const auth = requireAuth(services);
+  router.post('/api/dev/account/grant-characters', auth, async (request, response) => {
+    const parsed = developmentGrantSchema.safeParse(request.body); if (!parsed.success) { response.status(400).json({ error: 'Invalid character group' }); return }
+    try {
+      await ensureAccount(services, request.authIdentity!.userId);
+      const characterIds = resolveDevelopmentCharacterGroup(services.registry, parsed.data.group);
+      const grant = await services.accounts.grantCharacters(request.authIdentity!.userId, characterIds, `development:${parsed.data.group}`);
+      const account = await services.accounts.get(request.authIdentity!.userId); if (!account) throw new Error('ACCOUNT_NOT_FOUND');
+      response.json({ grant, account: accountState(account, services.registry.enabled) });
+    } catch { response.status(503).json({ error: 'Development character grant failed' }) }
   });
 }
 function accountLoadout(value: UpdateLoadoutRequest) { return { ...value, loadoutVersion: value.expectedVersion ?? 1 } }

@@ -1,0 +1,27 @@
+{
+  "id": "scale_shield_zara_support",
+  "kind": "SUPPORT",
+  "displayName": "냉기 버티기",
+  "shortDescription": "자신의 보호막이 파괴되면 보호막 60을 얻는다.",
+  "fullDescription": "자신의 보호막이 파괴되면 보호막 60을 얻는다.",
+  "trigger": {
+    "event": "SHIELD_BROKEN"
+  },
+  "cooldownMs": 10000,
+  "battleLimit": null,
+  "chainLimit": null,
+  "effects": [
+    {
+      "type": "ADD_SHIELD",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 60
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

@@ -1,0 +1,58 @@
+{
+  "id": "shield_shepherd_meira_support",
+  "kind": "SUPPORT",
+  "displayName": "푹신한 정렬",
+  "shortDescription": "방패를 4개 이상 맞추면 보호막 32를 추가로 얻는다.",
+  "fullDescription": "방패를 4개 이상 맞추면 보호막 32를 추가로 얻는다.",
+  "trigger": {
+    "event": "TILE_MATCH_RESOLVED",
+    "filter": {
+      "type": "AND",
+      "conditions": [
+        {
+          "type": "COMPARE",
+          "left": {
+            "type": "EVENT_VALUE",
+            "path": "match.tileType"
+          },
+          "operator": "EQ",
+          "right": {
+            "type": "CONSTANT",
+            "value": "SHIELD"
+          }
+        },
+        {
+          "type": "COMPARE",
+          "left": {
+            "type": "EVENT_VALUE",
+            "path": "match.count"
+          },
+          "operator": "GTE",
+          "right": {
+            "type": "CONSTANT",
+            "value": 4
+          }
+        }
+      ]
+    }
+  },
+  "cooldownMs": 6000,
+  "battleLimit": null,
+  "chainLimit": {
+    "maxTriggers": 1
+  },
+  "effects": [
+    {
+      "type": "ADD_SHIELD",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 32
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

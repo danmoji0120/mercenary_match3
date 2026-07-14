@@ -1,0 +1,39 @@
+{
+  "id": "shield_soldier_matilda",
+  "displayName": "방패병 마틸다",
+  "shortName": "마틸다",
+  "rarity": "R",
+  "race": "UNDEAD",
+  "role": "DEFENSE",
+  "combatStyle": "FORTRESS",
+  "stats": {
+    "maxHp": 1200,
+    "swordEffectPct": 80,
+    "shieldEffectPct": 125,
+    "healEffectPct": 85,
+    "manaGainPct": 85
+  },
+  "activeAbilityId": "shield_soldier_matilda_active",
+  "supportAbilityId": "shield_soldier_matilda_support",
+  "tags": [
+    "UNDEAD",
+    "DEFENSE",
+    "FORTRESS",
+    "SHIELD",
+    "DAMAGE_REDUCTION",
+    "BATTLE_START"
+  ],
+  "description": {
+    "summary": "죽어도 결근 처리가 안 돼서 방패 들고 계속 출근하는 성실한 시체",
+    "details": "언데드 출신으로 방어를 담당하는 용병이다. 죽어도 결근 처리가 안 돼서 방패 들고 계속 출근하는 성실한 시체. 전투에서는 ‘불퇴 방패’를 사용하고, 지원 시 ‘무결근 수비’로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

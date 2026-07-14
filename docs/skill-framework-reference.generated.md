@@ -1420,6 +1420,9 @@ Targets: `ENEMY`, `SELF`. Tile types: `HEAL`, `MANA`, `SHIELD`, `SWORD`. Runtime
 | exposed_flaw_charge | 6000 | refresh | 1 | shield_bypass_bonus:0.3 |
 | healing_reduction | 7000 | refresh | 1 | healing_received_multiplier:0.55 |
 | noael_aftereffect | 5000 | refresh | 1 | healing_received_multiplier:0.8 |
+| r_damage_reduction_20 | 4000 | refresh | 1 | incoming_damage_multiplier:0.8 |
+| r_healing_reduction_25 | 5000 | refresh | 1 | healing_received_multiplier:0.75 |
+| r_next_incoming_damage_reduction_30 | 5000 | refresh | 1 | incoming_damage_multiplier:0.7 |
 
 Statuses are serialized with source/target, stack count, and expiration. Status definition triggers exist in the runtime type but current status files contain no trigger-driven executor path of their own.
 

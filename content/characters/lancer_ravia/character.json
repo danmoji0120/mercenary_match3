@@ -1,0 +1,40 @@
+{
+  "id": "lancer_ravia",
+  "displayName": "창병 라비아",
+  "shortName": "라비아",
+  "rarity": "R",
+  "race": "DRAGONBLOOD",
+  "role": "ATTACK",
+  "combatStyle": "BALANCED",
+  "stats": {
+    "maxHp": 1000,
+    "swordEffectPct": 100,
+    "shieldEffectPct": 100,
+    "healEffectPct": 100,
+    "manaGainPct": 100
+  },
+  "activeAbilityId": "lancer_ravia_active",
+  "supportAbilityId": "lancer_ravia_support",
+  "tags": [
+    "DRAGONBLOOD",
+    "ATTACK",
+    "BALANCED",
+    "DAMAGE",
+    "ACTIVE_USED",
+    "SHIELD"
+  ],
+  "description": {
+    "summary": "용혈 왕녀를 호위한다고 주장하지만 실제로는 사인 받으러 따라다님",
+    "details": "용혈족 출신으로 공격을 담당하는 용병이다. 용혈 왕녀를 호위한다고 주장하지만 실제로는 사인 받으러 따라다님. 전투에서는 ‘호위 창격’을 사용하고, 지원 시 ‘왕녀 경호’로 힘을 보탠다. 꾸준한 피해를 쌓는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

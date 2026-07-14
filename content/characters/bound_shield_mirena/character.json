@@ -1,0 +1,39 @@
+{
+  "id": "bound_shield_mirena",
+  "displayName": "결박방패 미레나",
+  "shortName": "미레나",
+  "rarity": "R",
+  "race": "LAMIA",
+  "role": "DEFENSE",
+  "combatStyle": "CONTROL",
+  "stats": {
+    "maxHp": 1120,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 120,
+    "healEffectPct": 90,
+    "manaGainPct": 90
+  },
+  "activeAbilityId": "bound_shield_mirena_active",
+  "supportAbilityId": "bound_shield_mirena_support",
+  "tags": [
+    "LAMIA",
+    "DEFENSE",
+    "CONTROL",
+    "SHIELD",
+    "DAMAGE_REDUCTION",
+    "EMERGENCY_GUARD"
+  ],
+  "description": {
+    "summary": "방패보다 꼬리로 묶는 게 빨라서 적도 아군도 움직이기 힘들게 만드는 라미아",
+    "details": "라미아 출신으로 방어를 담당하는 용병이다. 방패보다 꼬리로 묶는 게 빨라서 적도 아군도 움직이기 힘들게 만드는 라미아. 전투에서는 ‘꼬리 결박 방패’를 사용하고, 지원 시 ‘움직임 봉쇄’로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

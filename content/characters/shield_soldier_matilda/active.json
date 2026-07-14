@@ -1,0 +1,28 @@
+{
+  "id": "shield_soldier_matilda_active",
+  "kind": "ACTIVE",
+  "displayName": "불퇴 방패",
+  "shortDescription": "보호막 130을 얻고 4초 동안 받는 피해가 20% 감소한다.",
+  "fullDescription": "보호막 130을 얻고 4초 동안 받는 피해가 20% 감소한다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "ADD_SHIELD",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 130
+      }
+    },
+    {
+      "type": "APPLY_STATUS",
+      "target": "SELF",
+      "statusId": "r_damage_reduction_20",
+      "durationMs": 4000
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

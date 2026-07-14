@@ -1,0 +1,41 @@
+{
+  "id": "maintenance_foreman_bron",
+  "displayName": "정비반장 브론",
+  "shortName": "브론",
+  "rarity": "R",
+  "race": "DWARF",
+  "role": "SUPPORT",
+  "combatStyle": "SUPPORT",
+  "stats": {
+    "maxHp": 1000,
+    "swordEffectPct": 100,
+    "shieldEffectPct": 100,
+    "healEffectPct": 100,
+    "manaGainPct": 100
+  },
+  "activeAbilityId": "maintenance_foreman_bron_active",
+  "supportAbilityId": "maintenance_foreman_bron_support",
+  "tags": [
+    "DWARF",
+    "SUPPORT",
+    "SUPPORT",
+    "HYBRID",
+    "SHIELD",
+    "MANA",
+    "ACTIVE_USED"
+  ],
+  "description": {
+    "summary": "고장난 장비도 욕하면서 어떻게든 굴린다",
+    "details": "드워프 출신으로 공수 양면을 담당하는 용병이다. 고장난 장비도 욕하면서 어떻게든 굴린다. 전투에서는 ‘응급 정비’를 사용하고, 지원 시 ‘욕설 섞인 보수’로 힘을 보탠다. 공격과 수비를 함께 수행하는 혼합형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "support",
+  "defaultSlots": []
+}
+

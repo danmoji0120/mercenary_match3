@@ -1,4 +1,4 @@
-import type { AccountMeResponse, UpdateLoadoutRequest, UpdateLoadoutResponse } from '@mercenary/shared';
+import type { AccountMeResponse, UpdateLoadoutRequest, UpdateLoadoutResponse, UserAccountState } from '@mercenary/shared';
 
 export type AccountStage = 'INITIALIZING' | 'CHECKING_SESSION' | 'SIGNING_IN_ANONYMOUSLY' | 'BOOTSTRAPPING_ACCOUNT' | 'READY' | 'RETRYABLE_ERROR' | 'FATAL_ERROR';
 const apiOrigin = import.meta.env.DEV && import.meta.env.VITE_SERVER_URL ? String(import.meta.env.VITE_SERVER_URL).replace(/\/$/, '') : '';
@@ -20,3 +20,10 @@ export function bootstrapGameAccount(accessToken: string) {
 export function refreshGameAccount(accessToken: string) { return api<AccountMeResponse>('/api/account/me', accessToken) }
 export function resetAccountBootstrapForRetry() { pending = null }
 export async function saveLoadout(token: string, request: UpdateLoadoutRequest) { return api<UpdateLoadoutResponse>('/api/account/loadout', token, { method: 'PUT', body: JSON.stringify(request) }) }
+export interface DevelopmentCharacterGrantResponse {
+  account: UserAccountState;
+  grant: { addedCharacterIds: string[]; existingCharacterIds: string[]; failedCharacterIds: string[] };
+}
+export function grantDevelopmentCharacters(token: string, group = 'all-enabled') {
+  return api<DevelopmentCharacterGrantResponse>('/api/dev/account/grant-characters', token, { method: 'POST', body: JSON.stringify({ group }) });
+}

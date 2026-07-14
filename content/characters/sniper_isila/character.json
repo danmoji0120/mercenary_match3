@@ -1,0 +1,39 @@
+{
+  "id": "sniper_isila",
+  "displayName": "저격수 이실라",
+  "shortName": "이실라",
+  "rarity": "R",
+  "race": "ELF",
+  "role": "ATTACK",
+  "combatStyle": "SNIPER",
+  "stats": {
+    "maxHp": 880,
+    "swordEffectPct": 120,
+    "shieldEffectPct": 85,
+    "healEffectPct": 90,
+    "manaGainPct": 110
+  },
+  "activeAbilityId": "sniper_isila_active",
+  "supportAbilityId": "sniper_isila_support",
+  "tags": [
+    "ELF",
+    "ATTACK",
+    "SNIPER",
+    "HEAVY_ATTACK",
+    "DAMAGE"
+  ],
+  "description": {
+    "summary": "표적은 잘 맞히지만 보고서의 마감일은 절대 못 맞힘",
+    "details": "엘프 출신으로 공격을 담당하는 용병이다. 표적은 잘 맞히지만 보고서의 마감일은 절대 못 맞힘. 전투에서는 ‘마감 없는 저격’을 사용하고, 지원 시 ‘표적 재확인’으로 힘을 보탠다. 꾸준한 피해를 쌓는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

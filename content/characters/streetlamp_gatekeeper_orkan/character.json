@@ -1,0 +1,39 @@
+{
+  "id": "streetlamp_gatekeeper_orkan",
+  "displayName": "가로등 문지기 오르칸",
+  "shortName": "오르칸",
+  "rarity": "R",
+  "race": "ORC",
+  "role": "DEFENSE",
+  "combatStyle": "STABLE_DEFENSE",
+  "stats": {
+    "maxHp": 1120,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 120,
+    "healEffectPct": 90,
+    "manaGainPct": 90
+  },
+  "activeAbilityId": "streetlamp_gatekeeper_orkan_active",
+  "supportAbilityId": "streetlamp_gatekeeper_orkan_support",
+  "tags": [
+    "ORC",
+    "DEFENSE",
+    "STABLE_DEFENSE",
+    "STABLE",
+    "SHIELD",
+    "BATTLE_START"
+  ],
+  "description": {
+    "summary": "가로등이 꺼지면 제일 먼저 의심받지만 실제로는 제일 성실하게 켬",
+    "details": "오크 출신으로 방어를 담당하는 용병이다. 가로등이 꺼지면 제일 먼저 의심받지만 실제로는 제일 성실하게 켬. 전투에서는 ‘가로등 수호’를 사용하고, 지원 시 ‘야간 점등’으로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

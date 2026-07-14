@@ -2302,6 +2302,57 @@
         "snapshot": "statusId, source/target participant, stackCount, expiresAt",
         "stacking": "refresh",
         "triggers": []
+      },
+      "r_damage_reduction_20": {
+        "consumePolicy": null,
+        "durationMs": 4000,
+        "maxStacks": 1,
+        "modifiers": [
+          {
+            "type": "incoming_damage_multiplier",
+            "value": 0.8
+          }
+        ],
+        "name": "피해 감소 20%",
+        "refreshPolicy": "refresh",
+        "snapshot": "statusId, source/target participant, stackCount, expiresAt",
+        "stacking": "refresh",
+        "triggers": []
+      },
+      "r_healing_reduction_25": {
+        "consumePolicy": null,
+        "durationMs": 5000,
+        "maxStacks": 1,
+        "modifiers": [
+          {
+            "type": "healing_received_multiplier",
+            "value": 0.75
+          }
+        ],
+        "name": "회복 감소 25%",
+        "refreshPolicy": "refresh",
+        "snapshot": "statusId, source/target participant, stackCount, expiresAt",
+        "stacking": "refresh",
+        "triggers": []
+      },
+      "r_next_incoming_damage_reduction_30": {
+        "consumePolicy": {
+          "consumeAfter": "attack_arrived",
+          "type": "on_next_incoming_attack"
+        },
+        "durationMs": 5000,
+        "maxStacks": 1,
+        "modifiers": [
+          {
+            "type": "incoming_damage_multiplier",
+            "value": 0.7
+          }
+        ],
+        "name": "다음 공격 피해 감소 30%",
+        "refreshPolicy": "refresh",
+        "snapshot": "statusId, source/target participant, stackCount, expiresAt",
+        "stacking": "refresh",
+        "triggers": []
       }
     },
     "durationUnit": "milliseconds",

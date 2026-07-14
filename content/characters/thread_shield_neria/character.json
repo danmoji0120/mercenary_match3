@@ -1,0 +1,39 @@
+{
+  "id": "thread_shield_neria",
+  "displayName": "실방패 네리아",
+  "shortName": "실방패 네리아",
+  "rarity": "R",
+  "race": "SPIDER_BEASTKIN",
+  "role": "DEFENSE",
+  "combatStyle": "CONTROL",
+  "stats": {
+    "maxHp": 1120,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 120,
+    "healEffectPct": 90,
+    "manaGainPct": 90
+  },
+  "activeAbilityId": "thread_shield_neria_active",
+  "supportAbilityId": "thread_shield_neria_support",
+  "tags": [
+    "SPIDER_BEASTKIN",
+    "DEFENSE",
+    "CONTROL",
+    "SHIELD",
+    "DAMAGE_REDUCTION",
+    "EMERGENCY_GUARD"
+  ],
+  "description": {
+    "summary": "방패가 아니라 실로 적을 묶어 막는 바람에 청소팀이 싫어하는 거미수인",
+    "details": "거미수인 출신으로 방어를 담당하는 용병이다. 방패가 아니라 실로 적을 묶어 막는 바람에 청소팀이 싫어하는 거미수인. 전투에서는 ‘실그물 방벽’을 사용하고, 지원 시 ‘접착 엄호’로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

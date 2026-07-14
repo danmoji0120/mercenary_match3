@@ -1,0 +1,40 @@
+{
+  "id": "mounted_archer_seira",
+  "displayName": "활기병 세이라",
+  "shortName": "세이라",
+  "rarity": "R",
+  "race": "CENTAUR",
+  "role": "ATTACK",
+  "combatStyle": "SKIRMISH",
+  "stats": {
+    "maxHp": 900,
+    "swordEffectPct": 110,
+    "shieldEffectPct": 90,
+    "healEffectPct": 95,
+    "manaGainPct": 115
+  },
+  "activeAbilityId": "mounted_archer_seira_active",
+  "supportAbilityId": "mounted_archer_seira_support",
+  "tags": [
+    "CENTAUR",
+    "ATTACK",
+    "SKIRMISH",
+    "DAMAGE",
+    "SWORD_MATCH",
+    "BONUS_DAMAGE"
+  ],
+  "description": {
+    "summary": "달리면서 쏘는 건 잘하지만 서류 제출도 달리면서 해서 글씨가 엉망임",
+    "details": "켄타우로스 출신으로 공격을 담당하는 용병이다. 달리면서 쏘는 건 잘하지만 서류 제출도 달리면서 해서 글씨가 엉망임. 전투에서는 ‘질주 사격’을 사용하고, 지원 시 ‘기마 연사’로 힘을 보탠다. 꾸준한 피해를 쌓는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

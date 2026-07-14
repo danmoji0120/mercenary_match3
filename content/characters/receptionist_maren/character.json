@@ -1,0 +1,41 @@
+{
+  "id": "receptionist_maren",
+  "displayName": "접수원 마렌",
+  "shortName": "마렌",
+  "rarity": "R",
+  "race": "HUMAN",
+  "role": "SUPPORT",
+  "combatStyle": "BALANCED",
+  "stats": {
+    "maxHp": 970,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 100,
+    "healEffectPct": 105,
+    "manaGainPct": 120
+  },
+  "activeAbilityId": "receptionist_maren_active",
+  "supportAbilityId": "receptionist_maren_support",
+  "tags": [
+    "HUMAN",
+    "SUPPORT",
+    "BALANCED",
+    "MANA",
+    "SHIELD",
+    "MANA_MATCH",
+    "MANA_RECOVERY"
+  ],
+  "description": {
+    "summary": "웃으면서 위험한 의뢰를 정상가로 받아온다",
+    "details": "인간 출신으로 마력 지원을 담당하는 용병이다. 웃으면서 위험한 의뢰를 정상가로 받아온다. 전투에서는 ‘위험 의뢰 접수’를 사용하고, 지원 시 ‘정상가 협상’으로 힘을 보탠다. 마력 순환과 전투 보조를 담당하는 지원형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "support",
+  "defaultSlots": []
+}
+

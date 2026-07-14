@@ -1,0 +1,39 @@
+{
+  "id": "slime_cleanup_lumia_support",
+  "kind": "SUPPORT",
+  "displayName": "얼룩 흡수",
+  "shortDescription": "한 번에 HP를 100 이상 회복하면 보호막 35를 얻는다.",
+  "fullDescription": "한 번에 HP를 100 이상 회복하면 보호막 35를 얻는다.",
+  "trigger": {
+    "event": "HEALED",
+    "filter": {
+      "type": "COMPARE",
+      "left": {
+        "type": "EVENT_VALUE",
+        "path": "heal.actualAmount"
+      },
+      "operator": "GTE",
+      "right": {
+        "type": "CONSTANT",
+        "value": 100
+      }
+    }
+  },
+  "cooldownMs": 8000,
+  "battleLimit": null,
+  "chainLimit": null,
+  "effects": [
+    {
+      "type": "ADD_SHIELD",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 35
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

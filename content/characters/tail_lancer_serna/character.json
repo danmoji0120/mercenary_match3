@@ -1,0 +1,40 @@
+{
+  "id": "tail_lancer_serna",
+  "displayName": "꼬리창병 세르나",
+  "shortName": "세르나",
+  "rarity": "R",
+  "race": "DRACONIC",
+  "role": "ATTACK",
+  "combatStyle": "SKIRMISH",
+  "stats": {
+    "maxHp": 920,
+    "swordEffectPct": 115,
+    "shieldEffectPct": 90,
+    "healEffectPct": 90,
+    "manaGainPct": 105
+  },
+  "activeAbilityId": "tail_lancer_serna_active",
+  "supportAbilityId": "tail_lancer_serna_support",
+  "tags": [
+    "DRACONIC",
+    "ATTACK",
+    "SKIRMISH",
+    "DAMAGE",
+    "SHIELD",
+    "SWORD_MATCH"
+  ],
+  "description": {
+    "summary": "창보다 꼬리로 더 많이 때려서 무기교육 담당을 울리는 용형족 창병",
+    "details": "용형족 출신으로 공격을 담당하는 용병이다. 창보다 꼬리로 더 많이 때려서 무기교육 담당을 울리는 용형족 창병. 전투에서는 ‘꼬리창 연타’를 사용하고, 지원 시 ‘후미 찌르기’로 힘을 보탠다. 꾸준한 피해를 쌓는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

@@ -1,0 +1,41 @@
+{
+  "id": "dungeon_surveyor_mappo",
+  "displayName": "던전 측량사 맵포",
+  "shortName": "맵포",
+  "rarity": "R",
+  "race": "KOBOLD",
+  "role": "SUPPORT",
+  "combatStyle": "BALANCED",
+  "stats": {
+    "maxHp": 970,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 100,
+    "healEffectPct": 105,
+    "manaGainPct": 120
+  },
+  "activeAbilityId": "dungeon_surveyor_mappo_active",
+  "supportAbilityId": "dungeon_surveyor_mappo_support",
+  "tags": [
+    "KOBOLD",
+    "SUPPORT",
+    "BALANCED",
+    "MANA",
+    "SHIELD",
+    "MANA_MATCH",
+    "MANA_RECOVERY"
+  ],
+  "description": {
+    "summary": "길은 잘 찾는데 지도 방향을 자기 기준으로 그려서 모두를 혼란스럽게 함",
+    "details": "코볼트 출신으로 마력 지원을 담당하는 용병이다. 길은 잘 찾는데 지도 방향을 자기 기준으로 그려서 모두를 혼란스럽게 함. 전투에서는 ‘측량 경로 계산’을 사용하고, 지원 시 ‘지름길 표식’으로 힘을 보탠다. 마력 순환과 전투 보조를 담당하는 지원형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "support",
+  "defaultSlots": []
+}
+

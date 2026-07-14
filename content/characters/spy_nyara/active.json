@@ -1,0 +1,29 @@
+{
+  "id": "spy_nyara_active",
+  "kind": "ACTIVE",
+  "displayName": "정보 탈취",
+  "shortDescription": "적에게 120 피해를 주고 5초 동안 적이 받는 회복량을 25% 감소시킨다.",
+  "fullDescription": "적에게 120 피해를 주고 5초 동안 적이 받는 회복량을 25% 감소시킨다.",
+  "manaCost": 100,
+  "effects": [
+    {
+      "type": "DAMAGE",
+      "target": "ENEMY",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 120
+      }
+    },
+    {
+      "type": "APPLY_STATUS",
+      "target": "ENEMY",
+      "statusId": "r_healing_reduction_25",
+      "durationMs": 5000
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}
+

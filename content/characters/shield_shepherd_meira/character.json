@@ -1,0 +1,39 @@
+{
+  "id": "shield_shepherd_meira",
+  "displayName": "방패목동 메이라",
+  "shortName": "메이라",
+  "rarity": "R",
+  "race": "SHEEP_BEASTKIN",
+  "role": "DEFENSE",
+  "combatStyle": "CONTROL",
+  "stats": {
+    "maxHp": 1120,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 120,
+    "healEffectPct": 90,
+    "manaGainPct": 90
+  },
+  "activeAbilityId": "shield_shepherd_meira_active",
+  "supportAbilityId": "shield_shepherd_meira_support",
+  "tags": [
+    "SHEEP_BEASTKIN",
+    "DEFENSE",
+    "CONTROL",
+    "SHIELD",
+    "DAMAGE_REDUCTION",
+    "SHIELD_MATCH"
+  ],
+  "description": {
+    "summary": "양떼 몰듯 아군도 몰아세워서 진형을 맞추는 푹신한 방패병",
+    "details": "양수인 출신으로 방어를 담당하는 용병이다. 양떼 몰듯 아군도 몰아세워서 진형을 맞추는 푹신한 방패병. 전투에서는 ‘양떼 방진’을 사용하고, 지원 시 ‘푹신한 정렬’로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

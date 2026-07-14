@@ -151,6 +151,131 @@
         "cost": 100,
         "effects": [
           {
+            "amount": 135,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "amount": 15,
+            "target": "self",
+            "type": "gain_mana"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 135와 마력 15를 얻는다.",
+        "id": "apology_receptionist_nell_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "민원 접수 방벽",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 135와 마력 15를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "apology_receptionist_nell_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "상냥한 미소로 모든 민원을 번호표 뒤에 묻어버리는 접수원",
+        "enabled": true,
+        "id": "apology_receptionist_nell",
+        "name": "사과문 접수원 넬",
+        "portraitAsset": "",
+        "race": "HUMAN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "접수 넬",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 100,
+          "manaGainPct": 100,
+          "maxHp": 1000,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 100
+        },
+        "support": {
+          "effectId": "apology_receptionist_nell_support"
+        },
+        "tags": [
+          "HUMAN",
+          "DEFENSE",
+          "BALANCED",
+          "SHIELD",
+          "MANA",
+          "SHIELD_MATCH"
+        ]
+      },
+      "id": "apology_receptionist_nell",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 100,
+        "manaGainPct": 100,
+        "maxHp": 1000,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 100
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SHIELD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 6000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 32,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "방패를 4개 이상 맞추면 보호막 32를 추가로 얻는다.",
+        "id": "apology_receptionist_nell_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "번호표 대기",
+        "oncePerBattle": false,
+        "shortDescription": "방패를 4개 이상 맞추면 보호막 32를 추가로 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
             "amount": 125,
             "target": "self",
             "type": "heal"
@@ -380,6 +505,252 @@
         "cost": 100,
         "effects": [
           {
+            "amount": 135,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "amount": 15,
+            "target": "self",
+            "type": "gain_mana"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 135와 마력 15를 얻는다.",
+        "id": "armor_mender_tilda_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "즉석 판금 수선",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 135와 마력 15를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "armor_mender_tilda_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "갑옷은 잘 고치는데 착용자 체형 평가는 너무 솔직함",
+        "enabled": true,
+        "id": "armor_mender_tilda",
+        "name": "방어구 수선공 틸다",
+        "portraitAsset": "",
+        "race": "DWARF",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "틸다",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 110,
+          "manaGainPct": 90,
+          "maxHp": 1080,
+          "shieldEffectPct": 110,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "armor_mender_tilda_support"
+        },
+        "tags": [
+          "DWARF",
+          "DEFENSE",
+          "SUPPORT",
+          "SHIELD",
+          "MANA",
+          "SHIELD_MATCH"
+        ]
+      },
+      "id": "armor_mender_tilda",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 110,
+        "manaGainPct": 90,
+        "maxHp": 1080,
+        "shieldEffectPct": 110,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SHIELD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 6000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 32,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "방패를 4개 이상 맞추면 보호막 32를 추가로 얻는다.",
+        "id": "armor_mender_tilda_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "리벳 보강",
+        "oncePerBattle": false,
+        "shortDescription": "방패를 4개 이상 맞추면 보호막 32를 추가로 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 175,
+            "target": "opponent",
+            "travelMs": 450,
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 175 피해를 준다.",
+        "id": "assault_soldier_braka_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "멈춤 없는 돌격",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 175 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "assault_soldier_braka_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "멈추라는 명령을 돌격하라는 뜻으로 알아듣는 돌격병",
+        "enabled": true,
+        "id": "assault_soldier_braka",
+        "name": "돌격병 브라카",
+        "portraitAsset": "",
+        "race": "ORC",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "브라카",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 85,
+          "manaGainPct": 115,
+          "maxHp": 860,
+          "shieldEffectPct": 80,
+          "swordEffectPct": 125
+        },
+        "support": {
+          "effectId": "assault_soldier_braka_support"
+        },
+        "tags": [
+          "ORC",
+          "ATTACK",
+          "VANGUARD",
+          "HEAVY_ATTACK",
+          "DAMAGE",
+          "SWORD_MATCH"
+        ]
+      },
+      "id": "assault_soldier_braka",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 85,
+        "manaGainPct": 115,
+        "maxHp": 860,
+        "shieldEffectPct": 80,
+        "swordEffectPct": 125
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 28,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "id": "assault_soldier_braka_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "추가 돌진",
+        "oncePerBattle": false,
+        "shortDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
             "amount": 120,
             "target": "opponent",
             "type": "deal_damage"
@@ -488,6 +859,494 @@
         "name": "성실한 도끼질",
         "oncePerBattle": false,
         "shortDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 160,
+            "target": "self",
+            "type": "heal"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "HP를 160 회복한다.",
+        "id": "bandage_inspector_michaela_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "규격 붕대",
+        "oncePerBattle": false,
+        "shortDescription": "HP를 160 회복한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "bandage_inspector_michaela_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "붕대 길이를 엄격하게 재지만 정작 환자는 대충 안심시킴",
+        "enabled": true,
+        "id": "bandage_inspector_michaela",
+        "name": "붕대 검수원 미카엘라",
+        "portraitAsset": "",
+        "race": "HUMAN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "미카엘라",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 120,
+          "manaGainPct": 105,
+          "maxHp": 980,
+          "shieldEffectPct": 95,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "bandage_inspector_michaela_support"
+        },
+        "tags": [
+          "HUMAN",
+          "HEAL",
+          "STABLE_HEAL",
+          "STABLE",
+          "LOW_HP"
+        ]
+      },
+      "id": "bandage_inspector_michaela",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 120,
+        "manaGainPct": 105,
+        "maxHp": 980,
+        "shieldEffectPct": 95,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [
+          {
+            "direction": "downward",
+            "operator": "eq",
+            "type": "hp_threshold_crossed",
+            "value": 25
+          },
+          {
+            "left": {
+              "resource": "HP",
+              "target": "SELF",
+              "type": "RESOURCE"
+            },
+            "operator": "gt",
+            "right": {
+              "type": "CONSTANT",
+              "value": 0
+            },
+            "type": "expression_compare"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 100,
+            "target": "self",
+            "type": "heal"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "HP가 처음으로 25% 이하가 되면 HP를 100 회복한다.",
+        "id": "bandage_inspector_michaela_support",
+        "kind": "support",
+        "maxTriggersPerBattle": 1,
+        "name": "대충 안심",
+        "oncePerBattle": true,
+        "shortDescription": "HP가 처음으로 25% 이하가 되면 HP를 100 회복한다.",
+        "tags": [],
+        "trigger": {
+          "type": "hp_threshold_crossed"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 30,
+            "target": "self",
+            "type": "gain_mana"
+          },
+          {
+            "amount": 65,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "마력 30과 보호막 65를 얻는다.",
+        "id": "black_ledger_clerk_griselda_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "검은장부 정산",
+        "oncePerBattle": false,
+        "shortDescription": "마력 30과 보호막 65를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "black_ledger_clerk_griselda_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "동전 소리만 듣고 금액을 맞히지만 가끔 남의 지갑도 장부에 올림",
+        "enabled": true,
+        "id": "black_ledger_clerk_griselda",
+        "name": "검은장부 계산원 그리젤다",
+        "portraitAsset": "",
+        "race": "DWARF",
+        "rarity": "R",
+        "recommendedRole": "support",
+        "shortName": "그리젤다",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 105,
+          "manaGainPct": 120,
+          "maxHp": 970,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "black_ledger_clerk_griselda_support"
+        },
+        "tags": [
+          "DWARF",
+          "SUPPORT",
+          "BALANCED",
+          "MANA",
+          "STABLE",
+          "SHIELD",
+          "MANA_RECOVERY"
+        ]
+      },
+      "id": "black_ledger_clerk_griselda",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 105,
+        "manaGainPct": 120,
+        "maxHp": 970,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 8,
+            "target": "self",
+            "type": "gain_mana"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "액티브 스킬을 사용한 뒤 마력 8을 얻는다.",
+        "id": "black_ledger_clerk_griselda_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "동전 계수",
+        "oncePerBattle": false,
+        "shortDescription": "액티브 스킬을 사용한 뒤 마력 8을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 130,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "durationMs": 4000,
+            "statusId": "r_damage_reduction_20",
+            "target": "self",
+            "type": "apply_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 130을 얻고 4초 동안 받는 피해가 20% 감소한다.",
+        "id": "bound_shield_mirena_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "꼬리 결박 방패",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 130을 얻고 4초 동안 받는 피해가 20% 감소한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "bound_shield_mirena_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "방패보다 꼬리로 묶는 게 빨라서 적도 아군도 움직이기 힘들게 만드는 라미아",
+        "enabled": true,
+        "id": "bound_shield_mirena",
+        "name": "결박방패 미레나",
+        "portraitAsset": "",
+        "race": "LAMIA",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "미레나",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 90,
+          "maxHp": 1120,
+          "shieldEffectPct": 120,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "bound_shield_mirena_support"
+        },
+        "tags": [
+          "LAMIA",
+          "DEFENSE",
+          "CONTROL",
+          "SHIELD",
+          "DAMAGE_REDUCTION",
+          "EMERGENCY_GUARD"
+        ]
+      },
+      "id": "bound_shield_mirena",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 90,
+        "maxHp": 1120,
+        "shieldEffectPct": 120,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "operator": "gte",
+                "type": "incoming_damage",
+                "value": 150
+              },
+              {
+                "operator": "lt",
+                "type": "self_shield_amount",
+                "value": 100
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 10000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 50,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "큰 공격이 도착하기 전에 보호막 50을 얻는다.",
+        "id": "bound_shield_mirena_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "움직임 봉쇄",
+        "oncePerBattle": false,
+        "shortDescription": "큰 공격이 도착하기 전에 보호막 50을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "before_attack_impact"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 120,
+            "target": "opponent",
+            "travelMs": 550,
+            "type": "deal_damage"
+          },
+          {
+            "amount": 55,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+        "id": "broom_bomber_elma_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "물약 폭격",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "broom_bomber_elma_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "빗자루로 날아가 물약폭탄을 떨구지만 착륙비가 더 드는 마녀",
+        "enabled": true,
+        "id": "broom_bomber_elma",
+        "name": "빗자루폭격수 엘마",
+        "portraitAsset": "",
+        "race": "WITCH",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "엘마",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 105,
+          "maxHp": 920,
+          "shieldEffectPct": 90,
+          "swordEffectPct": 115
+        },
+        "support": {
+          "effectId": "broom_bomber_elma_support"
+        },
+        "tags": [
+          "WITCH",
+          "ATTACK",
+          "CHAIN",
+          "DAMAGE",
+          "SHIELD"
+        ]
+      },
+      "id": "broom_bomber_elma",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 105,
+        "maxHp": 920,
+        "shieldEffectPct": 90,
+        "swordEffectPct": 115
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "left": {
+                  "path": "chain.depth",
+                  "type": "EVENT_VALUE"
+                },
+                "operator": "gte",
+                "right": {
+                  "type": "CONSTANT",
+                  "value": 3
+                },
+                "type": "expression_compare"
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 32,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검 매치를 포함한 연쇄 3 이상 달성 시 적에게 32 피해를 준다.",
+        "id": "broom_bomber_elma_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "빗자루 급강하",
+        "oncePerBattle": false,
+        "shortDescription": "검 매치를 포함한 연쇄 3 이상 달성 시 적에게 32 피해를 준다.",
         "tags": [],
         "trigger": {
           "type": "match_group_resolved"
@@ -891,6 +1750,484 @@
         "cost": 100,
         "effects": [
           {
+            "amount": 130,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "durationMs": 4000,
+            "statusId": "r_damage_reduction_20",
+            "target": "self",
+            "type": "apply_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 130을 얻고 4초 동안 받는 피해가 20% 감소한다.",
+        "id": "defense_module_eira_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "전개형 방어 프로토콜",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 130을 얻고 4초 동안 받는 피해가 20% 감소한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "defense_module_eira_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "방어 명령은 잘 따르지만 일상 대화도 방어 프로토콜로 받아침",
+        "enabled": true,
+        "id": "defense_module_eira",
+        "name": "방어모듈 에이라",
+        "portraitAsset": "",
+        "race": "ARTIFICIAL_HUMAN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "에이라",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 90,
+          "maxHp": 1120,
+          "shieldEffectPct": 120,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "defense_module_eira_support"
+        },
+        "tags": [
+          "ARTIFICIAL_HUMAN",
+          "DEFENSE",
+          "REACTIVE",
+          "SHIELD",
+          "DAMAGE_REDUCTION",
+          "EMERGENCY_GUARD"
+        ]
+      },
+      "id": "defense_module_eira",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 90,
+        "maxHp": 1120,
+        "shieldEffectPct": 120,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "operator": "gte",
+                "type": "incoming_damage",
+                "value": 150
+              },
+              {
+                "operator": "lt",
+                "type": "self_shield_amount",
+                "value": 100
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 10000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 50,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "큰 공격이 도착하기 전에 보호막 50을 얻는다.",
+        "id": "defense_module_eira_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "자동 차폐 명령",
+        "oncePerBattle": false,
+        "shortDescription": "큰 공격이 도착하기 전에 보호막 50을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "before_attack_impact"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 175,
+            "target": "opponent",
+            "travelMs": 550,
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 175 피해를 준다.",
+        "id": "demolition_foreman_doyle_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "선철거 후보고",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 175 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "demolition_foreman_doyle_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "전직 마탑 시설 철거반장. 벽부터 없애고 보고서를 쓴다",
+        "enabled": true,
+        "id": "demolition_foreman_doyle",
+        "name": "철거반장 도일",
+        "portraitAsset": "",
+        "race": "HUMAN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "도일",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 105,
+          "maxHp": 920,
+          "shieldEffectPct": 90,
+          "swordEffectPct": 115
+        },
+        "support": {
+          "effectId": "demolition_foreman_doyle_support"
+        },
+        "tags": [
+          "HUMAN",
+          "ATTACK",
+          "BALANCED",
+          "HEAVY_ATTACK",
+          "DAMAGE",
+          "SHIELD_BREAK"
+        ]
+      },
+      "id": "demolition_foreman_doyle",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 105,
+        "maxHp": 920,
+        "shieldEffectPct": 90,
+        "swordEffectPct": 115
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 10000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 60,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "자신의 보호막이 파괴되면 보호막 60을 얻는다.",
+        "id": "demolition_foreman_doyle_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "균열 확대",
+        "oncePerBattle": false,
+        "shortDescription": "자신의 보호막이 파괴되면 보호막 60을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "shield_broken"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 145,
+            "shieldBypassRatio": 0.15,
+            "target": "opponent",
+            "travelMs": 550,
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 145 피해를 주며 보호막의 15%를 무시한다.",
+        "id": "duelist_camille_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "야간 결투",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 145 피해를 주며 보호막의 15%를 무시한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "duelist_camille_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "밤에는 우아하지만 낮 회의에는 커튼 뒤에서만 참석하는 결투사",
+        "enabled": true,
+        "id": "duelist_camille",
+        "name": "결투사 카밀레",
+        "portraitAsset": "",
+        "race": "VAMPIRE",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "카밀레",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 105,
+          "maxHp": 920,
+          "shieldEffectPct": 90,
+          "swordEffectPct": 115
+        },
+        "support": {
+          "effectId": "duelist_camille_support"
+        },
+        "tags": [
+          "VAMPIRE",
+          "ATTACK",
+          "STABLE_ATTACK",
+          "STABLE",
+          "DAMAGE",
+          "SHIELD_BYPASS",
+          "SWORD_MATCH"
+        ]
+      },
+      "id": "duelist_camille",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 105,
+        "maxHp": 920,
+        "shieldEffectPct": 90,
+        "swordEffectPct": 115
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 28,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "id": "duelist_camille_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "피의 예법",
+        "oncePerBattle": false,
+        "shortDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 30,
+            "target": "self",
+            "type": "gain_mana"
+          },
+          {
+            "amount": 65,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "마력 30과 보호막 65를 얻는다.",
+        "id": "dungeon_surveyor_mappo_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "측량 경로 계산",
+        "oncePerBattle": false,
+        "shortDescription": "마력 30과 보호막 65를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "dungeon_surveyor_mappo_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "길은 잘 찾는데 지도 방향을 자기 기준으로 그려서 모두를 혼란스럽게 함",
+        "enabled": true,
+        "id": "dungeon_surveyor_mappo",
+        "name": "던전 측량사 맵포",
+        "portraitAsset": "",
+        "race": "KOBOLD",
+        "rarity": "R",
+        "recommendedRole": "support",
+        "shortName": "맵포",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 105,
+          "manaGainPct": 120,
+          "maxHp": 970,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "dungeon_surveyor_mappo_support"
+        },
+        "tags": [
+          "KOBOLD",
+          "SUPPORT",
+          "BALANCED",
+          "MANA",
+          "SHIELD",
+          "MANA_MATCH",
+          "MANA_RECOVERY"
+        ]
+      },
+      "id": "dungeon_surveyor_mappo",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 105,
+        "manaGainPct": 120,
+        "maxHp": 970,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "MANA",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 9,
+            "target": "self",
+            "type": "gain_mana"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "마력을 4개 이상 맞추면 마력 9를 추가로 얻는다.",
+        "id": "dungeon_surveyor_mappo_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "지름길 표식",
+        "oncePerBattle": false,
+        "shortDescription": "마력을 4개 이상 맞추면 마력 9를 추가로 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
             "amount": 155,
             "tags": [
               "active_skill",
@@ -1018,6 +2355,128 @@
         ],
         "trigger": {
           "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 160,
+            "target": "self",
+            "type": "heal"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "HP를 160 회복한다.",
+        "id": "emergency_courier_ropi_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "초고속 응급배송",
+        "oncePerBattle": false,
+        "shortDescription": "HP를 160 회복한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "emergency_courier_ropi_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "발은 빠르지만 멘탈은 종잇장. 그래도 응급 상황에는 제일 먼저 도착함",
+        "enabled": true,
+        "id": "emergency_courier_ropi",
+        "name": "응급전령 로피",
+        "portraitAsset": "",
+        "race": "RABBIT_BEASTKIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "로피",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 120,
+          "manaGainPct": 105,
+          "maxHp": 980,
+          "shieldEffectPct": 95,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "emergency_courier_ropi_support"
+        },
+        "tags": [
+          "RABBIT_BEASTKIN",
+          "HEAL",
+          "RAPID_HEAL",
+          "SKIRMISH",
+          "LOW_HP"
+        ]
+      },
+      "id": "emergency_courier_ropi",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 120,
+        "manaGainPct": 105,
+        "maxHp": 980,
+        "shieldEffectPct": 95,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [
+          {
+            "direction": "downward",
+            "operator": "eq",
+            "type": "hp_threshold_crossed",
+            "value": 25
+          },
+          {
+            "left": {
+              "resource": "HP",
+              "target": "SELF",
+              "type": "RESOURCE"
+            },
+            "operator": "gt",
+            "right": {
+              "type": "CONSTANT",
+              "value": 0
+            },
+            "type": "expression_compare"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 100,
+            "target": "self",
+            "type": "heal"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "HP가 처음으로 25% 이하가 되면 HP를 100 회복한다.",
+        "id": "emergency_courier_ropi_support",
+        "kind": "support",
+        "maxTriggersPerBattle": 1,
+        "name": "먼저 도착",
+        "oncePerBattle": true,
+        "shortDescription": "HP가 처음으로 25% 이하가 되면 HP를 100 회복한다.",
+        "tags": [],
+        "trigger": {
+          "type": "hp_threshold_crossed"
         }
       }
     },
@@ -1165,6 +2624,109 @@
         ],
         "trigger": {
           "type": "hp_threshold_crossed"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 170,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 170을 얻는다.",
+        "id": "evidence_guard_verno_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "증거품 봉쇄",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 170을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "evidence_guard_verno_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "밤새 꼼짝 않고 감시하지만 가끔 본인도 증거품처럼 서 있음",
+        "enabled": true,
+        "id": "evidence_guard_verno",
+        "name": "증거품 감시자 베르노",
+        "portraitAsset": "",
+        "race": "UNDEAD",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "베르노",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 110,
+          "manaGainPct": 90,
+          "maxHp": 1080,
+          "shieldEffectPct": 110,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "evidence_guard_verno_support"
+        },
+        "tags": [
+          "UNDEAD",
+          "DEFENSE",
+          "STABLE_DEFENSE",
+          "STABLE",
+          "SHIELD",
+          "BATTLE_START"
+        ]
+      },
+      "id": "evidence_guard_verno",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 110,
+        "manaGainPct": 90,
+        "maxHp": 1080,
+        "shieldEffectPct": 110,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 55,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "전투 시작 시 보호막 55를 얻는다.",
+        "id": "evidence_guard_verno_support",
+        "kind": "support",
+        "maxTriggersPerBattle": 1,
+        "name": "밤샘 감시",
+        "oncePerBattle": true,
+        "shortDescription": "전투 시작 시 보호막 55를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "battle_started"
         }
       }
     },
@@ -1452,6 +3014,236 @@
         "cost": 100,
         "effects": [
           {
+            "amount": 145,
+            "shieldBypassRatio": 0.15,
+            "target": "opponent",
+            "travelMs": 650,
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 145 피해를 주며 보호막의 15%를 무시한다.",
+        "id": "feather_sniper_erika_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "낙하 저격",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 145 피해를 주며 보호막의 15%를 무시한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "feather_sniper_erika_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "높은 곳에서 잘 맞히지만 바람 탓이라는 변명도 아주 잘함",
+        "enabled": true,
+        "id": "feather_sniper_erika",
+        "name": "깃털저격수 에리카",
+        "portraitAsset": "",
+        "race": "HARPY",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "에리카",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 110,
+          "maxHp": 880,
+          "shieldEffectPct": 85,
+          "swordEffectPct": 120
+        },
+        "support": {
+          "effectId": "feather_sniper_erika_support"
+        },
+        "tags": [
+          "HARPY",
+          "ATTACK",
+          "SNIPER",
+          "DAMAGE",
+          "SHIELD_BYPASS"
+        ]
+      },
+      "id": "feather_sniper_erika",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 110,
+        "maxHp": 880,
+        "shieldEffectPct": 85,
+        "swordEffectPct": 120
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "left": {
+                  "path": "chain.depth",
+                  "type": "EVENT_VALUE"
+                },
+                "operator": "gte",
+                "right": {
+                  "type": "CONSTANT",
+                  "value": 3
+                },
+                "type": "expression_compare"
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 32,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검 매치를 포함한 연쇄 3 이상 달성 시 적에게 32 피해를 준다.",
+        "id": "feather_sniper_erika_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "상공 조준",
+        "oncePerBattle": false,
+        "shortDescription": "검 매치를 포함한 연쇄 3 이상 달성 시 적에게 32 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 170,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 170을 얻는다.",
+        "id": "forest_shield_rania_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "새싹 방벽",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 170을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "forest_shield_rania_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "우아하게 막지만 방패에 새싹이 자라 관리비가 드는 숲방패병",
+        "enabled": true,
+        "id": "forest_shield_rania",
+        "name": "숲방패 라니아",
+        "portraitAsset": "",
+        "race": "DEER_BEASTKIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "라니아",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 90,
+          "maxHp": 1120,
+          "shieldEffectPct": 120,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "forest_shield_rania_support"
+        },
+        "tags": [
+          "DEER_BEASTKIN",
+          "DEFENSE",
+          "BALANCED",
+          "SHIELD",
+          "BATTLE_START"
+        ]
+      },
+      "id": "forest_shield_rania",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 90,
+        "maxHp": 1120,
+        "shieldEffectPct": 120,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 55,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "전투 시작 시 보호막 55를 얻는다.",
+        "id": "forest_shield_rania_support",
+        "kind": "support",
+        "maxTriggersPerBattle": 1,
+        "name": "숲의 엄호",
+        "oncePerBattle": true,
+        "shortDescription": "전투 시작 시 보호막 55를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "battle_started"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
             "allowPartial": true,
             "amount": 180,
             "canReduceHpBelowOne": false,
@@ -1589,6 +3381,1259 @@
         "tags": [],
         "trigger": {
           "type": "after_shield_gain"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 130,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "durationMs": 4000,
+            "statusId": "r_damage_reduction_20",
+            "target": "self",
+            "type": "apply_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 130을 얻고 4초 동안 받는 피해가 20% 감소한다.",
+        "id": "fragment_soldier_7_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "파편 장갑",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 130을 얻고 4초 동안 받는 피해가 20% 감소한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "fragment_soldier_7_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "명령을 세 번 들어야 움직이지만 독과 공포는 모름",
+        "enabled": true,
+        "id": "fragment_soldier_7",
+        "name": "파편병 7호",
+        "portraitAsset": "",
+        "race": "GOLEM",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "파편 7호",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 85,
+          "manaGainPct": 85,
+          "maxHp": 1200,
+          "shieldEffectPct": 125,
+          "swordEffectPct": 80
+        },
+        "support": {
+          "effectId": "fragment_soldier_7_support"
+        },
+        "tags": [
+          "GOLEM",
+          "DEFENSE",
+          "FORTRESS",
+          "SHIELD",
+          "DAMAGE_REDUCTION",
+          "SHIELD_BREAK"
+        ]
+      },
+      "id": "fragment_soldier_7",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 85,
+        "manaGainPct": 85,
+        "maxHp": 1200,
+        "shieldEffectPct": 125,
+        "swordEffectPct": 80
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 10000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 60,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "자신의 보호막이 파괴되면 보호막 60을 얻는다.",
+        "id": "fragment_soldier_7_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "무감각 핵",
+        "oncePerBattle": false,
+        "shortDescription": "자신의 보호막이 파괴되면 보호막 60을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "shield_broken"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 130,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "durationMs": 4000,
+            "statusId": "r_damage_reduction_20",
+            "target": "self",
+            "type": "apply_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 130을 얻고 4초 동안 받는 피해가 20% 감소한다.",
+        "id": "gatekeeper_brom_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "문전 봉쇄",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 130을 얻고 4초 동안 받는 피해가 20% 감소한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "gatekeeper_brom_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "문을 지키라 했더니 벽까지 지킨다",
+        "enabled": true,
+        "id": "gatekeeper_brom",
+        "name": "문지기 브롬",
+        "portraitAsset": "",
+        "race": "BEAR_BEASTKIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "브롬",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 85,
+          "manaGainPct": 85,
+          "maxHp": 1200,
+          "shieldEffectPct": 125,
+          "swordEffectPct": 80
+        },
+        "support": {
+          "effectId": "gatekeeper_brom_support"
+        },
+        "tags": [
+          "BEAR_BEASTKIN",
+          "DEFENSE",
+          "FORTRESS",
+          "SHIELD",
+          "DAMAGE_REDUCTION",
+          "BATTLE_START"
+        ]
+      },
+      "id": "gatekeeper_brom",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 85,
+        "manaGainPct": 85,
+        "maxHp": 1200,
+        "shieldEffectPct": 125,
+        "swordEffectPct": 80
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 55,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "전투 시작 시 보호막 55를 얻는다.",
+        "id": "gatekeeper_brom_support",
+        "kind": "support",
+        "maxTriggersPerBattle": 1,
+        "name": "벽까지 사수",
+        "oncePerBattle": true,
+        "shortDescription": "전투 시작 시 보호막 55를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "battle_started"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 30,
+            "target": "self",
+            "type": "gain_mana"
+          },
+          {
+            "amount": 65,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "마력 30과 보호막 65를 얻는다.",
+        "id": "hauling_foreman_jellico_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "점액 운반",
+        "oncePerBattle": false,
+        "shortDescription": "마력 30과 보호막 65를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "hauling_foreman_jellico_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "물건을 삼켜서 운반하지만 가끔 영수증도 같이 녹인다",
+        "enabled": true,
+        "id": "hauling_foreman_jellico",
+        "name": "운반반장 젤리코",
+        "portraitAsset": "",
+        "race": "SLIME",
+        "rarity": "R",
+        "recommendedRole": "support",
+        "shortName": "젤리코",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 105,
+          "manaGainPct": 120,
+          "maxHp": 970,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "hauling_foreman_jellico_support"
+        },
+        "tags": [
+          "SLIME",
+          "SUPPORT",
+          "SUPPORT",
+          "MANA",
+          "SHIELD",
+          "MANA_RECOVERY"
+        ]
+      },
+      "id": "hauling_foreman_jellico",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 105,
+        "manaGainPct": 120,
+        "maxHp": 970,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 8,
+            "target": "self",
+            "type": "gain_mana"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "액티브 스킬을 사용한 뒤 마력 8을 얻는다.",
+        "id": "hauling_foreman_jellico_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "삼킨 영수증",
+        "oncePerBattle": false,
+        "shortDescription": "액티브 스킬을 사용한 뒤 마력 8을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 175,
+            "target": "opponent",
+            "travelMs": 650,
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 175 피해를 준다.",
+        "id": "heavy_gunner_greta_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "중갑 포격",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 175 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "heavy_gunner_greta_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "총은 튼튼한데 바닥이 먼저 무너지는 중갑 총수",
+        "enabled": true,
+        "id": "heavy_gunner_greta",
+        "name": "중갑총수 그레타",
+        "portraitAsset": "",
+        "race": "DWARF",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "그레타",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 105,
+          "maxHp": 920,
+          "shieldEffectPct": 90,
+          "swordEffectPct": 115
+        },
+        "support": {
+          "effectId": "heavy_gunner_greta_support"
+        },
+        "tags": [
+          "DWARF",
+          "ATTACK",
+          "FORTRESS",
+          "HEAVY_ATTACK",
+          "DAMAGE",
+          "BATTLE_START"
+        ]
+      },
+      "id": "heavy_gunner_greta",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 105,
+        "maxHp": 920,
+        "shieldEffectPct": 90,
+        "swordEffectPct": 115
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 55,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "전투 시작 시 보호막 55를 얻는다.",
+        "id": "heavy_gunner_greta_support",
+        "kind": "support",
+        "maxTriggersPerBattle": 1,
+        "name": "고정 사격",
+        "oncePerBattle": true,
+        "shortDescription": "전투 시작 시 보호막 55를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "battle_started"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 125,
+            "target": "self",
+            "type": "heal"
+          },
+          {
+            "filter": {
+              "tag": "DEBUFF"
+            },
+            "key": "removedDebuff",
+            "maxCount": 1,
+            "selection": "OLDEST_FIRST",
+            "target": "self",
+            "type": "remove_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "HP를 125 회복하고 해로운 상태 1개를 제거한다.",
+        "id": "herb_appraiser_serina_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "약초 감별 처방",
+        "oncePerBattle": false,
+        "shortDescription": "HP를 125 회복하고 해로운 상태 1개를 제거한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "herb_appraiser_serina_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "약초는 정확히 구분하지만 맛 평가가 길어서 의무실 줄이 밀림",
+        "enabled": true,
+        "id": "herb_appraiser_serina",
+        "name": "약초감별사 세리나",
+        "portraitAsset": "",
+        "race": "ELF",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "세리나",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 120,
+          "manaGainPct": 105,
+          "maxHp": 980,
+          "shieldEffectPct": 95,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "herb_appraiser_serina_support"
+        },
+        "tags": [
+          "ELF",
+          "HEAL",
+          "SUPPORT_HEAL",
+          "SUPPORT",
+          "STATUS_CLEANSE",
+          "HEAL_MATCH"
+        ]
+      },
+      "id": "herb_appraiser_serina",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 120,
+        "manaGainPct": 105,
+        "maxHp": 980,
+        "shieldEffectPct": 95,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "HEAL",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 6000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 28,
+            "target": "self",
+            "type": "heal"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "회복을 4개 이상 맞추면 HP를 28 추가로 회복한다.",
+        "id": "herb_appraiser_serina_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "쓴맛 판별",
+        "oncePerBattle": false,
+        "shortDescription": "회복을 4개 이상 맞추면 HP를 28 추가로 회복한다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 120,
+            "target": "opponent",
+            "travelMs": 550,
+            "type": "deal_damage"
+          },
+          {
+            "durationMs": 5000,
+            "statusId": "r_healing_reduction_25",
+            "target": "opponent",
+            "type": "apply_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 120 피해를 주고 5초 동안 적이 받는 회복량을 25% 감소시킨다.",
+        "id": "ice_lancer_yukira_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "빙결 창격",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 120 피해를 주고 5초 동안 적이 받는 회복량을 25% 감소시킨다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "ice_lancer_yukira_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "차갑게 찌르고 차갑게 퇴근해서 회식 참석률이 0에 가까운 설녀",
+        "enabled": true,
+        "id": "ice_lancer_yukira",
+        "name": "얼음창병 유키라",
+        "portraitAsset": "",
+        "race": "SNOW_WOMAN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "유키라",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 95,
+          "manaGainPct": 115,
+          "maxHp": 950,
+          "shieldEffectPct": 90,
+          "swordEffectPct": 105
+        },
+        "support": {
+          "effectId": "ice_lancer_yukira_support"
+        },
+        "tags": [
+          "SNOW_WOMAN",
+          "DISRUPT",
+          "CONTROL",
+          "STABLE",
+          "DAMAGE",
+          "HEALING_REDUCTION",
+          "SWORD_MATCH"
+        ]
+      },
+      "id": "ice_lancer_yukira",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 95,
+        "manaGainPct": 115,
+        "maxHp": 950,
+        "shieldEffectPct": 90,
+        "swordEffectPct": 105
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 28,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "id": "ice_lancer_yukira_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "찬기 추격",
+        "oncePerBattle": false,
+        "shortDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 145,
+            "shieldBypassRatio": 0.15,
+            "target": "opponent",
+            "travelMs": 550,
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 145 피해를 주며 보호막의 15%를 무시한다.",
+        "id": "illusion_swordswoman_kohane_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "환영 겹검",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 145 피해를 주며 보호막의 15%를 무시한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "illusion_swordswoman_kohane_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "칼보다 잔상을 더 많이 휘둘러서 정산서도 두 장씩 청구함",
+        "enabled": true,
+        "id": "illusion_swordswoman_kohane",
+        "name": "환영검사 코하네",
+        "portraitAsset": "",
+        "race": "FOX_BEASTKIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "코하네",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 95,
+          "manaGainPct": 115,
+          "maxHp": 900,
+          "shieldEffectPct": 90,
+          "swordEffectPct": 110
+        },
+        "support": {
+          "effectId": "illusion_swordswoman_kohane_support"
+        },
+        "tags": [
+          "FOX_BEASTKIN",
+          "ATTACK",
+          "CHAIN",
+          "DAMAGE",
+          "SHIELD_BYPASS",
+          "SWORD_MATCH"
+        ]
+      },
+      "id": "illusion_swordswoman_kohane",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 95,
+        "manaGainPct": 115,
+        "maxHp": 900,
+        "shieldEffectPct": 90,
+        "swordEffectPct": 110
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 28,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "id": "illusion_swordswoman_kohane_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "잔상 추격",
+        "oncePerBattle": false,
+        "shortDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 120,
+            "target": "self",
+            "type": "heal"
+          },
+          {
+            "amount": 50,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "HP를 120 회복하고 보호막 50을 얻는다.",
+        "id": "infirmary_leader_molly_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "의무실 총정리",
+        "oncePerBattle": false,
+        "shortDescription": "HP를 120 회복하고 보호막 50을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "infirmary_leader_molly_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "죽었는데 근태가 좋아 사무소가 차마 해고하지 못했다",
+        "enabled": true,
+        "id": "infirmary_leader_molly",
+        "name": "의무실 조장 몰리",
+        "portraitAsset": "",
+        "race": "UNDEAD",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "몰리",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 120,
+          "manaGainPct": 105,
+          "maxHp": 980,
+          "shieldEffectPct": 95,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "infirmary_leader_molly_support"
+        },
+        "tags": [
+          "UNDEAD",
+          "HEAL",
+          "STABLE_HEAL",
+          "STABLE",
+          "SHIELD",
+          "LOW_HP"
+        ]
+      },
+      "id": "infirmary_leader_molly",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 120,
+        "manaGainPct": 105,
+        "maxHp": 980,
+        "shieldEffectPct": 95,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [
+          {
+            "direction": "downward",
+            "operator": "eq",
+            "type": "hp_threshold_crossed",
+            "value": 25
+          },
+          {
+            "left": {
+              "resource": "HP",
+              "target": "SELF",
+              "type": "RESOURCE"
+            },
+            "operator": "gt",
+            "right": {
+              "type": "CONSTANT",
+              "value": 0
+            },
+            "type": "expression_compare"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 100,
+            "target": "self",
+            "type": "heal"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "HP가 처음으로 25% 이하가 되면 HP를 100 회복한다.",
+        "id": "infirmary_leader_molly_support",
+        "kind": "support",
+        "maxTriggersPerBattle": 1,
+        "name": "죽어도 당직",
+        "oncePerBattle": true,
+        "shortDescription": "HP가 처음으로 25% 이하가 되면 HP를 100 회복한다.",
+        "tags": [],
+        "trigger": {
+          "type": "hp_threshold_crossed"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 170,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 170을 얻는다.",
+        "id": "jelly_shield_melty_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "젤리 충격흡수",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 170을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "jelly_shield_melty_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "맞으면 찌그러지지만 다음 순간 다시 웃고 있는 젤리 방패병",
+        "enabled": true,
+        "id": "jelly_shield_melty",
+        "name": "젤리 방패병 멜티",
+        "portraitAsset": "",
+        "race": "SLIME",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "멜티",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 110,
+          "manaGainPct": 90,
+          "maxHp": 1080,
+          "shieldEffectPct": 110,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "jelly_shield_melty_support"
+        },
+        "tags": [
+          "SLIME",
+          "DEFENSE",
+          "SURVIVAL",
+          "SHIELD",
+          "SHIELD_BREAK"
+        ]
+      },
+      "id": "jelly_shield_melty",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 110,
+        "manaGainPct": 90,
+        "maxHp": 1080,
+        "shieldEffectPct": 110,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 10000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 60,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "자신의 보호막이 파괴되면 보호막 60을 얻는다.",
+        "id": "jelly_shield_melty_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "원상 복구",
+        "oncePerBattle": false,
+        "shortDescription": "자신의 보호막이 파괴되면 보호막 60을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "shield_broken"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 160,
+            "target": "opponent",
+            "travelMs": 550,
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 160 피해를 준다.",
+        "id": "lancer_ravia_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "호위 창격",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 160 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "lancer_ravia_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "용혈 왕녀를 호위한다고 주장하지만 실제로는 사인 받으러 따라다님",
+        "enabled": true,
+        "id": "lancer_ravia",
+        "name": "창병 라비아",
+        "portraitAsset": "",
+        "race": "DRAGONBLOOD",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "라비아",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 100,
+          "manaGainPct": 100,
+          "maxHp": 1000,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 100
+        },
+        "support": {
+          "effectId": "lancer_ravia_support"
+        },
+        "tags": [
+          "DRAGONBLOOD",
+          "ATTACK",
+          "BALANCED",
+          "DAMAGE",
+          "ACTIVE_USED",
+          "SHIELD"
+        ]
+      },
+      "id": "lancer_ravia",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 100,
+        "manaGainPct": 100,
+        "maxHp": 1000,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 100
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 35,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "액티브 스킬을 사용한 뒤 보호막 35를 얻는다.",
+        "id": "lancer_ravia_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "왕녀 경호",
+        "oncePerBattle": false,
+        "shortDescription": "액티브 스킬을 사용한 뒤 보호막 35를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 135,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "amount": 15,
+            "target": "self",
+            "type": "gain_mana"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 135와 마력 15를 얻는다.",
+        "id": "maintenance_foreman_bron_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "응급 정비",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 135와 마력 15를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "maintenance_foreman_bron_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "고장난 장비도 욕하면서 어떻게든 굴린다",
+        "enabled": true,
+        "id": "maintenance_foreman_bron",
+        "name": "정비반장 브론",
+        "portraitAsset": "",
+        "race": "DWARF",
+        "rarity": "R",
+        "recommendedRole": "support",
+        "shortName": "브론",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 100,
+          "manaGainPct": 100,
+          "maxHp": 1000,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 100
+        },
+        "support": {
+          "effectId": "maintenance_foreman_bron_support"
+        },
+        "tags": [
+          "DWARF",
+          "SUPPORT",
+          "SUPPORT",
+          "HYBRID",
+          "SHIELD",
+          "MANA",
+          "ACTIVE_USED"
+        ]
+      },
+      "id": "maintenance_foreman_bron",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 100,
+        "manaGainPct": 100,
+        "maxHp": 1000,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 100
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 35,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "액티브 스킬을 사용한 뒤 보호막 35를 얻는다.",
+        "id": "maintenance_foreman_bron_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "욕설 섞인 보수",
+        "oncePerBattle": false,
+        "shortDescription": "액티브 스킬을 사용한 뒤 보호막 35를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
         }
       }
     },
@@ -1868,6 +4913,728 @@
         "cost": 100,
         "effects": [
           {
+            "amount": 160,
+            "target": "opponent",
+            "travelMs": 650,
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 160 피해를 준다.",
+        "id": "mounted_archer_seira_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "질주 사격",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 160 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "mounted_archer_seira_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "달리면서 쏘는 건 잘하지만 서류 제출도 달리면서 해서 글씨가 엉망임",
+        "enabled": true,
+        "id": "mounted_archer_seira",
+        "name": "활기병 세이라",
+        "portraitAsset": "",
+        "race": "CENTAUR",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "세이라",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 95,
+          "manaGainPct": 115,
+          "maxHp": 900,
+          "shieldEffectPct": 90,
+          "swordEffectPct": 110
+        },
+        "support": {
+          "effectId": "mounted_archer_seira_support"
+        },
+        "tags": [
+          "CENTAUR",
+          "ATTACK",
+          "SKIRMISH",
+          "DAMAGE",
+          "SWORD_MATCH",
+          "BONUS_DAMAGE"
+        ]
+      },
+      "id": "mounted_archer_seira",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 95,
+        "manaGainPct": 115,
+        "maxHp": 900,
+        "shieldEffectPct": 90,
+        "swordEffectPct": 110
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 28,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "id": "mounted_archer_seira_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "기마 연사",
+        "oncePerBattle": false,
+        "shortDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 30,
+            "target": "self",
+            "type": "gain_mana"
+          },
+          {
+            "amount": 65,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "마력 30과 보호막 65를 얻는다.",
+        "id": "night_accountant_vivian_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "미수금 정산",
+        "oncePerBattle": false,
+        "shortDescription": "마력 30과 보호막 65를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "night_accountant_vivian_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "피보다 미수금을 더 무서워하는 야간 회계 담당",
+        "enabled": true,
+        "id": "night_accountant_vivian",
+        "name": "야근 회계원 비비안",
+        "portraitAsset": "",
+        "race": "VAMPIRE",
+        "rarity": "R",
+        "recommendedRole": "support",
+        "shortName": "비비안",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 105,
+          "manaGainPct": 120,
+          "maxHp": 970,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "night_accountant_vivian_support"
+        },
+        "tags": [
+          "VAMPIRE",
+          "SUPPORT",
+          "BALANCED",
+          "MANA",
+          "STABLE",
+          "SHIELD",
+          "MANA_RECOVERY"
+        ]
+      },
+      "id": "night_accountant_vivian",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 105,
+        "manaGainPct": 120,
+        "maxHp": 970,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 8,
+            "target": "self",
+            "type": "gain_mana"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "액티브 스킬을 사용한 뒤 마력 8을 얻는다.",
+        "id": "night_accountant_vivian_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "야간 회계",
+        "oncePerBattle": false,
+        "shortDescription": "액티브 스킬을 사용한 뒤 마력 8을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 120,
+            "target": "opponent",
+            "travelMs": 450,
+            "type": "deal_damage"
+          },
+          {
+            "amount": 55,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+        "id": "odd_job_captain_gribit_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "잡역 총동원",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "odd_job_captain_gribit_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "따까리들의 따까리 대장. 도망 경로도 지휘한다",
+        "enabled": true,
+        "id": "odd_job_captain_gribit",
+        "name": "잡역공대장 그리빗",
+        "portraitAsset": "",
+        "race": "GOBLIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "그리빗",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 100,
+          "manaGainPct": 100,
+          "maxHp": 1000,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 100
+        },
+        "support": {
+          "effectId": "odd_job_captain_gribit_support"
+        },
+        "tags": [
+          "GOBLIN",
+          "DEFENSE",
+          "BALANCED",
+          "HYBRID",
+          "DAMAGE",
+          "SHIELD",
+          "BATTLE_START"
+        ]
+      },
+      "id": "odd_job_captain_gribit",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 100,
+        "manaGainPct": 100,
+        "maxHp": 1000,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 100
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 55,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "전투 시작 시 보호막 55를 얻는다.",
+        "id": "odd_job_captain_gribit_support",
+        "kind": "support",
+        "maxTriggersPerBattle": 1,
+        "name": "퇴로 지휘",
+        "oncePerBattle": true,
+        "shortDescription": "전투 시작 시 보호막 55를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "battle_started"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 135,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "amount": 15,
+            "target": "self",
+            "type": "gain_mana"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 135와 마력 15를 얻는다.",
+        "id": "overtime_receptionist_ines_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "야근 접수",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 135와 마력 15를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "overtime_receptionist_ines_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "야근 민원을 웃으며 받지만 접수번호로 사람을 평가함",
+        "enabled": true,
+        "id": "overtime_receptionist_ines",
+        "name": "야근 접수원 이네스",
+        "portraitAsset": "",
+        "race": "HUMAN",
+        "rarity": "R",
+        "recommendedRole": "support",
+        "shortName": "이네스",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 105,
+          "manaGainPct": 120,
+          "maxHp": 970,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "overtime_receptionist_ines_support"
+        },
+        "tags": [
+          "HUMAN",
+          "SUPPORT",
+          "BALANCED",
+          "MANA",
+          "STABLE",
+          "SHIELD",
+          "MANA_MATCH",
+          "MANA_RECOVERY"
+        ]
+      },
+      "id": "overtime_receptionist_ines",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 105,
+        "manaGainPct": 120,
+        "maxHp": 970,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "MANA",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 9,
+            "target": "self",
+            "type": "gain_mana"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "마력을 4개 이상 맞추면 마력 9를 추가로 얻는다.",
+        "id": "overtime_receptionist_ines_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "번호표 판단",
+        "oncePerBattle": false,
+        "shortDescription": "마력을 4개 이상 맞추면 마력 9를 추가로 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 125,
+            "target": "self",
+            "type": "heal"
+          },
+          {
+            "filter": {
+              "tag": "DEBUFF"
+            },
+            "key": "removedDebuff",
+            "maxCount": 1,
+            "selection": "OLDEST_FIRST",
+            "target": "self",
+            "type": "remove_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "HP를 125 회복하고 해로운 상태 1개를 제거한다.",
+        "id": "poison_treatment_shez_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "독맛 해독",
+        "oncePerBattle": false,
+        "shortDescription": "HP를 125 회복하고 해로운 상태 1개를 제거한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "poison_treatment_shez_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "독을 맛봐야 정확히 안다고 믿는 불안한 해독 전문가",
+        "enabled": true,
+        "id": "poison_treatment_shez",
+        "name": "독물처치사 셰즈",
+        "portraitAsset": "",
+        "race": "LIZARD_BEASTKIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "셰즈",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 120,
+          "manaGainPct": 105,
+          "maxHp": 980,
+          "shieldEffectPct": 95,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "poison_treatment_shez_support"
+        },
+        "tags": [
+          "LIZARD_BEASTKIN",
+          "HEAL",
+          "SUPPORT_HEAL",
+          "SUPPORT",
+          "STATUS_CLEANSE",
+          "LOW_HP"
+        ]
+      },
+      "id": "poison_treatment_shez",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 120,
+        "manaGainPct": 105,
+        "maxHp": 980,
+        "shieldEffectPct": 95,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [
+          {
+            "direction": "downward",
+            "operator": "eq",
+            "type": "hp_threshold_crossed",
+            "value": 25
+          },
+          {
+            "left": {
+              "resource": "HP",
+              "target": "SELF",
+              "type": "RESOURCE"
+            },
+            "operator": "gt",
+            "right": {
+              "type": "CONSTANT",
+              "value": 0
+            },
+            "type": "expression_compare"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 100,
+            "target": "self",
+            "type": "heal"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "HP가 처음으로 25% 이하가 되면 HP를 100 회복한다.",
+        "id": "poison_treatment_shez_support",
+        "kind": "support",
+        "maxTriggersPerBattle": 1,
+        "name": "응급 중화",
+        "oncePerBattle": true,
+        "shortDescription": "HP가 처음으로 25% 이하가 되면 HP를 100 회복한다.",
+        "tags": [],
+        "trigger": {
+          "type": "hp_threshold_crossed"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 145,
+            "shieldBypassRatio": 0.15,
+            "target": "opponent",
+            "travelMs": 550,
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 145 피해를 주며 보호막의 15%를 무시한다.",
+        "id": "pursuer_lena_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "냄새 추격",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 145 피해를 주며 보호막의 15%를 무시한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "pursuer_lena_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "도망치는 적은 잘 잡지만 의뢰비도 냄새 맡고 먼저 찾아감",
+        "enabled": true,
+        "id": "pursuer_lena",
+        "name": "추격자 레나",
+        "portraitAsset": "",
+        "race": "WOLF_BEASTKIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "레나",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 95,
+          "manaGainPct": 115,
+          "maxHp": 900,
+          "shieldEffectPct": 90,
+          "swordEffectPct": 110
+        },
+        "support": {
+          "effectId": "pursuer_lena_support"
+        },
+        "tags": [
+          "WOLF_BEASTKIN",
+          "ATTACK",
+          "SKIRMISH",
+          "DAMAGE",
+          "SHIELD_BYPASS",
+          "SWORD_MATCH"
+        ]
+      },
+      "id": "pursuer_lena",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 95,
+        "manaGainPct": 115,
+        "maxHp": 900,
+        "shieldEffectPct": 90,
+        "swordEffectPct": 110
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 28,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "id": "pursuer_lena_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "도주 차단",
+        "oncePerBattle": false,
+        "shortDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
             "amount": 185,
             "target": "opponent",
             "type": "deal_damage"
@@ -1968,6 +5735,488 @@
         "tags": [],
         "trigger": {
           "type": "active_requested"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 135,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "amount": 15,
+            "target": "self",
+            "type": "gain_mana"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 135와 마력 15를 얻는다.",
+        "id": "receptionist_maren_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "위험 의뢰 접수",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 135와 마력 15를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "receptionist_maren_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "웃으면서 위험한 의뢰를 정상가로 받아온다",
+        "enabled": true,
+        "id": "receptionist_maren",
+        "name": "접수원 마렌",
+        "portraitAsset": "",
+        "race": "HUMAN",
+        "rarity": "R",
+        "recommendedRole": "support",
+        "shortName": "마렌",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 105,
+          "manaGainPct": 120,
+          "maxHp": 970,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "receptionist_maren_support"
+        },
+        "tags": [
+          "HUMAN",
+          "SUPPORT",
+          "BALANCED",
+          "MANA",
+          "SHIELD",
+          "MANA_MATCH",
+          "MANA_RECOVERY"
+        ]
+      },
+      "id": "receptionist_maren",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 105,
+        "manaGainPct": 120,
+        "maxHp": 970,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "MANA",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 9,
+            "target": "self",
+            "type": "gain_mana"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "마력을 4개 이상 맞추면 마력 9를 추가로 얻는다.",
+        "id": "receptionist_maren_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "정상가 협상",
+        "oncePerBattle": false,
+        "shortDescription": "마력을 4개 이상 맞추면 마력 9를 추가로 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 120,
+            "target": "opponent",
+            "travelMs": 550,
+            "type": "deal_damage"
+          },
+          {
+            "amount": 55,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+        "id": "recovery_team_paco_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "긴급 회수",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "recovery_team_paco_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "회수와 절도를 구분 못 하는 척하는 회수 전문가",
+        "enabled": true,
+        "id": "recovery_team_paco",
+        "name": "회수반 파코",
+        "portraitAsset": "",
+        "race": "RACCOON_BEASTKIN",
+        "rarity": "R",
+        "recommendedRole": "support",
+        "shortName": "파코",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 100,
+          "manaGainPct": 100,
+          "maxHp": 1000,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 100
+        },
+        "support": {
+          "effectId": "recovery_team_paco_support"
+        },
+        "tags": [
+          "RACCOON_BEASTKIN",
+          "SUPPORT",
+          "SUPPORT",
+          "HYBRID",
+          "DAMAGE",
+          "SHIELD",
+          "MANA_MATCH"
+        ]
+      },
+      "id": "recovery_team_paco",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 100,
+        "manaGainPct": 100,
+        "maxHp": 1000,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 100
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "MANA",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 9,
+            "target": "self",
+            "type": "gain_mana"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "마력을 4개 이상 맞추면 마력 9를 추가로 얻는다.",
+        "id": "recovery_team_paco_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "슬쩍 보급",
+        "oncePerBattle": false,
+        "shortDescription": "마력을 4개 이상 맞추면 마력 9를 추가로 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 120,
+            "target": "self",
+            "type": "heal"
+          },
+          {
+            "amount": 50,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "HP를 120 회복하고 보호막 50을 얻는다.",
+        "id": "repair_core_12_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "부품 재조립",
+        "oncePerBattle": false,
+        "shortDescription": "HP를 120 회복하고 보호막 50을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "repair_core_12_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "작동은 느리지만 부서진 아군을 부품처럼 꼼꼼히 맞추는 수리핵",
+        "enabled": true,
+        "id": "repair_core_12",
+        "name": "수리핵 12호",
+        "portraitAsset": "",
+        "race": "GOLEM",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "12호",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 120,
+          "manaGainPct": 105,
+          "maxHp": 980,
+          "shieldEffectPct": 95,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "repair_core_12_support"
+        },
+        "tags": [
+          "GOLEM",
+          "HEAL",
+          "SUPPORT",
+          "SHIELD",
+          "LARGE_HEAL"
+        ]
+      },
+      "id": "repair_core_12",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 120,
+        "manaGainPct": 105,
+        "maxHp": 980,
+        "shieldEffectPct": 95,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [
+          {
+            "left": {
+              "path": "heal.actualAmount",
+              "type": "EVENT_VALUE"
+            },
+            "operator": "gte",
+            "right": {
+              "type": "CONSTANT",
+              "value": 100
+            },
+            "type": "expression_compare"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 35,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "한 번에 HP를 100 이상 회복하면 보호막 35를 얻는다.",
+        "id": "repair_core_12_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "자동 수리",
+        "oncePerBattle": false,
+        "shortDescription": "한 번에 HP를 100 이상 회복하면 보호막 35를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "after_heal"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 100,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "durationMs": 5000,
+            "statusId": "r_next_incoming_damage_reduction_30",
+            "target": "self",
+            "type": "apply_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 100을 얻고 5초 안에 받는 다음 공격 피해를 30% 감소시킨다.",
+        "id": "rift_shield_voidrin_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "균열 차폐",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 100을 얻고 5초 안에 받는 다음 공격 피해를 30% 감소시킨다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "rift_shield_voidrin_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "문틈 같은 균열 뒤에 숨어서 세상도 같이 막아버리는 공허 방패병",
+        "enabled": true,
+        "id": "rift_shield_voidrin",
+        "name": "균열방패 보이드린",
+        "portraitAsset": "",
+        "race": "VOIDKIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "보이드린",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 90,
+          "maxHp": 1120,
+          "shieldEffectPct": 120,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "rift_shield_voidrin_support"
+        },
+        "tags": [
+          "VOIDKIN",
+          "DEFENSE",
+          "CONTROL",
+          "SHIELD",
+          "NEXT_ATTACK_GUARD",
+          "SHIELD_BREAK"
+        ]
+      },
+      "id": "rift_shield_voidrin",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 90,
+        "maxHp": 1120,
+        "shieldEffectPct": 120,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 10000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 60,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "자신의 보호막이 파괴되면 보호막 60을 얻는다.",
+        "id": "rift_shield_voidrin_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "공허 봉합",
+        "oncePerBattle": false,
+        "shortDescription": "자신의 보호막이 파괴되면 보호막 60을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "shield_broken"
         }
       }
     },
@@ -2108,6 +6357,1296 @@
         "cost": 100,
         "effects": [
           {
+            "amount": 145,
+            "shieldBypassRatio": 0.15,
+            "target": "opponent",
+            "travelMs": 550,
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 145 피해를 주며 보호막의 15%를 무시한다.",
+        "id": "rooftop_scout_neria_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "지붕길 급습",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 145 피해를 주며 보호막의 15%를 무시한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "rooftop_scout_neria_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "길은 잘 찾지만 반드시 가장 높은 곳으로만 안내해서 모두를 피곤하게 함",
+        "enabled": true,
+        "id": "rooftop_scout_neria",
+        "name": "지붕길 정찰꾼 네리아",
+        "portraitAsset": "",
+        "race": "CAT_BEASTKIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "지붕 네리아",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 95,
+          "manaGainPct": 115,
+          "maxHp": 900,
+          "shieldEffectPct": 90,
+          "swordEffectPct": 110
+        },
+        "support": {
+          "effectId": "rooftop_scout_neria_support"
+        },
+        "tags": [
+          "CAT_BEASTKIN",
+          "ATTACK",
+          "SKIRMISH",
+          "DAMAGE",
+          "SHIELD_BYPASS",
+          "CHAIN"
+        ]
+      },
+      "id": "rooftop_scout_neria",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 95,
+        "manaGainPct": 115,
+        "maxHp": 900,
+        "shieldEffectPct": 90,
+        "swordEffectPct": 110
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "left": {
+                  "path": "chain.depth",
+                  "type": "EVENT_VALUE"
+                },
+                "operator": "gte",
+                "right": {
+                  "type": "CONSTANT",
+                  "value": 3
+                },
+                "type": "expression_compare"
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 32,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검 매치를 포함한 연쇄 3 이상 달성 시 적에게 32 피해를 준다.",
+        "id": "rooftop_scout_neria_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "고지 이동",
+        "oncePerBattle": false,
+        "shortDescription": "검 매치를 포함한 연쇄 3 이상 달성 시 적에게 32 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 30,
+            "target": "self",
+            "type": "gain_mana"
+          },
+          {
+            "amount": 65,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "마력 30과 보호막 65를 얻는다.",
+        "id": "sales_broker_oscar_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "소개비 선입금",
+        "oncePerBattle": false,
+        "shortDescription": "마력 30과 보호막 65를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "sales_broker_oscar_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "진실보다 소개비를 더 믿는 남자",
+        "enabled": true,
+        "id": "sales_broker_oscar",
+        "name": "영업 브로커 오스카",
+        "portraitAsset": "",
+        "race": "HUMAN",
+        "rarity": "R",
+        "recommendedRole": "support",
+        "shortName": "오스카",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 105,
+          "manaGainPct": 120,
+          "maxHp": 970,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "sales_broker_oscar_support"
+        },
+        "tags": [
+          "HUMAN",
+          "SUPPORT",
+          "SUPPORT",
+          "MANA",
+          "SHIELD",
+          "MANA_RECOVERY"
+        ]
+      },
+      "id": "sales_broker_oscar",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 105,
+        "manaGainPct": 120,
+        "maxHp": 970,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 8,
+            "target": "self",
+            "type": "gain_mana"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "액티브 스킬을 사용한 뒤 마력 8을 얻는다.",
+        "id": "sales_broker_oscar_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "중개 수수료",
+        "oncePerBattle": false,
+        "shortDescription": "액티브 스킬을 사용한 뒤 마력 8을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 130,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "durationMs": 4000,
+            "statusId": "r_damage_reduction_20",
+            "target": "self",
+            "type": "apply_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 130을 얻고 4초 동안 받는 피해가 20% 감소한다.",
+        "id": "scale_shield_zara_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "비늘 방벽",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 130을 얻고 4초 동안 받는 피해가 20% 감소한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "scale_shield_zara_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "비늘이 단단해서 방패값은 아끼지만 겨울 의뢰에는 사무소 난로를 독점함",
+        "enabled": true,
+        "id": "scale_shield_zara",
+        "name": "비늘방패 자라",
+        "portraitAsset": "",
+        "race": "LIZARD_BEASTKIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "자라",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 110,
+          "manaGainPct": 90,
+          "maxHp": 1080,
+          "shieldEffectPct": 110,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "scale_shield_zara_support"
+        },
+        "tags": [
+          "LIZARD_BEASTKIN",
+          "DEFENSE",
+          "FORTRESS",
+          "SHIELD",
+          "DAMAGE_REDUCTION",
+          "SHIELD_BREAK"
+        ]
+      },
+      "id": "scale_shield_zara",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 110,
+        "manaGainPct": 90,
+        "maxHp": 1080,
+        "shieldEffectPct": 110,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 10000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 60,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "자신의 보호막이 파괴되면 보호막 60을 얻는다.",
+        "id": "scale_shield_zara_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "냉기 버티기",
+        "oncePerBattle": false,
+        "shortDescription": "자신의 보호막이 파괴되면 보호막 60을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "shield_broken"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 30,
+            "target": "self",
+            "type": "gain_mana"
+          },
+          {
+            "amount": 65,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "마력 30과 보호막 65를 얻는다.",
+        "id": "scout_leader_raka_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "추적 경로 공유",
+        "oncePerBattle": false,
+        "shortDescription": "마력 30과 보호막 65를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "scout_leader_raka_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "도망친 사역마와 빚쟁이를 냄새로 찾는다",
+        "enabled": true,
+        "id": "scout_leader_raka",
+        "name": "정찰조장 라카",
+        "portraitAsset": "",
+        "race": "WOLF_BEASTKIN",
+        "rarity": "R",
+        "recommendedRole": "support",
+        "shortName": "라카",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 105,
+          "manaGainPct": 120,
+          "maxHp": 970,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "scout_leader_raka_support"
+        },
+        "tags": [
+          "WOLF_BEASTKIN",
+          "SUPPORT",
+          "SUPPORT",
+          "MANA",
+          "SHIELD",
+          "MANA_MATCH",
+          "MANA_RECOVERY"
+        ]
+      },
+      "id": "scout_leader_raka",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 105,
+        "manaGainPct": 120,
+        "maxHp": 970,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "MANA",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 9,
+            "target": "self",
+            "type": "gain_mana"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "마력을 4개 이상 맞추면 마력 9를 추가로 얻는다.",
+        "id": "scout_leader_raka_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "냄새 표식",
+        "oncePerBattle": false,
+        "shortDescription": "마력을 4개 이상 맞추면 마력 9를 추가로 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 100,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "durationMs": 5000,
+            "statusId": "r_next_incoming_damage_reduction_30",
+            "target": "self",
+            "type": "apply_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 100을 얻고 5초 안에 받는 다음 공격 피해를 30% 감소시킨다.",
+        "id": "sealing_cord_carrier_darmel_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "봉인끈 결속",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 100을 얻고 5초 안에 받는 다음 공격 피해를 30% 감소시킨다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "sealing_cord_carrier_darmel_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "봉인끈 매듭은 완벽하지만 본인 신발끈은 매번 풀려 있음",
+        "enabled": true,
+        "id": "sealing_cord_carrier_darmel",
+        "name": "봉인끈 운반자 다르멜",
+        "portraitAsset": "",
+        "race": "HUMAN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "다르멜",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 100,
+          "manaGainPct": 100,
+          "maxHp": 1000,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 100
+        },
+        "support": {
+          "effectId": "sealing_cord_carrier_darmel_support"
+        },
+        "tags": [
+          "HUMAN",
+          "DEFENSE",
+          "STABLE_DEFENSE",
+          "STABLE",
+          "SHIELD",
+          "NEXT_ATTACK_GUARD",
+          "SHIELD_MATCH"
+        ]
+      },
+      "id": "sealing_cord_carrier_darmel",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 100,
+        "manaGainPct": 100,
+        "maxHp": 1000,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 100
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SHIELD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 6000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 32,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "방패를 4개 이상 맞추면 보호막 32를 추가로 얻는다.",
+        "id": "sealing_cord_carrier_darmel_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "매듭 보강",
+        "oncePerBattle": false,
+        "shortDescription": "방패를 4개 이상 맞추면 보호막 32를 추가로 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 100,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "durationMs": 5000,
+            "statusId": "r_next_incoming_damage_reduction_30",
+            "target": "self",
+            "type": "apply_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 100을 얻고 5초 안에 받는 다음 공격 피해를 30% 감소시킨다.",
+        "id": "shield_assistant_uniel_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "보조익 전개",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 100을 얻고 5초 안에 받는 다음 공격 피해를 30% 감소시킨다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "shield_assistant_uniel_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "노아엘의 실패 데이터를 참고해 더 튼튼하지만 더 고장 잘 나는 방패보조기",
+        "enabled": true,
+        "id": "shield_assistant_uniel",
+        "name": "방패보조 유니엘",
+        "portraitAsset": "",
+        "race": "ARTIFICIAL_ANGEL",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "유니엘",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 90,
+          "maxHp": 1120,
+          "shieldEffectPct": 120,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "shield_assistant_uniel_support"
+        },
+        "tags": [
+          "ARTIFICIAL_ANGEL",
+          "DEFENSE",
+          "REACTIVE",
+          "SHIELD",
+          "NEXT_ATTACK_GUARD",
+          "SHIELD_BREAK"
+        ]
+      },
+      "id": "shield_assistant_uniel",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 90,
+        "maxHp": 1120,
+        "shieldEffectPct": 120,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 10000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 60,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "자신의 보호막이 파괴되면 보호막 60을 얻는다.",
+        "id": "shield_assistant_uniel_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "복구 프로토콜",
+        "oncePerBattle": false,
+        "shortDescription": "자신의 보호막이 파괴되면 보호막 60을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "shield_broken"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 120,
+            "target": "opponent",
+            "type": "deal_damage"
+          },
+          {
+            "amount": 55,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+        "id": "shield_fist_rinka_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "방패주먹 돌진",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "shield_fist_rinka_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "방패를 들라 했더니 주먹에 묶고 돌격하는 문제아 오니",
+        "enabled": true,
+        "id": "shield_fist_rinka",
+        "name": "방패주먹 린카",
+        "portraitAsset": "",
+        "race": "ONI",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "린카",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 85,
+          "manaGainPct": 115,
+          "maxHp": 860,
+          "shieldEffectPct": 80,
+          "swordEffectPct": 125
+        },
+        "support": {
+          "effectId": "shield_fist_rinka_support"
+        },
+        "tags": [
+          "ONI",
+          "ATTACK",
+          "VANGUARD",
+          "HYBRID",
+          "DAMAGE",
+          "SHIELD",
+          "SWORD_MATCH"
+        ]
+      },
+      "id": "shield_fist_rinka",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 85,
+        "manaGainPct": 115,
+        "maxHp": 860,
+        "shieldEffectPct": 80,
+        "swordEffectPct": 125
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 28,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "id": "shield_fist_rinka_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "주먹 막기",
+        "oncePerBattle": false,
+        "shortDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 170,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 170을 얻는다.",
+        "id": "shield_girl_taura_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "수줍은 대방패",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 170을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "shield_girl_taura_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "덩치는 산만 한데 칭찬받으면 방패 뒤에 숨어버리는 미노타우로스",
+        "enabled": true,
+        "id": "shield_girl_taura",
+        "name": "방패소녀 타우라",
+        "portraitAsset": "",
+        "race": "MINOTAUR",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "타우라",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 85,
+          "manaGainPct": 85,
+          "maxHp": 1200,
+          "shieldEffectPct": 125,
+          "swordEffectPct": 80
+        },
+        "support": {
+          "effectId": "shield_girl_taura_support"
+        },
+        "tags": [
+          "MINOTAUR",
+          "DEFENSE",
+          "BALANCED",
+          "SHIELD",
+          "BATTLE_START"
+        ]
+      },
+      "id": "shield_girl_taura",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 85,
+        "manaGainPct": 85,
+        "maxHp": 1200,
+        "shieldEffectPct": 125,
+        "swordEffectPct": 80
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 55,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "전투 시작 시 보호막 55를 얻는다.",
+        "id": "shield_girl_taura_support",
+        "kind": "support",
+        "maxTriggersPerBattle": 1,
+        "name": "칭찬 회피",
+        "oncePerBattle": true,
+        "shortDescription": "전투 시작 시 보호막 55를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "battle_started"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 130,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "durationMs": 4000,
+            "statusId": "r_damage_reduction_20",
+            "target": "self",
+            "type": "apply_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 130을 얻고 4초 동안 받는 피해가 20% 감소한다.",
+        "id": "shield_shepherd_meira_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "양떼 방진",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 130을 얻고 4초 동안 받는 피해가 20% 감소한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "shield_shepherd_meira_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "양떼 몰듯 아군도 몰아세워서 진형을 맞추는 푹신한 방패병",
+        "enabled": true,
+        "id": "shield_shepherd_meira",
+        "name": "방패목동 메이라",
+        "portraitAsset": "",
+        "race": "SHEEP_BEASTKIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "메이라",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 90,
+          "maxHp": 1120,
+          "shieldEffectPct": 120,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "shield_shepherd_meira_support"
+        },
+        "tags": [
+          "SHEEP_BEASTKIN",
+          "DEFENSE",
+          "CONTROL",
+          "SHIELD",
+          "DAMAGE_REDUCTION",
+          "SHIELD_MATCH"
+        ]
+      },
+      "id": "shield_shepherd_meira",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 90,
+        "maxHp": 1120,
+        "shieldEffectPct": 120,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SHIELD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 6000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 32,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "방패를 4개 이상 맞추면 보호막 32를 추가로 얻는다.",
+        "id": "shield_shepherd_meira_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "푹신한 정렬",
+        "oncePerBattle": false,
+        "shortDescription": "방패를 4개 이상 맞추면 보호막 32를 추가로 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 130,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "durationMs": 4000,
+            "statusId": "r_damage_reduction_20",
+            "target": "self",
+            "type": "apply_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 130을 얻고 4초 동안 받는 피해가 20% 감소한다.",
+        "id": "shield_soldier_matilda_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "불퇴 방패",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 130을 얻고 4초 동안 받는 피해가 20% 감소한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "shield_soldier_matilda_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "죽어도 결근 처리가 안 돼서 방패 들고 계속 출근하는 성실한 시체",
+        "enabled": true,
+        "id": "shield_soldier_matilda",
+        "name": "방패병 마틸다",
+        "portraitAsset": "",
+        "race": "UNDEAD",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "마틸다",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 85,
+          "manaGainPct": 85,
+          "maxHp": 1200,
+          "shieldEffectPct": 125,
+          "swordEffectPct": 80
+        },
+        "support": {
+          "effectId": "shield_soldier_matilda_support"
+        },
+        "tags": [
+          "UNDEAD",
+          "DEFENSE",
+          "FORTRESS",
+          "SHIELD",
+          "DAMAGE_REDUCTION",
+          "BATTLE_START"
+        ]
+      },
+      "id": "shield_soldier_matilda",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 85,
+        "manaGainPct": 85,
+        "maxHp": 1200,
+        "shieldEffectPct": 125,
+        "swordEffectPct": 80
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 55,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "전투 시작 시 보호막 55를 얻는다.",
+        "id": "shield_soldier_matilda_support",
+        "kind": "support",
+        "maxTriggersPerBattle": 1,
+        "name": "무결근 수비",
+        "oncePerBattle": true,
+        "shortDescription": "전투 시작 시 보호막 55를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "battle_started"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 170,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 170을 얻는다.",
+        "id": "shield_soldier_nadia_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "광택 방벽",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 170을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "shield_soldier_nadia_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "전선대장을 존경하지만 방패를 광택 내느라 출격을 늦추는 사자수인 방패병",
+        "enabled": true,
+        "id": "shield_soldier_nadia",
+        "name": "방패병 나디아",
+        "portraitAsset": "",
+        "race": "LION_BEASTKIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "나디아",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 90,
+          "maxHp": 1120,
+          "shieldEffectPct": 120,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "shield_soldier_nadia_support"
+        },
+        "tags": [
+          "LION_BEASTKIN",
+          "DEFENSE",
+          "BALANCED",
+          "SHIELD",
+          "SHIELD_MATCH"
+        ]
+      },
+      "id": "shield_soldier_nadia",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 90,
+        "maxHp": 1120,
+        "shieldEffectPct": 120,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SHIELD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 6000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 32,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "방패를 4개 이상 맞추면 보호막 32를 추가로 얻는다.",
+        "id": "shield_soldier_nadia_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "전선대장 흉내",
+        "oncePerBattle": false,
+        "shortDescription": "방패를 4개 이상 맞추면 보호막 32를 추가로 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
             "amount": 165,
             "target": "self",
             "type": "heal"
@@ -2216,6 +7755,1457 @@
         "name": "냄비뚜껑 엄호",
         "oncePerBattle": false,
         "shortDescription": "회복을 4개 이상 맞추면 보호막 52를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 120,
+            "target": "self",
+            "type": "heal"
+          },
+          {
+            "amount": 50,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "HP를 120 회복하고 보호막 50을 얻는다.",
+        "id": "slime_cleanup_lumia_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "점액 세척",
+        "oncePerBattle": false,
+        "shortDescription": "HP를 120 회복하고 보호막 50을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "slime_cleanup_lumia_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "점액을 잘 치우지만 본인도 점액이라 완료 판정이 늘 애매함",
+        "enabled": true,
+        "id": "slime_cleanup_lumia",
+        "name": "점액 청소반 루미아",
+        "portraitAsset": "",
+        "race": "SLIME",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "루미아",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 110,
+          "manaGainPct": 90,
+          "maxHp": 1080,
+          "shieldEffectPct": 110,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "slime_cleanup_lumia_support"
+        },
+        "tags": [
+          "SLIME",
+          "HEAL",
+          "SURVIVAL",
+          "SHIELD",
+          "LARGE_HEAL"
+        ]
+      },
+      "id": "slime_cleanup_lumia",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 110,
+        "manaGainPct": 90,
+        "maxHp": 1080,
+        "shieldEffectPct": 110,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [
+          {
+            "left": {
+              "path": "heal.actualAmount",
+              "type": "EVENT_VALUE"
+            },
+            "operator": "gte",
+            "right": {
+              "type": "CONSTANT",
+              "value": 100
+            },
+            "type": "expression_compare"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 35,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "한 번에 HP를 100 이상 회복하면 보호막 35를 얻는다.",
+        "id": "slime_cleanup_lumia_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "얼룩 흡수",
+        "oncePerBattle": false,
+        "shortDescription": "한 번에 HP를 100 이상 회복하면 보호막 35를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "after_heal"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 120,
+            "target": "opponent",
+            "travelMs": 550,
+            "type": "deal_damage"
+          },
+          {
+            "durationMs": 5000,
+            "statusId": "r_healing_reduction_25",
+            "target": "opponent",
+            "type": "apply_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 120 피해를 주고 5초 동안 적이 받는 회복량을 25% 감소시킨다.",
+        "id": "smoke_thief_tami_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "연막 절도",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 120 피해를 주고 5초 동안 적이 받는 회복량을 25% 감소시킨다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "smoke_thief_tami_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "분실물을 찾아온다며 본인 주머니부터 검사하게 만드는 연막 도둑",
+        "enabled": true,
+        "id": "smoke_thief_tami",
+        "name": "연막도둑 타미",
+        "portraitAsset": "",
+        "race": "RACCOON_BEASTKIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "타미",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 95,
+          "manaGainPct": 115,
+          "maxHp": 950,
+          "shieldEffectPct": 90,
+          "swordEffectPct": 105
+        },
+        "support": {
+          "effectId": "smoke_thief_tami_support"
+        },
+        "tags": [
+          "RACCOON_BEASTKIN",
+          "DISRUPT",
+          "SKIRMISH",
+          "DAMAGE",
+          "HEALING_REDUCTION",
+          "MANA_MATCH"
+        ]
+      },
+      "id": "smoke_thief_tami",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 95,
+        "manaGainPct": 115,
+        "maxHp": 950,
+        "shieldEffectPct": 90,
+        "swordEffectPct": 105
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "MANA",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 9,
+            "target": "self",
+            "type": "gain_mana"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "마력을 4개 이상 맞추면 마력 9를 추가로 얻는다.",
+        "id": "smoke_thief_tami_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "주머니 수색",
+        "oncePerBattle": false,
+        "shortDescription": "마력을 4개 이상 맞추면 마력 9를 추가로 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 175,
+            "target": "opponent",
+            "travelMs": 650,
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 175 피해를 준다.",
+        "id": "sniper_isila_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "마감 없는 저격",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 175 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "sniper_isila_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "표적은 잘 맞히지만 보고서의 마감일은 절대 못 맞힘",
+        "enabled": true,
+        "id": "sniper_isila",
+        "name": "저격수 이실라",
+        "portraitAsset": "",
+        "race": "ELF",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "이실라",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 110,
+          "maxHp": 880,
+          "shieldEffectPct": 85,
+          "swordEffectPct": 120
+        },
+        "support": {
+          "effectId": "sniper_isila_support"
+        },
+        "tags": [
+          "ELF",
+          "ATTACK",
+          "SNIPER",
+          "HEAVY_ATTACK",
+          "DAMAGE"
+        ]
+      },
+      "id": "sniper_isila",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 110,
+        "maxHp": 880,
+        "shieldEffectPct": 85,
+        "swordEffectPct": 120
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "left": {
+                  "path": "chain.depth",
+                  "type": "EVENT_VALUE"
+                },
+                "operator": "gte",
+                "right": {
+                  "type": "CONSTANT",
+                  "value": 3
+                },
+                "type": "expression_compare"
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 32,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검 매치를 포함한 연쇄 3 이상 달성 시 적에게 32 피해를 준다.",
+        "id": "sniper_isila_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "표적 재확인",
+        "oncePerBattle": false,
+        "shortDescription": "검 매치를 포함한 연쇄 3 이상 달성 시 적에게 32 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 175,
+            "target": "opponent",
+            "travelMs": 550,
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 175 피해를 준다.",
+        "id": "spear_assault_fiona_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "과속 창돌격",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 175 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "spear_assault_fiona_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "빠른 돌격은 좋은데 멈추는 법을 아직 배우는 중인 토끼수인",
+        "enabled": true,
+        "id": "spear_assault_fiona",
+        "name": "창돌격병 피오나",
+        "portraitAsset": "",
+        "race": "RABBIT_BEASTKIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "피오나",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 85,
+          "manaGainPct": 115,
+          "maxHp": 860,
+          "shieldEffectPct": 80,
+          "swordEffectPct": 125
+        },
+        "support": {
+          "effectId": "spear_assault_fiona_support"
+        },
+        "tags": [
+          "RABBIT_BEASTKIN",
+          "ATTACK",
+          "VANGUARD",
+          "HEAVY_ATTACK",
+          "DAMAGE",
+          "SWORD_MATCH"
+        ]
+      },
+      "id": "spear_assault_fiona",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 85,
+        "manaGainPct": 115,
+        "maxHp": 860,
+        "shieldEffectPct": 80,
+        "swordEffectPct": 125
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 28,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "id": "spear_assault_fiona_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "멈춤 없는 후속타",
+        "oncePerBattle": false,
+        "shortDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 175,
+            "target": "opponent",
+            "travelMs": 550,
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 175 피해를 준다.",
+        "id": "spear_rider_kyrie_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "급강하 창격",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 175 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "spear_rider_kyrie_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "착지는 못하지만 첫 타격만큼은 누구보다 빠름",
+        "enabled": true,
+        "id": "spear_rider_kyrie",
+        "name": "창기수 키리에",
+        "portraitAsset": "",
+        "race": "HARPY",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "키리에",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 85,
+          "manaGainPct": 115,
+          "maxHp": 860,
+          "shieldEffectPct": 80,
+          "swordEffectPct": 125
+        },
+        "support": {
+          "effectId": "spear_rider_kyrie_support"
+        },
+        "tags": [
+          "HARPY",
+          "ATTACK",
+          "VANGUARD",
+          "HEAVY_ATTACK",
+          "DAMAGE",
+          "SWORD_MATCH"
+        ]
+      },
+      "id": "spear_rider_kyrie",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 85,
+        "manaGainPct": 115,
+        "maxHp": 860,
+        "shieldEffectPct": 80,
+        "swordEffectPct": 125
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 28,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "id": "spear_rider_kyrie_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "첫 타 선점",
+        "oncePerBattle": false,
+        "shortDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 120,
+            "target": "opponent",
+            "type": "deal_damage"
+          },
+          {
+            "amount": 55,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+        "id": "spear_shield_soldier_rina_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "교본식 창방패",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "spear_shield_soldier_rina_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "교본대로만 움직여서 변칙 상황에는 잠깐 멈추는 신참 창방패병",
+        "enabled": true,
+        "id": "spear_shield_soldier_rina",
+        "name": "창방패병 리나",
+        "portraitAsset": "",
+        "race": "HUMAN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "리나",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 100,
+          "manaGainPct": 100,
+          "maxHp": 1000,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 100
+        },
+        "support": {
+          "effectId": "spear_shield_soldier_rina_support"
+        },
+        "tags": [
+          "HUMAN",
+          "DEFENSE",
+          "BALANCED",
+          "HYBRID",
+          "DAMAGE",
+          "SHIELD",
+          "SHIELD_MATCH"
+        ]
+      },
+      "id": "spear_shield_soldier_rina",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 100,
+        "manaGainPct": 100,
+        "maxHp": 1000,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 100
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SHIELD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 6000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 32,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "방패를 4개 이상 맞추면 보호막 32를 추가로 얻는다.",
+        "id": "spear_shield_soldier_rina_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "정석 방진",
+        "oncePerBattle": false,
+        "shortDescription": "방패를 4개 이상 맞추면 보호막 32를 추가로 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 120,
+            "target": "opponent",
+            "type": "deal_damage"
+          },
+          {
+            "durationMs": 5000,
+            "statusId": "r_healing_reduction_25",
+            "target": "opponent",
+            "type": "apply_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 120 피해를 주고 5초 동안 적이 받는 회복량을 25% 감소시킨다.",
+        "id": "spy_nyara_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "정보 탈취",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 120 피해를 주고 5초 동안 적이 받는 회복량을 25% 감소시킨다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "spy_nyara_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "정보는 훔치고 간식은 더 훔친다",
+        "enabled": true,
+        "id": "spy_nyara",
+        "name": "첩보원 냐라",
+        "portraitAsset": "",
+        "race": "CAT_BEASTKIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "냐라",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 95,
+          "manaGainPct": 115,
+          "maxHp": 950,
+          "shieldEffectPct": 90,
+          "swordEffectPct": 105
+        },
+        "support": {
+          "effectId": "spy_nyara_support"
+        },
+        "tags": [
+          "CAT_BEASTKIN",
+          "DISRUPT",
+          "SKIRMISH",
+          "DAMAGE",
+          "MANA_MATCH"
+        ]
+      },
+      "id": "spy_nyara",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 95,
+        "manaGainPct": 115,
+        "maxHp": 950,
+        "shieldEffectPct": 90,
+        "swordEffectPct": 105
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "MANA",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 9,
+            "target": "self",
+            "type": "gain_mana"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "마력을 4개 이상 맞추면 마력 9를 추가로 얻는다.",
+        "id": "spy_nyara_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "은밀한 보급",
+        "oncePerBattle": false,
+        "shortDescription": "마력을 4개 이상 맞추면 마력 9를 추가로 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 170,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 170을 얻는다.",
+        "id": "streetlamp_gatekeeper_orkan_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "가로등 수호",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 170을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "streetlamp_gatekeeper_orkan_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "가로등이 꺼지면 제일 먼저 의심받지만 실제로는 제일 성실하게 켬",
+        "enabled": true,
+        "id": "streetlamp_gatekeeper_orkan",
+        "name": "가로등 문지기 오르칸",
+        "portraitAsset": "",
+        "race": "ORC",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "오르칸",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 90,
+          "maxHp": 1120,
+          "shieldEffectPct": 120,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "streetlamp_gatekeeper_orkan_support"
+        },
+        "tags": [
+          "ORC",
+          "DEFENSE",
+          "STABLE_DEFENSE",
+          "STABLE",
+          "SHIELD",
+          "BATTLE_START"
+        ]
+      },
+      "id": "streetlamp_gatekeeper_orkan",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 90,
+        "maxHp": 1120,
+        "shieldEffectPct": 120,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 55,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "전투 시작 시 보호막 55를 얻는다.",
+        "id": "streetlamp_gatekeeper_orkan_support",
+        "kind": "support",
+        "maxTriggersPerBattle": 1,
+        "name": "야간 점등",
+        "oncePerBattle": true,
+        "shortDescription": "전투 시작 시 보호막 55를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "battle_started"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 30,
+            "target": "self",
+            "type": "gain_mana"
+          },
+          {
+            "amount": 65,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "마력 30과 보호막 65를 얻는다.",
+        "id": "tactical_operator_corta_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "승률 재계산",
+        "oncePerBattle": false,
+        "shortDescription": "마력 30과 보호막 65를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "tactical_operator_corta_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "작전 성공률은 정확히 계산하지만 용병들의 멘탈 붕괴는 변수로 안 침",
+        "enabled": true,
+        "id": "tactical_operator_corta",
+        "name": "전술연산병 코르타",
+        "portraitAsset": "",
+        "race": "ARTIFICIAL_HUMAN",
+        "rarity": "R",
+        "recommendedRole": "support",
+        "shortName": "코르타",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 105,
+          "manaGainPct": 120,
+          "maxHp": 970,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "tactical_operator_corta_support"
+        },
+        "tags": [
+          "ARTIFICIAL_HUMAN",
+          "SUPPORT",
+          "SUPPORT",
+          "MANA",
+          "SHIELD",
+          "MANA_RECOVERY"
+        ]
+      },
+      "id": "tactical_operator_corta",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 105,
+        "manaGainPct": 120,
+        "maxHp": 970,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 8000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 8,
+            "target": "self",
+            "type": "gain_mana"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "액티브 스킬을 사용한 뒤 마력 8을 얻는다.",
+        "id": "tactical_operator_corta_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "전술 보정값",
+        "oncePerBattle": false,
+        "shortDescription": "액티브 스킬을 사용한 뒤 마력 8을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 120,
+            "target": "opponent",
+            "travelMs": 450,
+            "type": "deal_damage"
+          },
+          {
+            "amount": 55,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+        "id": "tail_lancer_serna_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "꼬리창 연타",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "tail_lancer_serna_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "창보다 꼬리로 더 많이 때려서 무기교육 담당을 울리는 용형족 창병",
+        "enabled": true,
+        "id": "tail_lancer_serna",
+        "name": "꼬리창병 세르나",
+        "portraitAsset": "",
+        "race": "DRACONIC",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "세르나",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 105,
+          "maxHp": 920,
+          "shieldEffectPct": 90,
+          "swordEffectPct": 115
+        },
+        "support": {
+          "effectId": "tail_lancer_serna_support"
+        },
+        "tags": [
+          "DRACONIC",
+          "ATTACK",
+          "SKIRMISH",
+          "DAMAGE",
+          "SHIELD",
+          "SWORD_MATCH"
+        ]
+      },
+      "id": "tail_lancer_serna",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 105,
+        "maxHp": 920,
+        "shieldEffectPct": 90,
+        "swordEffectPct": 115
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 28,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "id": "tail_lancer_serna_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "후미 찌르기",
+        "oncePerBattle": false,
+        "shortDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "tags": [],
+        "trigger": {
+          "type": "match_group_resolved"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 130,
+            "target": "self",
+            "type": "gain_shield"
+          },
+          {
+            "durationMs": 4000,
+            "statusId": "r_damage_reduction_20",
+            "target": "self",
+            "type": "apply_status"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "보호막 130을 얻고 4초 동안 받는 피해가 20% 감소한다.",
+        "id": "thread_shield_neria_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "실그물 방벽",
+        "oncePerBattle": false,
+        "shortDescription": "보호막 130을 얻고 4초 동안 받는 피해가 20% 감소한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "thread_shield_neria_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "방패가 아니라 실로 적을 묶어 막는 바람에 청소팀이 싫어하는 거미수인",
+        "enabled": true,
+        "id": "thread_shield_neria",
+        "name": "실방패 네리아",
+        "portraitAsset": "",
+        "race": "SPIDER_BEASTKIN",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "실방패 네리아",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 90,
+          "manaGainPct": 90,
+          "maxHp": 1120,
+          "shieldEffectPct": 120,
+          "swordEffectPct": 90
+        },
+        "support": {
+          "effectId": "thread_shield_neria_support"
+        },
+        "tags": [
+          "SPIDER_BEASTKIN",
+          "DEFENSE",
+          "CONTROL",
+          "SHIELD",
+          "DAMAGE_REDUCTION",
+          "EMERGENCY_GUARD"
+        ]
+      },
+      "id": "thread_shield_neria",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 90,
+        "manaGainPct": 90,
+        "maxHp": 1120,
+        "shieldEffectPct": 120,
+        "swordEffectPct": 90
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "operator": "gte",
+                "type": "incoming_damage",
+                "value": 150
+              },
+              {
+                "operator": "lt",
+                "type": "self_shield_amount",
+                "value": 100
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 10000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 50,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "큰 공격이 도착하기 전에 보호막 50을 얻는다.",
+        "id": "thread_shield_neria_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "접착 엄호",
+        "oncePerBattle": false,
+        "shortDescription": "큰 공격이 도착하기 전에 보호막 50을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "before_attack_impact"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 145,
+            "shieldBypassRatio": 0.15,
+            "target": "opponent",
+            "travelMs": 650,
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 145 피해를 주며 보호막의 15%를 무시한다.",
+        "id": "trap_thrower_poppo_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "함정 옆 투척",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 145 피해를 주며 보호막의 15%를 무시한다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "trap_thrower_poppo_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "작아서 함정에 안 걸리는 게 아니라 함정 옆에 숨어있던 코볼트",
+        "enabled": true,
+        "id": "trap_thrower_poppo",
+        "name": "함정투척병 포포",
+        "portraitAsset": "",
+        "race": "KOBOLD",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "포포",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 95,
+          "manaGainPct": 115,
+          "maxHp": 950,
+          "shieldEffectPct": 90,
+          "swordEffectPct": 105
+        },
+        "support": {
+          "effectId": "trap_thrower_poppo_support"
+        },
+        "tags": [
+          "KOBOLD",
+          "ATTACK",
+          "VANGUARD",
+          "DAMAGE",
+          "SHIELD_BYPASS",
+          "SWORD_MATCH"
+        ]
+      },
+      "id": "trap_thrower_poppo",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 95,
+        "manaGainPct": 115,
+        "maxHp": 950,
+        "shieldEffectPct": 90,
+        "swordEffectPct": 105
+      },
+      "support": {
+        "chainLimit": {
+          "maxTriggers": 1
+        },
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "tileType": "SWORD",
+                "type": "tile_type_is"
+              },
+              {
+                "operator": "gte",
+                "type": "matched_tile_count",
+                "value": 4
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 7000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 28,
+            "target": "opponent",
+            "type": "deal_damage"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
+        "id": "trap_thrower_poppo_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "숨은 기습",
+        "oncePerBattle": false,
+        "shortDescription": "검을 4개 이상 맞추면 적에게 추가로 28 피해를 준다.",
         "tags": [],
         "trigger": {
           "type": "match_group_resolved"
@@ -2372,6 +9362,132 @@
         "tags": [],
         "trigger": {
           "type": "status_expired"
+        }
+      }
+    },
+    {
+      "active": {
+        "chainLimit": null,
+        "conditions": [],
+        "contentVersion": 1,
+        "cooldownMs": 0,
+        "cost": 100,
+        "effects": [
+          {
+            "amount": 120,
+            "target": "opponent",
+            "travelMs": 550,
+            "type": "deal_damage"
+          },
+          {
+            "amount": 55,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+        "id": "wagon_escort_colin_active",
+        "kind": "active",
+        "maxTriggersPerBattle": null,
+        "name": "난폭 호송",
+        "oncePerBattle": false,
+        "shortDescription": "적에게 120 피해를 주고 자신은 보호막 55를 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "active_requested"
+        }
+      },
+      "character": {
+        "allowedSlots": [
+          "combatant",
+          "support"
+        ],
+        "assets": {},
+        "combatant": {
+          "skillId": "wagon_escort_colin_active"
+        },
+        "contentVersion": 1,
+        "defaultSlots": [],
+        "description": "수레는 반드시 도착시키지만 지름길 기준이 너무 난폭함",
+        "enabled": true,
+        "id": "wagon_escort_colin",
+        "name": "수레길 호송꾼 콜린",
+        "portraitAsset": "",
+        "race": "CENTAUR",
+        "rarity": "R",
+        "recommendedRole": "combatant",
+        "shortName": "콜린",
+        "starter": false,
+        "stats": {
+          "healEffectPct": 100,
+          "manaGainPct": 100,
+          "maxHp": 1000,
+          "shieldEffectPct": 100,
+          "swordEffectPct": 100
+        },
+        "support": {
+          "effectId": "wagon_escort_colin_support"
+        },
+        "tags": [
+          "CENTAUR",
+          "DEFENSE",
+          "REACTIVE",
+          "HYBRID",
+          "DAMAGE",
+          "SHIELD",
+          "EMERGENCY_GUARD"
+        ]
+      },
+      "id": "wagon_escort_colin",
+      "presentation": null,
+      "stats": {
+        "healEffectPct": 100,
+        "manaGainPct": 100,
+        "maxHp": 1000,
+        "shieldEffectPct": 100,
+        "swordEffectPct": 100
+      },
+      "support": {
+        "chainLimit": null,
+        "conditions": [
+          {
+            "conditions": [
+              {
+                "operator": "gte",
+                "type": "incoming_damage",
+                "value": 150
+              },
+              {
+                "operator": "lt",
+                "type": "self_shield_amount",
+                "value": 100
+              }
+            ],
+            "type": "all"
+          }
+        ],
+        "contentVersion": 1,
+        "cooldownMs": 10000,
+        "cost": 0,
+        "effects": [
+          {
+            "amount": 50,
+            "target": "self",
+            "type": "gain_shield"
+          }
+        ],
+        "enabled": true,
+        "fullDescription": "큰 공격이 도착하기 전에 보호막 50을 얻는다.",
+        "id": "wagon_escort_colin_support",
+        "kind": "support",
+        "maxTriggersPerBattle": null,
+        "name": "수레길 엄호",
+        "oncePerBattle": false,
+        "shortDescription": "큰 공격이 도착하기 전에 보호막 50을 얻는다.",
+        "tags": [],
+        "trigger": {
+          "type": "before_attack_impact"
         }
       }
     },

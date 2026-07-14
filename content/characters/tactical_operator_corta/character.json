@@ -1,0 +1,40 @@
+{
+  "id": "tactical_operator_corta",
+  "displayName": "전술연산병 코르타",
+  "shortName": "코르타",
+  "rarity": "R",
+  "race": "ARTIFICIAL_HUMAN",
+  "role": "SUPPORT",
+  "combatStyle": "SUPPORT",
+  "stats": {
+    "maxHp": 970,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 100,
+    "healEffectPct": 105,
+    "manaGainPct": 120
+  },
+  "activeAbilityId": "tactical_operator_corta_active",
+  "supportAbilityId": "tactical_operator_corta_support",
+  "tags": [
+    "ARTIFICIAL_HUMAN",
+    "SUPPORT",
+    "SUPPORT",
+    "MANA",
+    "SHIELD",
+    "MANA_RECOVERY"
+  ],
+  "description": {
+    "summary": "작전 성공률은 정확히 계산하지만 용병들의 멘탈 붕괴는 변수로 안 침",
+    "details": "인조인간 출신으로 마력 지원을 담당하는 용병이다. 작전 성공률은 정확히 계산하지만 용병들의 멘탈 붕괴는 변수로 안 침. 전투에서는 ‘승률 재계산’을 사용하고, 지원 시 ‘전술 보정값’으로 힘을 보탠다. 마력 순환과 전투 보조를 담당하는 지원형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "support",
+  "defaultSlots": []
+}
+

@@ -1,0 +1,40 @@
+{
+  "id": "recovery_team_paco",
+  "displayName": "회수반 파코",
+  "shortName": "파코",
+  "rarity": "R",
+  "race": "RACCOON_BEASTKIN",
+  "role": "SUPPORT",
+  "combatStyle": "SUPPORT",
+  "stats": {
+    "maxHp": 1000,
+    "swordEffectPct": 100,
+    "shieldEffectPct": 100,
+    "healEffectPct": 100,
+    "manaGainPct": 100
+  },
+  "activeAbilityId": "recovery_team_paco_active",
+  "supportAbilityId": "recovery_team_paco_support",
+  "tags": [
+    "RACCOON_BEASTKIN",
+    "SUPPORT",
+    "SUPPORT",
+    "HYBRID",
+    "DAMAGE",
+    "SHIELD",
+    "MANA_MATCH"
+  ],
+  "description": {
+    "summary": "회수와 절도를 구분 못 하는 척하는 회수 전문가",
+    "details": "너구리수인 출신으로 공수 양면을 담당하는 용병이다. 회수와 절도를 구분 못 하는 척하는 회수 전문가. 전투에서는 ‘긴급 회수’를 사용하고, 지원 시 ‘슬쩍 보급’으로 힘을 보탠다. 공격과 수비를 함께 수행하는 혼합형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "support",
+  "defaultSlots": []
+}

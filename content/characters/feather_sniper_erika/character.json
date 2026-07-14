@@ -1,0 +1,39 @@
+{
+  "id": "feather_sniper_erika",
+  "displayName": "깃털저격수 에리카",
+  "shortName": "에리카",
+  "rarity": "R",
+  "race": "HARPY",
+  "role": "ATTACK",
+  "combatStyle": "SNIPER",
+  "stats": {
+    "maxHp": 880,
+    "swordEffectPct": 120,
+    "shieldEffectPct": 85,
+    "healEffectPct": 90,
+    "manaGainPct": 110
+  },
+  "activeAbilityId": "feather_sniper_erika_active",
+  "supportAbilityId": "feather_sniper_erika_support",
+  "tags": [
+    "HARPY",
+    "ATTACK",
+    "SNIPER",
+    "DAMAGE",
+    "SHIELD_BYPASS"
+  ],
+  "description": {
+    "summary": "높은 곳에서 잘 맞히지만 바람 탓이라는 변명도 아주 잘함",
+    "details": "하피 출신으로 공격을 담당하는 용병이다. 높은 곳에서 잘 맞히지만 바람 탓이라는 변명도 아주 잘함. 전투에서는 ‘낙하 저격’을 사용하고, 지원 시 ‘상공 조준’으로 힘을 보탠다. 꾸준한 피해를 쌓는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

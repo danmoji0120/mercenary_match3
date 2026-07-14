@@ -1,0 +1,40 @@
+{
+  "id": "spear_rider_kyrie",
+  "displayName": "창기수 키리에",
+  "shortName": "키리에",
+  "rarity": "R",
+  "race": "HARPY",
+  "role": "ATTACK",
+  "combatStyle": "VANGUARD",
+  "stats": {
+    "maxHp": 860,
+    "swordEffectPct": 125,
+    "shieldEffectPct": 80,
+    "healEffectPct": 85,
+    "manaGainPct": 115
+  },
+  "activeAbilityId": "spear_rider_kyrie_active",
+  "supportAbilityId": "spear_rider_kyrie_support",
+  "tags": [
+    "HARPY",
+    "ATTACK",
+    "VANGUARD",
+    "HEAVY_ATTACK",
+    "DAMAGE",
+    "SWORD_MATCH"
+  ],
+  "description": {
+    "summary": "착지는 못하지만 첫 타격만큼은 누구보다 빠름",
+    "details": "하피 출신으로 공격을 담당하는 용병이다. 착지는 못하지만 첫 타격만큼은 누구보다 빠름. 전투에서는 ‘급강하 창격’을 사용하고, 지원 시 ‘첫 타 선점’으로 힘을 보탠다. 꾸준한 피해를 쌓는 공격형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

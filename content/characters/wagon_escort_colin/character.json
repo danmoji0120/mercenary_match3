@@ -1,0 +1,40 @@
+{
+  "id": "wagon_escort_colin",
+  "displayName": "수레길 호송꾼 콜린",
+  "shortName": "콜린",
+  "rarity": "R",
+  "race": "CENTAUR",
+  "role": "DEFENSE",
+  "combatStyle": "REACTIVE",
+  "stats": {
+    "maxHp": 1000,
+    "swordEffectPct": 100,
+    "shieldEffectPct": 100,
+    "healEffectPct": 100,
+    "manaGainPct": 100
+  },
+  "activeAbilityId": "wagon_escort_colin_active",
+  "supportAbilityId": "wagon_escort_colin_support",
+  "tags": [
+    "CENTAUR",
+    "DEFENSE",
+    "REACTIVE",
+    "HYBRID",
+    "DAMAGE",
+    "SHIELD",
+    "EMERGENCY_GUARD"
+  ],
+  "description": {
+    "summary": "수레는 반드시 도착시키지만 지름길 기준이 너무 난폭함",
+    "details": "켄타우로스 출신으로 공수 양면을 담당하는 용병이다. 수레는 반드시 도착시키지만 지름길 기준이 너무 난폭함. 전투에서는 ‘난폭 호송’을 사용하고, 지원 시 ‘수레길 엄호’로 힘을 보탠다. 공격과 수비를 함께 수행하는 혼합형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

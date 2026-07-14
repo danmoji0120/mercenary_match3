@@ -229,7 +229,9 @@ export class Battle {
     const player = this.player(playerId);
     const ability = player ? this.effects.activeDefinition(playerId) : undefined;
     if (!player || !ability || this.phase !== 'PLAYING' || player.gauge < ability.cost || !requestId || this.usedSkillRequests.has(requestId)) return false;
-    const now = Date.now(), origin = this.effects.useActive(playerId, now); if (!origin) return false; this.usedSkillRequests.add(requestId); player.gauge -= ability.cost; this.stats[playerId]!.skillUseCount++; this.effects.emitPublic('ACTIVE_USED', playerId, { targetParticipantId: this.other(playerId).id, abilityId: ability.id, abilityKind: ability.kind, abilityManaCost: ability.cost, abilityManaSpent: ability.cost, skillId: ability.id, sourceTags: ability.tags, serverTime: now, origin }); this.broadcastSnapshots(); return true;
+    const now = Date.now(); player.gauge -= ability.cost;
+    const origin = this.effects.useActive(playerId, now); if (!origin) { player.gauge += ability.cost; return false }
+    this.usedSkillRequests.add(requestId); this.stats[playerId]!.skillUseCount++; this.effects.emitPublic('ACTIVE_USED', playerId, { targetParticipantId: this.other(playerId).id, abilityId: ability.id, abilityKind: ability.kind, abilityManaCost: ability.cost, abilityManaSpent: ability.cost, skillId: ability.id, sourceTags: ability.tags, serverTime: now, origin }); this.broadcastSnapshots(); return true;
   }
 
   setConnected(playerId: string, connected: boolean) { const player = this.player(playerId); if (player) { player.connected = connected; this.broadcastSnapshots() } }

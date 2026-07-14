@@ -1,0 +1,38 @@
+{
+  "id": "emergency_courier_ropi",
+  "displayName": "응급전령 로피",
+  "shortName": "로피",
+  "rarity": "R",
+  "race": "RABBIT_BEASTKIN",
+  "role": "HEAL",
+  "combatStyle": "RAPID_HEAL",
+  "stats": {
+    "maxHp": 980,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 95,
+    "healEffectPct": 120,
+    "manaGainPct": 105
+  },
+  "activeAbilityId": "emergency_courier_ropi_active",
+  "supportAbilityId": "emergency_courier_ropi_support",
+  "tags": [
+    "RABBIT_BEASTKIN",
+    "HEAL",
+    "RAPID_HEAL",
+    "SKIRMISH",
+    "LOW_HP"
+  ],
+  "description": {
+    "summary": "발은 빠르지만 멘탈은 종잇장. 그래도 응급 상황에는 제일 먼저 도착함",
+    "details": "토끼수인 출신으로 회복을 담당하는 용병이다. 발은 빠르지만 멘탈은 종잇장. 그래도 응급 상황에는 제일 먼저 도착함. 전투에서는 ‘초고속 응급배송’을 사용하고, 지원 시 ‘먼저 도착’으로 힘을 보탠다. 회복과 위기 대응을 맡는 회복형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

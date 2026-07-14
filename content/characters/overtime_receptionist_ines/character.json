@@ -1,0 +1,41 @@
+{
+  "id": "overtime_receptionist_ines",
+  "displayName": "야근 접수원 이네스",
+  "shortName": "이네스",
+  "rarity": "R",
+  "race": "HUMAN",
+  "role": "SUPPORT",
+  "combatStyle": "BALANCED",
+  "stats": {
+    "maxHp": 970,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 100,
+    "healEffectPct": 105,
+    "manaGainPct": 120
+  },
+  "activeAbilityId": "overtime_receptionist_ines_active",
+  "supportAbilityId": "overtime_receptionist_ines_support",
+  "tags": [
+    "HUMAN",
+    "SUPPORT",
+    "BALANCED",
+    "MANA",
+    "STABLE",
+    "SHIELD",
+    "MANA_MATCH",
+    "MANA_RECOVERY"
+  ],
+  "description": {
+    "summary": "야근 민원을 웃으며 받지만 접수번호로 사람을 평가함",
+    "details": "인간 출신으로 마력 지원을 담당하는 용병이다. 야근 민원을 웃으며 받지만 접수번호로 사람을 평가함. 전투에서는 ‘야근 접수’를 사용하고, 지원 시 ‘번호표 판단’으로 힘을 보탠다. 마력 순환과 전투 보조를 담당하는 지원형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "support",
+  "defaultSlots": []
+}

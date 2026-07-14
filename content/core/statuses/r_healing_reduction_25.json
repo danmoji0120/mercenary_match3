@@ -1,0 +1,21 @@
+{
+  "id": "r_healing_reduction_25",
+  "name": "회복 감소 25%",
+  "description": "5초 동안 받는 회복량이 25% 감소합니다.",
+  "durationMs": 5000,
+  "stacking": "refresh",
+  "maxStacks": 1,
+  "refreshPolicy": "refresh",
+  "consumePolicy": null,
+  "modifiers": [
+    {
+      "type": "healing_received_multiplier",
+      "value": 0.75
+    }
+  ],
+  "triggers": [],
+  "tags": ["DEBUFF"],
+  "visibleToOwner": true,
+  "visibleToOpponent": true,
+  "contentVersion": 1
+}

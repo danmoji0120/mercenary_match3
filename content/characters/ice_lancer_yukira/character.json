@@ -1,0 +1,40 @@
+{
+  "id": "ice_lancer_yukira",
+  "displayName": "얼음창병 유키라",
+  "shortName": "유키라",
+  "rarity": "R",
+  "race": "SNOW_WOMAN",
+  "role": "DISRUPT",
+  "combatStyle": "CONTROL",
+  "stats": {
+    "maxHp": 950,
+    "swordEffectPct": 105,
+    "shieldEffectPct": 90,
+    "healEffectPct": 95,
+    "manaGainPct": 115
+  },
+  "activeAbilityId": "ice_lancer_yukira_active",
+  "supportAbilityId": "ice_lancer_yukira_support",
+  "tags": [
+    "SNOW_WOMAN",
+    "DISRUPT",
+    "CONTROL",
+    "STABLE",
+    "DAMAGE",
+    "HEALING_REDUCTION",
+    "SWORD_MATCH"
+  ],
+  "description": {
+    "summary": "차갑게 찌르고 차갑게 퇴근해서 회식 참석률이 0에 가까운 설녀",
+    "details": "설녀 출신으로 전투 방해를 담당하는 용병이다. 차갑게 찌르고 차갑게 퇴근해서 회식 참석률이 0에 가까운 설녀. 전투에서는 ‘빙결 창격’을 사용하고, 지원 시 ‘찬기 추격’으로 힘을 보탠다. 피해와 약화 효과로 상대 전개를 끊는 방해형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}

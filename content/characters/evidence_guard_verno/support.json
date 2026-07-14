@@ -1,0 +1,27 @@
+{
+  "id": "evidence_guard_verno_support",
+  "kind": "SUPPORT",
+  "displayName": "밤샘 감시",
+  "shortDescription": "전투 시작 시 보호막 55를 얻는다.",
+  "fullDescription": "전투 시작 시 보호막 55를 얻는다.",
+  "trigger": {
+    "event": "BATTLE_STARTED"
+  },
+  "cooldownMs": 0,
+  "battleLimit": 1,
+  "chainLimit": null,
+  "effects": [
+    {
+      "type": "ADD_SHIELD",
+      "target": "SELF",
+      "amount": {
+        "type": "CONSTANT",
+        "value": 55
+      }
+    }
+  ],
+  "copyPolicy": "DENY_COPIED",
+  "recursionPolicy": "SAFE_DEFAULT",
+  "contentVersion": 1,
+  "enabled": true
+}

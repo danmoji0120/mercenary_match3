@@ -1,0 +1,40 @@
+{
+  "id": "defense_module_eira",
+  "displayName": "방어모듈 에이라",
+  "shortName": "에이라",
+  "rarity": "R",
+  "race": "ARTIFICIAL_HUMAN",
+  "role": "DEFENSE",
+  "combatStyle": "REACTIVE",
+  "stats": {
+    "maxHp": 1120,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 120,
+    "healEffectPct": 90,
+    "manaGainPct": 90
+  },
+  "activeAbilityId": "defense_module_eira_active",
+  "supportAbilityId": "defense_module_eira_support",
+  "tags": [
+    "ARTIFICIAL_HUMAN",
+    "DEFENSE",
+    "REACTIVE",
+    "SHIELD",
+    "DAMAGE_REDUCTION",
+    "EMERGENCY_GUARD"
+  ],
+  "description": {
+    "summary": "방어 명령은 잘 따르지만 일상 대화도 방어 프로토콜로 받아침",
+    "details": "인조인간 출신으로 방어를 담당하는 용병이다. 방어 명령은 잘 따르지만 일상 대화도 방어 프로토콜로 받아침. 전투에서는 ‘전개형 방어 프로토콜’을 사용하고, 지원 시 ‘자동 차폐 명령’으로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+

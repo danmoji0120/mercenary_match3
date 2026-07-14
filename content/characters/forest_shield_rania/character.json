@@ -1,0 +1,39 @@
+{
+  "id": "forest_shield_rania",
+  "displayName": "숲방패 라니아",
+  "shortName": "라니아",
+  "rarity": "R",
+  "race": "DEER_BEASTKIN",
+  "role": "DEFENSE",
+  "combatStyle": "BALANCED",
+  "stats": {
+    "maxHp": 1120,
+    "swordEffectPct": 90,
+    "shieldEffectPct": 120,
+    "healEffectPct": 90,
+    "manaGainPct": 90
+  },
+  "activeAbilityId": "forest_shield_rania_active",
+  "supportAbilityId": "forest_shield_rania_support",
+  "tags": [
+    "DEER_BEASTKIN",
+    "DEFENSE",
+    "BALANCED",
+    "SHIELD",
+    "BATTLE_START"
+  ],
+  "description": {
+    "summary": "우아하게 막지만 방패에 새싹이 자라 관리비가 드는 숲방패병",
+    "details": "사슴수인 출신으로 방어를 담당하는 용병이다. 우아하게 막지만 방패에 새싹이 자라 관리비가 드는 숲방패병. 전투에서는 ‘새싹 방벽’을 사용하고, 지원 시 ‘숲의 엄호’로 힘을 보탠다. 보호막과 피해 감소로 전선을 지키는 방어형이다."
+  },
+  "enabled": true,
+  "starter": false,
+  "contentVersion": 1,
+  "allowedSlots": [
+    "combatant",
+    "support"
+  ],
+  "recommendedRole": "combatant",
+  "defaultSlots": []
+}
+
